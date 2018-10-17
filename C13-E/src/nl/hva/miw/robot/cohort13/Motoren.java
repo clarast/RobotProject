@@ -22,6 +22,7 @@ public class Motoren {
 	private LichtsensorMeting meting = new LichtsensorMeting();
 	private int oudeKleurMeting;
 	private int nieuweKleurMeting = 1;
+	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 
 	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
 	static RegulatedMotor leftMotor = new EV3LargeRegulatedMotor(MotorPort.A);
@@ -39,8 +40,11 @@ public class Motoren {
 			meting.meetIntensiteit();
 			zetMotorSnelheid(meting.getIntensiteit());
 			rijden();
+			if (kleurXpassage == 1) {
+				tijdswaarneming.getStopwatch().reset();
+			}
 		}
-
+		tijdswaarneming.getStopwatch().elapsed();
 		leftMotor.stop();
 		rightMotor.stop();
 		// toevoegen SFX
