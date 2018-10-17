@@ -9,13 +9,13 @@ import lejos.hardware.port.*;
 
 public class Motoren {
 
-	private float motorSpeedA;
-	private float motorSpeedB;
+	private int motorSpeedA;
+	private int motorSpeedB;
 	private int kleurXpassage = 0;
 	private final double RICHT_INTENSITEIT = 0.50;
 	private LichtsensorMeting meting = new LichtsensorMeting();
 	private int oudeKleurMeting;
-	private int nieuweKleurMeting = 1;
+	private int nieuweKleurMeting = 0;
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 
 	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
@@ -40,6 +40,9 @@ public class Motoren {
 		tijdswaarneming.getStopwatch().elapsed();
 		leftMotor.stop();
 		rightMotor.stop();
+		LCD.clear();
+		LCD.drawString(tijdswaarneming.toString(),100,20,GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		Delay.msDelay(100000);
 		// toevoegen SFX
 
 	}
@@ -52,9 +55,8 @@ public class Motoren {
 	 */
 	private void setKleurXpassage() {
 		this.oudeKleurMeting = this.nieuweKleurMeting;
+		meting.meetKleur();
 		this.nieuweKleurMeting = (int) meting.getKleur();
-		System.out.println(nieuweKleurMeting);
-
 		boolean oudeKleurMetingFinish = this.finishkleur(oudeKleurMeting);
 		boolean nieuweKleurMetingFinish = this.finishkleur(nieuweKleurMeting);
 
@@ -81,17 +83,17 @@ public class Motoren {
 			this.motorSpeedB = 200;
 		} else if (lichtIntensiteit > this.RICHT_INTENSITEIT) {
 			this.motorSpeedA = 30;
-			this.motorSpeedB = 150;
+			this.motorSpeedB = 200;
 		} else if (lichtIntensiteit < this.RICHT_INTENSITEIT) {
-			this.motorSpeedA = 150;
+			this.motorSpeedA = 200;
 			this.motorSpeedB = 30;
 		}
 
 	}
 
 	public void rijden() {
-		leftMotor.setSpeed((int) motorSpeedA);
-		rightMotor.setSpeed((int) motorSpeedB);
+		leftMotor.setSpeed(motorSpeedA);
+		rightMotor.setSpeed(motorSpeedB);
 		leftMotor.backward();
 		rightMotor.backward();
 		Delay.msDelay(100);
