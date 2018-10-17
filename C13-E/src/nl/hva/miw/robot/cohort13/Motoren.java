@@ -29,20 +29,22 @@ public class Motoren {
 		LCD.drawString("Start Moving!", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 
 		while (kleurXpassage < 2) {
+
 			this.setKleurXpassage();
 			meting.meetIntensiteit();
 			zetMotorSnelheid(meting.getIntensiteit());
 			rijden();
 			if (kleurXpassage == 1) {
-				tijdswaarneming.getStopwatch().reset();
+				tijdswaarneming.startStopwatch();
 			}
 		}
-		tijdswaarneming.getStopwatch().elapsed();
+		tijdswaarneming.stopStopwatch();
 		leftMotor.stop();
 		rightMotor.stop();
 		LCD.clear();
-		LCD.drawString(tijdswaarneming.toString(),100,20,GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-		Delay.msDelay(100000);
+		LCD.drawString(tijdswaarneming.toString(), 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		Delay.msDelay(600000);
+
 		// toevoegen SFX
 
 	}

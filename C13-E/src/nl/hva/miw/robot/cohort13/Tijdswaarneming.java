@@ -1,30 +1,30 @@
 package nl.hva.miw.robot.cohort13;
 
 import java.util.concurrent.TimeUnit;
-
 import lejos.utility.Stopwatch;
 
 public class Tijdswaarneming {
 	private Stopwatch stopwatch;
+	private int eindtijd;
 
 	public Tijdswaarneming() {
 		super();
 		this.stopwatch = new Stopwatch();
 	}
 
-
-	public Stopwatch getStopwatch() {
-		return stopwatch;
+	public void startStopwatch() {
+		stopwatch.reset();
 	}
 
+	public void stopStopwatch() {
+		this.eindtijd = stopwatch.elapsed();
+	}
 
 	@Override
 	public String toString() {
-		int milliseconds = (int) (stopwatch.elapsed() % 1000) % 60000 / 10;
-		int seconds = (int) (stopwatch.elapsed() / 1000) % 60;
-		int minutes = (int) ((stopwatch.elapsed() / (1000 * 60)) % 60);
-
-		return String.format("%d: %d: %d", minutes, seconds, milliseconds);
+		return String.format("%02d min, %02d sec", TimeUnit.MILLISECONDS.toMinutes(this.eindtijd),
+				TimeUnit.MILLISECONDS.toSeconds(this.eindtijd)
+						- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(this.eindtijd)));
 	}
 
 }
