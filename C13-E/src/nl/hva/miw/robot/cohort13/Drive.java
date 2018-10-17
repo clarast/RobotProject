@@ -1,5 +1,6 @@
 package nl.hva.miw.robot.cohort13;
 
+import lejos.hardware.Brick;
 import lejos.hardware.BrickFinder;
 
 import lejos.hardware.lcd.GraphicsLCD;
@@ -9,7 +10,7 @@ import lejos.hardware.motor.Motor;
 import lejos.utility.Delay;
 
 import lejos.robotics.RegulatedMotor;
-
+import lejos.robotics.SampleProvider;
 import lejos.hardware.motor.*;
 
 import lejos.hardware.port.*;
@@ -20,54 +21,59 @@ import lejos.hardware.Button;
 
 public class Drive {
 
+	private int motorSpeedA;
+	private int motorSpeedB;
+	private int kleurXpassage = 0;
+	
 	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
-
 	static RegulatedMotor leftMotor = new EV3LargeRegulatedMotor(MotorPort.B);
-
 	static RegulatedMotor rightMotor = new EV3LargeRegulatedMotor(MotorPort.C);
 
-	private EV3ColorSensor lichtSensor;
-
-	public Drive(EV3ColorSensor lichtSensor) {
-		this.lichtSensor = lichtSensor;
-	}
-
-	void moverobotbkw() {
-
-		int aantalKeerRood = 0;
+	void moveRobotFwd() {
 
 		LCD.clear();
-
 		// Display on robot screen
-
-		LCD.drawString("Moving Backward", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-
+		LCD.drawString("Moving Forward", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 		// This code will set the speed and move the robot backward for 5 seconds
 
-		while (aantalKeerRood < 2) {
+		while (kleurXpassage < 2) {
 
-			// methode maken voor if
+			// methode maken voor if met instantiering ColorSensor etc
 			if (lichtSensor.getColorID() == 0) {
-				aantalKeerRood++;
+				kleurXpassage++;
+				//start stopwatch
 			}
+			
 			// intensiteitmeting nemen
-			// meegeven aan een methode die berekent hoeveel gestuurd moet worden
-			leftMotor.setSpeed(1);
-
-			rightMotor.setSpeed(1);
-
+			LichtsensorMeting meting = new LichtsensorMeting();
+			meting.meetIntensiteit();
+			float lichtIntensiteit = meting.getIntensiteit();
+			
+			// meegeven aan een methode die berekent hoeveel gestuurd moet worden			
+			berekenSnelheid(lichtIntensiteit);
+			leftMotor.setSpeed(motorSpeedA);
+			rightMotor.setSpeed(motorSpeedB);
 			leftMotor.backward();
-
 			rightMotor.backward();
-
+			
+			//rijd 100ms en daarna nieuwe meting
+			Delay.msDelay(100);
+		
 		}
 
 		leftMotor.stop();
-
 		rightMotor.stop();
+		//toevoegen SFX
 
 	}
 
+	private void berekenSnelheid(float lichtIntensiteit) {
+		//bereken per motor de snelheid
+		
+		//set per motor de snelheid
+		motorSpeedA = 
+        motorSpeedB =
+	}
 }
 
 //	void moverobotfwd() {
