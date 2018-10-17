@@ -1,7 +1,5 @@
 package nl.hva.miw.robot.cohort13;
 
-import javax.annotation.processing.RoundEnvironment;
-
 import lejos.hardware.Brick;
 import lejos.hardware.Button;
 import lejos.hardware.Key;
@@ -31,7 +29,7 @@ public class Fikkie {
 		Motoren motor = new Motoren();
 		motor.moveRobotFwd();
 	}
-
+	
 	public void waitForKey(Key key) {
 		while (key.isUp()) {
 			Delay.msDelay(100);

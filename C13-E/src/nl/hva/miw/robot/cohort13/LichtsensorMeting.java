@@ -53,9 +53,4 @@ public class LichtsensorMeting {
 	public float getKleur() {
 		return kleur;
 	}
-	
-	
-	
-	
-	
 }
