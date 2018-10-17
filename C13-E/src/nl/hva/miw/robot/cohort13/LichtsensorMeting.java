@@ -19,10 +19,8 @@ public class LichtsensorMeting {
 	public void meetIntensiteit() {
 		// neem meting in RedMode
 		SampleProvider redMode = lichtSensor.getRedMode();
-		float[] sample = new float[lichtSensor.sampleSize()];
+		float[] sample = new float[redMode.sampleSize()];
 		redMode.fetchSample(sample, 0);
-		// sluit sensor af
-		lichtSensor.close();
 		this.intensiteit = sample[0];
 	
 	}
@@ -33,10 +31,8 @@ public class LichtsensorMeting {
 	
 	public void meetKleur() {
 		SampleProvider colorId = lichtSensor.getColorIDMode();
-		float[] sample = new float[lichtSensor.sampleSize()];
+		float[] sample = new float[colorId.sampleSize()];
 		colorId.fetchSample(sample, 0);
-		// sluit sensor af
-		lichtSensor.close();
 		this.kleur = sample[0];
 		
 //		ID 0: Undefined

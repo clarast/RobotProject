@@ -1,17 +1,11 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.Brick;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.lcd.GraphicsLCD;
-import lejos.hardware.motor.Motor;
 import lejos.utility.Delay;
 import lejos.robotics.RegulatedMotor;
-import lejos.robotics.SampleProvider;
 import lejos.hardware.motor.*;
 import lejos.hardware.port.*;
-import lejos.hardware.sensor.EV3ColorSensor;
-
-import lejos.hardware.Button;
 
 public class Motoren {
 
@@ -34,7 +28,6 @@ public class Motoren {
 		LCD.drawString("Start Moving!", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 
 		while (kleurXpassage < 2) {
-			
 			this.setKleurXpassage();
 			meting.meetIntensiteit();
 			zetMotorSnelheid(meting.getIntensiteit());
@@ -56,6 +49,7 @@ public class Motoren {
 	private void setKleurXpassage() {
 		this.oudeKleurMeting = this.nieuweKleurMeting;
 		this.nieuweKleurMeting = (int) meting.getKleur();
+		System.out.println(nieuweKleurMeting);
 
 		boolean oudeKleurMetingFinish = this.finishkleur(oudeKleurMeting);
 		boolean nieuweKleurMetingFinish = this.finishkleur(nieuweKleurMeting);
@@ -79,14 +73,14 @@ public class Motoren {
 
 	private void zetMotorSnelheid(float lichtIntensiteit) {
 		if (lichtIntensiteit == this.RICHT_INTENSITEIT) {
-			this.motorSpeedA = Motor.A.getMaxSpeed();
-			this.motorSpeedB = Motor.B.getMaxSpeed();
+			this.motorSpeedA = 200;
+			this.motorSpeedB = 200;
 		} else if (lichtIntensiteit > this.RICHT_INTENSITEIT) {
-			this.motorSpeedA = 80;
-			this.motorSpeedB = 100;
+			this.motorSpeedA = 30;
+			this.motorSpeedB = 150;
 		} else if (lichtIntensiteit < this.RICHT_INTENSITEIT) {
-			this.motorSpeedA = 100;
-			this.motorSpeedB = 80;
+			this.motorSpeedA = 150;
+			this.motorSpeedB = 30;
 		}
 
 	}
