@@ -1,25 +1,19 @@
 package nl.hva.miw.robot.cohort13;
-
 import lejos.hardware.Brick;
 import lejos.hardware.BrickFinder;
-
 import lejos.hardware.lcd.GraphicsLCD;
-
 import lejos.hardware.motor.Motor;
-
 import lejos.utility.Delay;
-
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 import lejos.hardware.motor.*;
-
 import lejos.hardware.port.*;
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.utility.Delay;
+
 
 import lejos.hardware.Button;
 
-public class Drive {
+public class Motoren {
 
 	private int motorSpeedA;
 	private int motorSpeedB;
