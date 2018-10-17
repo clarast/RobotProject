@@ -33,7 +33,7 @@ public class Motoren {
 		while (kleurXpassage < 2) {
 
 			// methode maken voor if met instantiering ColorSensor etc
-			if (lichtSensor.getColorID() == 0) {
+	//		if (lichtSensorMeting.getColorID() == 0) {
 				kleurXpassage++;
 				//start stopwatch
 			}
@@ -44,7 +44,7 @@ public class Motoren {
 			float lichtIntensiteit = meting.getIntensiteit();
 			
 			// meegeven aan een methode die berekent hoeveel gestuurd moet worden			
-			berekenSnelheid(lichtIntensiteit);
+//			berekenSnelheid(lichtIntensiteit);
 			leftMotor.setSpeed(motorSpeedA);
 			rightMotor.setSpeed(motorSpeedB);
 			leftMotor.backward();
@@ -55,18 +55,18 @@ public class Motoren {
 		
 		}
 
-		leftMotor.stop();
-		rightMotor.stop();
-		//toevoegen SFX
-
-	}
+//		leftMotor.stop();
+//		rightMotor.stop();
+//		//toevoegen SFX
+//
+//	}
 
 	private void berekenSnelheid(float lichtIntensiteit) {
 		//bereken per motor de snelheid
 		
 		//set per motor de snelheid
-		motorSpeedA = 
-        motorSpeedB =
+		motorSpeedA = 10;
+        motorSpeedB =10;
 	}
 }
 

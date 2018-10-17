@@ -9,6 +9,8 @@ import lejos.robotics.SampleProvider;
 public class LichtsensorMeting {
 
 	private float intensiteit;
+	private float kleur;
+	
 	// initialiseer sensor
 	Brick brick = BrickFinder.getDefault();
 	Port s1 = brick.getPort("S1");
@@ -28,4 +30,22 @@ public class LichtsensorMeting {
 	public float getIntensiteit() {
 		return intensiteit;
 	}
+	
+	public void meetKleur() {
+		SampleProvider colorId = lichtSensor.getColorIDMode();
+		float[] sample = new float[lichtSensor.sampleSize()];
+		colorId.fetchSample(sample, 0);
+		// sluit sensor af
+		lichtSensor.close();
+		this.kleur = sample[0];
+	}
+
+	public float getKleur() {
+		return kleur;
+	}
+	
+	
+	
+	
+	
 }
