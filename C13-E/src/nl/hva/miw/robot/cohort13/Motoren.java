@@ -26,14 +26,14 @@ public class Motoren {
 
 		// Display on robot screen
 		LCD.clear();
-		LCD.drawString("Start Moving!", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		LCD.drawString("Fikkie apport!", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 
 		while (kleurXpassage < 2) {
 
-			this.setKleurXpassage();
+//			this.setKleurXpassage();
 			meting.meetIntensiteit();
 			zetMotorSnelheid(meting.getIntensiteit());
-			rijden();
+			vooruitRijden();
 			if (kleurXpassage == 1) {
 				tijdswaarneming.startStopwatch();
 			}
@@ -55,50 +55,75 @@ public class Motoren {
 	 * gemeten kleur een meting is die niet zwart, wit of undefined is. van de float
 	 * die terugkomt van de kleurmeting is een int gemaakt via casting.
 	 */
-	private void setKleurXpassage() {
-		this.oudeKleurMeting = this.nieuweKleurMeting;
-		meting.meetKleur();
-		this.nieuweKleurMeting = (int) meting.getKleur();
-		boolean oudeKleurMetingFinish = this.finishkleur(oudeKleurMeting);
-		boolean nieuweKleurMetingFinish = this.finishkleur(nieuweKleurMeting);
-
-		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
-			kleurXpassage++;
-		}
-	}
+//	private void setKleurXpassage() {
+//		this.oudeKleurMeting = this.nieuweKleurMeting;
+//		meting.meetKleur();
+//		this.nieuweKleurMeting = (int) meting.getKleur();
+//		boolean oudeKleurMetingFinish = this.finishkleur(oudeKleurMeting);
+//		boolean nieuweKleurMetingFinish = this.finishkleur(nieuweKleurMeting);
+//
+//		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
+//			kleurXpassage++;
+//		}
+//	}
 
 	/**
 	 * @param kleur: dit is de kleur waarvan bepaald moet worden of het een finish
 	 *        kleur is.
 	 * @return true als de inputkleur niet zwart, wit of undefined is.
 	 */
-	private boolean finishkleur(int kleur) {
-		if (kleur == 0 || kleur == 1 || kleur == 6) {
-			return false;
-		} else
-			return true;
-	}
+//	private boolean finishkleur(int kleur) {
+//		if (kleur == 0 || kleur == 1 || kleur == 6) {
+//			return false;
+//		} else
+//			return true;
+//	}
 
 	private void zetMotorSnelheid(float lichtIntensiteit) {
-		if (lichtIntensiteit == this.RICHT_INTENSITEIT) {
-			this.motorSpeedA = 200;
+		// scherpbocht naar links
+		if (lichtIntensiteit > 0.9 || lichtIntensiteit < 0.1) {
+			draaiOpDePlek(lichtIntensiteit);
+		}
+		// flauwe bocht naar links
+		else if (lichtIntensiteit > this.RICHT_INTENSITEIT) {
+			this.motorSpeedA = 100;
 			this.motorSpeedB = 200;
-		} else if (lichtIntensiteit > this.RICHT_INTENSITEIT) {
-			this.motorSpeedA = 30;
-			this.motorSpeedB = 200;
-		} else if (lichtIntensiteit < this.RICHT_INTENSITEIT) {
+		}
+		// flauwe bocht naar rechts
+		else if (lichtIntensiteit < this.RICHT_INTENSITEIT) {
 			this.motorSpeedA = 200;
-			this.motorSpeedB = 30;
+			this.motorSpeedB = 100;
 		}
 
 	}
 
-	public void rijden() {
+	public void vooruitRijden() {
 		leftMotor.setSpeed(motorSpeedA);
 		rightMotor.setSpeed(motorSpeedB);
 		leftMotor.backward();
 		rightMotor.backward();
 		Delay.msDelay(100);
+	}
 
+	public void draaiOpDePlek(float lichtIntensiteit) {
+		if (lichtIntensiteit > 0.9) {
+			this.motorSpeedA = 0;
+			this.motorSpeedB = 200;
+			leftMotor.setSpeed(motorSpeedA);
+			rightMotor.setSpeed(motorSpeedB);
+			leftMotor.forward();
+			rightMotor.backward();
+			Delay.msDelay(50);
+			moveRobotFwd();
+		} else {
+			this.motorSpeedA = 200;
+			this.motorSpeedB = 0;
+			leftMotor.setSpeed(motorSpeedA);
+			rightMotor.setSpeed(motorSpeedB);
+			leftMotor.backward();
+			rightMotor.forward();
+			Delay.msDelay(50);
+			moveRobotFwd();
+		}
 	}
 }
