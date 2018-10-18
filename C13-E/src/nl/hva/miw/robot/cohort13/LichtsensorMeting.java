@@ -40,16 +40,6 @@ public class LichtsensorMeting {
 		colorId.fetchSample(sample, 0);
 		// zet attribuut op laatste metingswaarde
 		this.kleur = sample[0];
-
-		// ID 0: Undefined
-		// ID 1: Black
-		// ID 2: Blue
-		// ID 3: Green
-		// ID 4: Yellow
-		// ID 5: Red
-		// ID 6: White
-		// bron: http://www.aplu.ch/classdoc/ev3jliba/ch/aplu/ev3/ColorSensor.html
-
 	}
 
 	public float getKleur() {

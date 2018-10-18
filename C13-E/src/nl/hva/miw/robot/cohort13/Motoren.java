@@ -15,7 +15,7 @@ public class Motoren {
 	private final double RICHT_INTENSITEIT = 0.50;
 	private LichtsensorMeting meting = new LichtsensorMeting();
 	private int oudeKleurMeting;
-	private int nieuweKleurMeting = 0;
+	private int nieuweKleurMeting = 2;
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 
 	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
@@ -43,7 +43,7 @@ public class Motoren {
 		rightMotor.stop();
 		LCD.clear();
 		LCD.drawString(tijdswaarneming.toString(), 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-		Delay.msDelay(600000);
+		Delay.msDelay(20000);
 
 		// toevoegen SFX
 	}
@@ -63,19 +63,27 @@ public class Motoren {
 
 		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
 			kleurXpassage++;
+			System.out.println("kleurpassage");
 		}
 	}
 
 	/**
-	 * @param kleur: dit is de kleur waarvan bepaald moet worden of het een finish
-	 *        kleur is.
+	 * @param kleur:
+	 *            dit is de kleur waarvan bepaald moet worden of het een finish
+	 *            kleur is.
 	 * @return true als de inputkleur niet zwart, wit of undefined is.
 	 */
 	private boolean finishkleur(int kleur) {
-		if (kleur == 0 || kleur == 1 || kleur == 6) {
+		if (kleur == 2 || kleur == 6 || kleur == 7) {
 			return false;
 		} else
 			return true;
+
+		// Meetresultaten kleurcoderingen:
+		// zwart 7
+		// rood 0
+		// wit 6
+		// grens zwart/wit 2
 	}
 
 	private void zetMotorSnelheid(float lichtIntensiteit) {
@@ -89,7 +97,6 @@ public class Motoren {
 			this.motorSpeedA = 200;
 			this.motorSpeedB = 30;
 		}
-
 	}
 
 	public void rijden() {
@@ -100,4 +107,4 @@ public class Motoren {
 		Delay.msDelay(100);
 
 	}
-}		
+}
