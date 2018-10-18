@@ -26,10 +26,11 @@ public class Fikkie {
 		display.drawString("Push the button!", 0, 4);
 		// Wav file afspelen + LCD kleurtjes => klasse SFX
 		waitForKey(Button.ENTER);
+		// tienTestMetingenKleur();
 		Motoren motor = new Motoren();
 		motor.moveRobotFwd();
 	}
-	
+
 	public void waitForKey(Key key) {
 		while (key.isUp()) {
 			Delay.msDelay(100);
@@ -37,5 +38,20 @@ public class Fikkie {
 		while (key.isDown()) {
 			Delay.msDelay(100);
 		}
+	}
+
+	/**
+	 * deze methode is een testmethode (niet functioneel, wordt uiteindelijk niet in
+	 * het programma gebruikt) en print 10 kleurmetingen met 5 seconden tussentijd
+	 * (sluit programma einde methode).
+	 */
+	private void tienTestMetingenKleur() {
+		LichtsensorMeting kleurtest = new LichtsensorMeting();
+		for (int i = 0; i < 10; i++) {
+			kleurtest.meetKleur();
+			System.out.println(kleurtest.getKleur());
+			Delay.msDelay(5000);
+		}
+		System.exit(1);
 	}
 }
