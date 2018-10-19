@@ -24,10 +24,8 @@ public class Fikkie {
 
 	private void run() {
 		TextLCD display = brick.getTextLCD();
-		display.drawString("Push the button!", 0, 4);
 		// Wav file afspelen + LCD kleurtjes => klasse SFX
 		waitForKey(Button.ENTER);
-//
 		LCD.clear();
 		LCD.drawString("Fikkie apport!", 100, 20);
 		Lijnvolger lijnvolger = new Lijnvolger();
