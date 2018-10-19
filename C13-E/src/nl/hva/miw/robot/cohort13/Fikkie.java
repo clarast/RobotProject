@@ -1,8 +1,11 @@
 package nl.hva.miw.robot.cohort13;
 
+import java.io.File;
+
 import lejos.hardware.Brick;
 import lejos.hardware.Button;
 import lejos.hardware.Key;
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.lcd.TextLCD;
@@ -25,6 +28,7 @@ public class Fikkie {
 	private void run() {
 		TextLCD display = brick.getTextLCD();
 		// Wav file afspelen + LCD kleurtjes => klasse SFX
+		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 		waitForKey(Button.ENTER);
 		LCD.clear();
 		LCD.drawString("Fikkie apport!", 100, 20);
