@@ -52,6 +52,7 @@ public class Lijnvolger {
 			}
 		}
 
+		LCD.clear();
 		tijdswaarneming.stopStopwatch();
 		MotorA.stop();
 		MotorB.stop();
@@ -90,7 +91,6 @@ public class Lijnvolger {
 			kleurXpassage++;
 			LCD.clear();
 			System.out.println("kleurpassage");
-			Delay.msDelay(5000);
 			LCD.clear();
 		}
 	}
@@ -130,12 +130,8 @@ public class Lijnvolger {
 		this.motorPowerB = 40;
 		if (meting.getIntensiteit() > INTENSITEIT_HOOG) {
 			MotorA.forward();
-			rijden();
-			MotorA.backward();
 		} else {
 			MotorB.forward();
-			rijden();
-			MotorB.backward();
 		}
 	}
 
@@ -152,6 +148,8 @@ public class Lijnvolger {
 	}
 
 	public void flauweBocht() {
+		MotorA.backward();
+		MotorB.backward();
 		if (meting.getIntensiteit() > RICHT_INTENSITEIT) {
 			this.motorPowerA = 30;
 			this.motorPowerB = 40;
