@@ -15,9 +15,9 @@ public class Lijnvolger {
 	private int motorPowerA = 40;
 	private int motorPowerB = 40;
 	private int kleurXpassage = 0;
-	private final double INTENSITEIT_LAAG = 0.2;
+	private final double INTENSITEIT_LAAG = 0.15;
 	private final double RICHT_INTENSITEIT = 0.5;
-	private final double INTENSITEIT_HOOG = 0.8;
+	private final double INTENSITEIT_HOOG = 0.85;
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
 	static UnregulatedMotor MotorA = new UnregulatedMotor(MotorPort.A);
