@@ -12,30 +12,35 @@ import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Lijnvolger {
 
-	private int motorPowerA;
-	private int motorPowerB;
+	private int motorPowerA = 40;
+	private int motorPowerB = 40;
 	private int kleurXpassage = 0;
-	private final double INTENSITEIT_LAAG = 0.2;
+	private final double INTENSITEIT_LAAG = 0.15;
 	private final double RICHT_INTENSITEIT = 0.5;
-	private final double INTENSITEIT_HOOG = 0.8;
+	private final double INTENSITEIT_HOOG = 0.85;
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
 	static UnregulatedMotor MotorA = new UnregulatedMotor(MotorPort.A);
 	static UnregulatedMotor MotorB = new UnregulatedMotor(MotorPort.B);
 
-	// initialiseer lichtsensor (in deze klasse omdat lichtsensor vanuit hier aangestuurd en aangeroepen wordt) 
+	// initialiseer lichtsensor (in deze klasse omdat lichtsensor vanuit hier
+	// aangestuurd en aangeroepen wordt)
 	Brick brick = BrickFinder.getDefault();
 	Port s1 = brick.getPort("S1");
 	EV3ColorSensor lichtSensor = new EV3ColorSensor(s1);
-	
+
 	// Maak objecten meting en finish, gebruik daarin dezelfde lichtsensor
 	private LichtsensorMeting meting = new LichtsensorMeting(lichtSensor);
 	private LichtsensorMeting finish = new LichtsensorMeting(lichtSensor);
 
 	void moveRobotFwd() {
+		// this.achterTest();
 		this.finishIJken();
 		int startStopwatch = 0;
-		
+
+		MotorA.backward();
+		MotorB.backward();
+
 		while (kleurXpassage < 2) {
 			this.setKleurXpassage();
 			meting.meetIntensiteit();
@@ -47,6 +52,7 @@ public class Lijnvolger {
 			}
 		}
 
+		LCD.clear();
 		tijdswaarneming.stopStopwatch();
 		MotorA.stop();
 		MotorB.stop();
@@ -85,7 +91,6 @@ public class Lijnvolger {
 			kleurXpassage++;
 			LCD.clear();
 			System.out.println("kleurpassage");
-			Delay.msDelay(5000);
 			LCD.clear();
 		}
 	}
@@ -97,21 +102,19 @@ public class Lijnvolger {
 			return false;
 	}
 
-
 	private void bepaalTypeBocht() {
-		
+
 		// scherpe bocht naar links / rechts
 		if (meting.getIntensiteit() > INTENSITEIT_HOOG) {
 			draaiOpDePlek();
 		} else if (meting.getIntensiteit() < INTENSITEIT_LAAG) {
 			draaiOpDePlek();
-			
+
 			// flauwe bocht naar links / rechts (methode voor maken!)
 		} else if (meting.getIntensiteit() > this.RICHT_INTENSITEIT) {
 			flauweBocht();
 
-		}
-		else if (meting.getIntensiteit() < this.RICHT_INTENSITEIT) {
+		} else if (meting.getIntensiteit() < this.RICHT_INTENSITEIT) {
 			flauweBocht();
 		}
 	}
@@ -119,34 +122,39 @@ public class Lijnvolger {
 	public void rijden() {
 		MotorA.setPower(motorPowerA);
 		MotorB.setPower(motorPowerB);
-		MotorA.backward();
-		MotorB.backward();
 		Delay.msDelay(100);
 	}
 
-	public void draaiOpDePlek (){
+	public void draaiOpDePlek() {
+		this.motorPowerA = 40;
+		this.motorPowerB = 40;
 		if (meting.getIntensiteit() > INTENSITEIT_HOOG) {
-			MotorA.setPower(50);
-			MotorB.setPower(50);
 			MotorA.forward();
-			MotorB.backward();
-	//		moveRobotFwd();
 		} else {
-			MotorA.setPower(50);
-			MotorB.setPower(50);
-			MotorA.backward();
 			MotorB.forward();
-		//	moveRobotFwd();
 		}
 	}
-	
+
+	public void achterTest() {
+		MotorA.setPower(50);
+		MotorB.setPower(50);
+		MotorA.forward();
+		MotorB.forward();
+		Delay.msDelay(5000);
+
+		MotorA.backward();
+		Delay.msDelay(5000);
+		System.exit(1);
+	}
+
 	public void flauweBocht() {
+		MotorA.backward();
+		MotorB.backward();
 		if (meting.getIntensiteit() > RICHT_INTENSITEIT) {
 			this.motorPowerA = 30;
-			this.motorPowerB = 60;
-		}
-		else {
-			this.motorPowerA = 60;
+			this.motorPowerB = 40;
+		} else {
+			this.motorPowerA = 40;
 			this.motorPowerB = 30;
 		}
 	}
