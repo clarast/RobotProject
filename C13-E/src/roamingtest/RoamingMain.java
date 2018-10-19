@@ -1,11 +1,59 @@
 package roamingtest;
 
+/*private int motorSpeedA;
+private int motorSpeedB;
+GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
+static RegulatedMotor leftMotor = new EV3LargeRegulatedMotor(MotorPort.A);
+static RegulatedMotor rightMotor = new EV3LargeRegulatedMotor(MotorPort.B);
+
+
+public void moverobotleft() {
+	this.motorSpeedA = 0;
+	this.motorSpeedB = 400;
+	leftMotor.setSpeed(motorSpeedA);
+	rightMotor.setSpeed(motorSpeedB);
+	leftMotor.forward();
+	rightMotor.backward();
+}
+
+public void moverobotright() {
+	this.motorSpeedA = 400;
+	this.motorSpeedB = 0;
+	leftMotor.setSpeed(motorSpeedA);
+	rightMotor.setSpeed(motorSpeedB);
+	leftMotor.forward();
+	rightMotor.backward();
+
+}
+
+public void moverobotStraightForward() {
+	this.motorSpeedA = 400;
+	this.motorSpeedB = 400;
+	leftMotor.setSpeed(motorSpeedA);
+	rightMotor.setSpeed(motorSpeedB);
+	leftMotor.forward();
+	rightMotor.forward();
+}
+
+public void moverobotStraightBackward() {
+	this.motorSpeedA = 400;
+	this.motorSpeedB = 400;
+	leftMotor.setSpeed(motorSpeedA);
+	rightMotor.setSpeed(motorSpeedB);
+	leftMotor.backward();
+	rightMotor.backward();
+}
+}*/
+
 import java.io.File;
 
 import customrobot.library.TouchSensor;
+import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
+import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.SensorModes;
@@ -13,6 +61,9 @@ import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.GraphicsLCD;
+import lejos.hardware.lcd.LCD;
+import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MeanFilter;
 import lejos.robotics.pathfinding.RandomSelfGeneratingNode;
@@ -23,6 +74,7 @@ public class RoamingMain {
 	static UnregulatedMotor motorA = new UnregulatedMotor(MotorPort.A);
 	static UnregulatedMotor motorB = new UnregulatedMotor(MotorPort.B);
 	static TouchSensor touch = new TouchSensor(SensorPort.S3);
+	static RegulatedMotor motorC = new EV3MediumRegulatedMotor(MotorPort.C);
 
 	public static void main(String[] args) {
 
@@ -51,8 +103,8 @@ public class RoamingMain {
 
 			motorA.forward();
 			motorB.forward();
-			motorA.setPower(80);
-			motorB.setPower(80);
+			motorA.setPower(200);
+			motorB.setPower(200);
 
 			// stack a filter on the sensor that gives the running average of the last 5
 			// samples
@@ -67,27 +119,29 @@ public class RoamingMain {
 			int dist = (int) sample[0];
 
 			while (dist < 35 && Button.ESCAPE.isUp()) {
-				// TODO maak een switch case om een modus te kiezen wanneer er iets in de sensor gedetecteerd wordt.
-				
-				switch (makeRandom()) {
-				case 1: // zet 'm naar links
+				// TODO maak een switch case om een modus te kiezen wanneer er iets in de sensor
+				// gedetecteerd wordt.
+
+				switch (makeRandomActie()) {
+				case 1: //  ga naar links
 					motorA.forward();
-					motorA.setPower(60);
-					motorB.setPower(20);
+					motorA.setPower(90);
+					motorB.setPower(30);
 					break;
-					//zet 'm naar rechts
+				// zet 'm naar rechts
 				case 2:
 					motorB.forward();
-					motorB.setPower(60);
-					motorA.setPower(20);
+					motorB.setPower(90);
+					motorA.setPower(30);
 					break;
 				case 3:
 					// blaf
 					Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 					break;
-					//TODO wag tail
+
 				case 4:
-					
+					// TODO wag tail
+					wagTail();
 				}
 
 				// stack a filter on the sensor that gives the running average of the last 5
@@ -116,9 +170,35 @@ public class RoamingMain {
 		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);// Finish programme
 	}
 
-	public static int makeRandom() {
-		int random = (int) (Math.random() * 3) + 1;
+	public static int makeRandomActie() {
+		int random = (int) (Math.random() * 4) + 1;
 		return random;
+	}
+	
+	public static int makeRandomDegrees() {
+		int random = (int) (Math.random() * 60) + 30;
+		return random;
+	}
+	
+	public static int makeRandomKwispelen() {
+		int random = (int) (Math.random() * 15) + 5;
+		return random;
+	}
+	
+	
+
+	public static void wagTail() {
+		// TODO laat een aantal keer kwispelen
+		for (int aantalKeer = 0; aantalKeer < makeRandomKwispelen(); aantalKeer++) {
+		motorC.setSpeed(600);
+		//motorC.forward();
+		motorC.rotateTo(makeRandomDegrees());
+		Delay.msDelay(1);
+		//motorC.backward();
+		motorC.rotateTo(-makeRandomDegrees());
+		}
+		motorC.rotateTo(0);
+		//make random 
 	}
 
 }
