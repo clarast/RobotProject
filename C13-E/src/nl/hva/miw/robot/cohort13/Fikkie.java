@@ -1,14 +1,24 @@
 package nl.hva.miw.robot.cohort13;
 
+import java.io.File;
+
 import lejos.hardware.Brick;
-import lejos.hardware.Key;
+import lejos.hardware.BrickFinder;
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.TextLCD;
-import lejos.utility.Delay;
+import lejos.hardware.lcd.GraphicsLCD;
+import lejos.hardware.motor.UnregulatedMotor;
+import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.Port;
+import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Fikkie {
 
 	Brick brick;
+	private UnregulatedMotor motorA;
+	private UnregulatedMotor motorB;
+	private EV3ColorSensor lichtSensor;
+	private GraphicsLCD LCD;
 
 	public Fikkie() {
 		super();
@@ -21,34 +31,18 @@ public class Fikkie {
 	}
 
 	private void run() {
-		TextLCD display = brick.getTextLCD();
-		// Wav file afspelen + LCD kleurtjes => klasse SFX
-	//	Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
-		Lijnvolger lijnvolger = new Lijnvolger();
-		lijnvolger.moveRobotFwd();
+		this.aansluitenMotorsEnSensors();
+		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, LCD);
+		lijnvolger.tijdrit();
 	}
 
-	public void waitForKey(Key key) {
-		while (key.isUp()) {
-			Delay.msDelay(100);
-		}
-		while (key.isDown()) {
-			Delay.msDelay(100);
-		}
+	private void aansluitenMotorsEnSensors() {
+		LCD = BrickFinder.getDefault().getGraphicsLCD();
+		motorA = new UnregulatedMotor(MotorPort.A);
+		motorB = new UnregulatedMotor(MotorPort.B);
+		brick = BrickFinder.getDefault();
+		Port s1 = brick.getPort("S1");
+		lichtSensor = new EV3ColorSensor(s1);
 	}
-
-	/**
-	 * deze methode is een testmethode (niet functioneel, wordt uiteindelijk niet in
-	 * het programma gebruikt) en print 10 kleurmetingen met 5 seconden tussentijd
-	 * (sluit programma einde methode).
-	 */
-//	private void tienTestMetingenKleur() {
-//		LichtsensorMeting kleurtest = new LichtsensorMeting();
-//		for (int i = 0; i < 10; i++) {
-//			kleurtest.meetKleur();
-//			System.out.println(kleurtest.getKleur());
-//			Delay.msDelay(5000);
-//		}
-//		System.exit(1);
-//	}
 }

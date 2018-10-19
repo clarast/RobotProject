@@ -1,152 +1,116 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.Brick;
-import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.utility.Delay;
 import lejos.hardware.motor.*;
-import lejos.hardware.port.*;
 import lejos.hardware.sensor.EV3ColorSensor;
-//sander
 
 public class Lijnvolger {
 
-	private int motorPowerA = 40;
-	private int motorPowerB = 40;
-	private int kleurXpassage = 0;
-	private final double INTENSITEIT_LAAG = 0.15;
-	private final double RICHT_INTENSITEIT = 0.5;
-	private final double INTENSITEIT_HOOG = 0.80;
+	// De sensors en motoren worden in Fikkie aangemaakt, en hier doorgegeven met de constructor.
+	private UnregulatedMotor motorA;
+	private UnregulatedMotor motorB;
+	private EV3ColorSensor lichtSensor;
+	private GraphicsLCD LCD;
+	
+	private int motorPowerA = 40; // 40 is de startsnelheid
+	private int motorPowerB = 40; // 40 is de startsnelheid
+	
+	private final double INTENSITEIT_DREMPEL_LAAG1 = 0.15;
+	private final double INTENSITEIT_DREMPEL_LAAG2 = 0.40;
+	private final double INTENSITEIT_RICHTWAARDE = 0.5;
+	private final double INTENSITEIT_DREMPEL_HOOG1 = 0.60;
+	private final double INTENSITEIT_DREMPEL_HOOG2 = 0.80;
+	
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
-	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
-	static UnregulatedMotor MotorA = new UnregulatedMotor(MotorPort.A);
-	static UnregulatedMotor MotorB = new UnregulatedMotor(MotorPort.B);
 
-	// initialiseer lichtsensor (in deze klasse omdat lichtsensor vanuit hier
-	// aangestuurd en aangeroepen wordt)
-	Brick brick = BrickFinder.getDefault();
-	Port s1 = brick.getPort("S1");
-	EV3ColorSensor lichtSensor = new EV3ColorSensor(s1);
-
-	// Maak objecten meting en finish, gebruik daarin dezelfde lichtsensor
 	private LichtsensorMeting meting = new LichtsensorMeting(lichtSensor);
-	private LichtsensorMeting finish = new LichtsensorMeting(lichtSensor);
+	private LichtsensorMeting finishPassageMeting = new LichtsensorMeting(lichtSensor);
+	private Finish finish = new Finish(finishPassageMeting, LCD);
 
-	void moveRobotFwd() {
-		// this.achterTest();
-		this.finishIJken();
-		int startStopwatch = 0;
+	public Lijnvolger(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3ColorSensor lichtSensor, GraphicsLCD LCD) {
+		super();
+		this.motorA = motorA;
+		this.motorB = motorB;
+		this.lichtSensor = lichtSensor;
+		this.LCD = LCD;
+	}
+	
+	
+	void tijdrit() {
+		finish.finishIJken();
+		boolean stopwatchStarted = false;
 
-		MotorA.backward();
-		MotorB.backward();
+		motorA.backward();
+		motorB.backward();
 
-		while (kleurXpassage < 2) {
-			this.setKleurXpassage();
+		while (finish.getAantalFinishPassages() < 2) {
+			finish.setAantalFinishPassages();
 			meting.meetIntensiteit();
-			bepaalTypeBocht();
-			rijden();
-			if (kleurXpassage == 1 && startStopwatch == 0) {
+			this.bepaalTypeBocht();
+			this.rijden();
+			if (finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
 				tijdswaarneming.startStopwatch();
-				startStopwatch++;
+				stopwatchStarted = true;
 			}
 		}
 
 		tijdswaarneming.stopStopwatch();
-		MotorA.stop();
-		MotorB.stop();
+		motorA.stop();
+		motorB.stop();
 		lichtSensor.close();
 		LCD.clear();
 		LCD.drawString(tijdswaarneming.toString(), 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-		Delay.msDelay(5000);
-		// toevoegen SFX
-	}
-
-	private void finishIJken() {
-		LCD.clear();
-		System.out.println("Snuffel finish, druk op enter als ie klaarstaat");
 		Button.ENTER.waitForPress();
-		finish.meetKleurRGB();
-		LCD.clear();
-		System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", finish.getR(),
-				finish.getG(), finish.getB());
-		Button.ENTER.waitForPress();
-		LCD.clear();
-	}
-
-	/**
-	 * Deze methode hoogt de aantal passages op als een niet zwarte haakse lijn
-	 * wordt gepasseerd. Methode finishkleur wordt aangeroepen om te bepalen of een
-	 * gemeten kleur een meting is die niet finish is.
-	 */
-	private void setKleurXpassage() {
-		meting.nieuweMetingWordtOudeMeting();
-		meting.meetKleurRGB();
-
-		boolean oudeKleurMetingFinish = this.finishkleur(meting.getOudeR(), meting.getOudeG(), meting.getOudeB());
-		boolean nieuweKleurMetingFinish = this.finishkleur(meting.getR(), meting.getG(), meting.getB());
-
-		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
-			kleurXpassage++;
-			LCD.clear();
-			System.out.println("kleurpassage");
-			LCD.clear();
-		}
-	}
-
-	private boolean finishkleur(double kleur1, double kleur2, double kleur3) {
-		if (kleur1 == finish.getR() && kleur2 == finish.getG() && kleur3 == finish.getB()) {
-			return true;
-		} else
-			return false;
 	}
 
 	private void bepaalTypeBocht() {
-		// scherpe bocht (draai op plek) boven of onder drempelwaarde, anders flauwe
-		// bocht.
-		if (meting.getIntensiteit() > INTENSITEIT_HOOG || meting.getIntensiteit() < INTENSITEIT_LAAG) {
-			draaiOpDePlek();
-		} else if (meting.getIntensiteit() > 0.60 || meting.getIntensiteit() < 0.40) {
-			flauweBocht();
+		// scherpe bocht (draai op plek) als boven of onder drempelwaarde. Flauwe bocht
+		// als onder tweede drempelwaarde. Anders geen bocht maar rechtdoor.
+		if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG2 || meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG1) {
+			this.draaiOpDePlek();
+		} else if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG1 || meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG2) {
+			this.flauweBocht();
 		} else
 			this.rechtdoor();
-	}
-
-	private void rechtdoor() {
-		MotorA.backward();
-		MotorB.backward();
-		this.motorPowerA = 60;
-		this.motorPowerB = 60;
-	}
-
-	public void rijden() {
-		MotorA.setPower(motorPowerA);
-		MotorB.setPower(motorPowerB);
-		Delay.msDelay(125);
 	}
 
 	public void draaiOpDePlek() {
 		this.motorPowerA = 35;
 		this.motorPowerB = 40;
-		if (meting.getIntensiteit() > INTENSITEIT_HOOG) {
-			MotorA.forward();
-			MotorB.backward();
+		if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG2) {
+			motorA.forward();
+			motorB.backward();
 		} else {
-			MotorA.backward();
-			MotorB.forward();
+			motorA.backward();
+			motorB.forward();
 		}
 	}
 
 	public void flauweBocht() {
-		MotorA.backward();
-		MotorB.backward();
-		if (meting.getIntensiteit() > RICHT_INTENSITEIT) {
+		motorA.backward();
+		motorB.backward();
+		if (meting.getIntensiteit() > INTENSITEIT_RICHTWAARDE) {
 			this.motorPowerA = 45;
 			this.motorPowerB = 60;
 		} else {
 			this.motorPowerA = 60;
 			this.motorPowerB = 45;
 		}
+	}
+
+	private void rechtdoor() {
+		motorA.backward();
+		motorB.backward();
+		this.motorPowerA = 60;
+		this.motorPowerB = 60;
+	}
+
+	public void rijden() {
+		motorA.setPower(motorPowerA);
+		motorB.setPower(motorPowerB);
+		Delay.msDelay(125);
 	}
 
 }

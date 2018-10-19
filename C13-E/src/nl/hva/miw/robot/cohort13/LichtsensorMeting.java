@@ -32,21 +32,6 @@ public class LichtsensorMeting {
 		this.intensiteit = sample[0];
 	}
 
-	public float getIntensiteit() {
-		return intensiteit;
-	}
-
-	public void meetKleur() {
-		// zet sensor op RedMode (type meting voor kleurmeting)
-		SampleProvider colorId = lichtSensor.getColorIDMode();
-		// maak float array aan, deze is nodig om resultaat in op te slaan
-		float[] sample = new float[colorId.sampleSize()];
-		// haal een sample op
-		colorId.fetchSample(sample, 0);
-		// zet attribuut op laatste metingswaarde
-		this.kleur = sample[0];
-	}
-
 	public void meetKleurRGB() {
 		// zet sensor op RedMode (type meting voor kleurmeting)
 		SampleProvider rgb = lichtSensor.getRGBMode();
@@ -69,6 +54,10 @@ public class LichtsensorMeting {
 		this.oudeR = this.R;
 		this.oudeG = this.G;
 		this.oudeB = this.B;
+	}
+	
+	public float getIntensiteit() {
+		return intensiteit;
 	}
 	
 	public float getKleur() {
