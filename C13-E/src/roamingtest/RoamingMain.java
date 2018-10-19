@@ -58,9 +58,6 @@ public class RoamingMain {
 
 		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 
-	/*	motorA.setPower(200);
-		motorB.setPower(200);*/
-		System.out.println("rijden");
 
 		// poort initialiseren
 		Port port = LocalEV3.get().getPort("S2");
@@ -74,11 +71,12 @@ public class RoamingMain {
 		while (Button.ESCAPE.isUp()) {
 
 			Delay.msDelay(1000);
-
-			motorA.backward();
-			motorB.backward();
+			
 			motorA.setPower(200);
 			motorB.setPower(200);
+			motorA.backward();
+			motorB.backward();
+			
 
 			// stack a filter on the sensor that gives the running average of the last 5
 			// samples
