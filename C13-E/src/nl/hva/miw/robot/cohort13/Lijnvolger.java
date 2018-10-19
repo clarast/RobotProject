@@ -17,7 +17,7 @@ public class Lijnvolger {
 	private int kleurXpassage = 0;
 	private final double INTENSITEIT_LAAG = 0.15;
 	private final double RICHT_INTENSITEIT = 0.5;
-	private final double INTENSITEIT_HOOG = 0.85;
+	private final double INTENSITEIT_HOOG = 0.80;
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 	GraphicsLCD LCD = BrickFinder.getDefault().getGraphicsLCD();
 	static UnregulatedMotor MotorA = new UnregulatedMotor(MotorPort.A);
@@ -52,7 +52,6 @@ public class Lijnvolger {
 			}
 		}
 
-		LCD.clear();
 		tijdswaarneming.stopStopwatch();
 		MotorA.stop();
 		MotorB.stop();
@@ -103,59 +102,50 @@ public class Lijnvolger {
 	}
 
 	private void bepaalTypeBocht() {
-
-		// scherpe bocht naar links / rechts
-		if (meting.getIntensiteit() > INTENSITEIT_HOOG) {
+		// scherpe bocht (draai op plek) boven of onder drempelwaarde, anders flauwe
+		// bocht.
+		if (meting.getIntensiteit() > INTENSITEIT_HOOG || meting.getIntensiteit() < INTENSITEIT_LAAG) {
 			draaiOpDePlek();
-		} else if (meting.getIntensiteit() < INTENSITEIT_LAAG) {
-			draaiOpDePlek();
-
-			// flauwe bocht naar links / rechts (methode voor maken!)
-		} else if (meting.getIntensiteit() > this.RICHT_INTENSITEIT) {
+		} else if (meting.getIntensiteit() > 0.60 || meting.getIntensiteit() < 0.40) {
 			flauweBocht();
+		} else
+			this.rechtdoor();
+	}
 
-		} else if (meting.getIntensiteit() < this.RICHT_INTENSITEIT) {
-			flauweBocht();
-		}
+	private void rechtdoor() {
+		MotorA.backward();
+		MotorB.backward();
+		this.motorPowerA = 60;
+		this.motorPowerB = 60;
 	}
 
 	public void rijden() {
 		MotorA.setPower(motorPowerA);
 		MotorB.setPower(motorPowerB);
-		Delay.msDelay(100);
+		Delay.msDelay(125);
 	}
 
 	public void draaiOpDePlek() {
-		this.motorPowerA = 40;
+		this.motorPowerA = 35;
 		this.motorPowerB = 40;
 		if (meting.getIntensiteit() > INTENSITEIT_HOOG) {
 			MotorA.forward();
+			MotorB.backward();
 		} else {
+			MotorA.backward();
 			MotorB.forward();
 		}
-	}
-
-	public void achterTest() {
-		MotorA.setPower(50);
-		MotorB.setPower(50);
-		MotorA.forward();
-		MotorB.forward();
-		Delay.msDelay(5000);
-
-		MotorA.backward();
-		Delay.msDelay(5000);
-		System.exit(1);
 	}
 
 	public void flauweBocht() {
 		MotorA.backward();
 		MotorB.backward();
 		if (meting.getIntensiteit() > RICHT_INTENSITEIT) {
-			this.motorPowerA = 30;
-			this.motorPowerB = 40;
+			this.motorPowerA = 45;
+			this.motorPowerB = 60;
 		} else {
-			this.motorPowerA = 40;
-			this.motorPowerB = 30;
+			this.motorPowerA = 60;
+			this.motorPowerB = 45;
 		}
 	}
 

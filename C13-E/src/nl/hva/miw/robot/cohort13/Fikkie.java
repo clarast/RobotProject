@@ -1,13 +1,8 @@
 package nl.hva.miw.robot.cohort13;
 
-import java.io.File;
-
 import lejos.hardware.Brick;
-import lejos.hardware.Button;
 import lejos.hardware.Key;
-import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.LCD;
 import lejos.hardware.lcd.TextLCD;
 import lejos.utility.Delay;
 
@@ -28,7 +23,7 @@ public class Fikkie {
 	private void run() {
 		TextLCD display = brick.getTextLCD();
 		// Wav file afspelen + LCD kleurtjes => klasse SFX
-		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+	//	Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 		Lijnvolger lijnvolger = new Lijnvolger();
 		lijnvolger.moveRobotFwd();
 	}
