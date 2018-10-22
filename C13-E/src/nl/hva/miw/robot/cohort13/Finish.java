@@ -12,24 +12,26 @@ public class Finish {
 	private double finishG;
 	private double finishB;
 	private EV3ColorSensor lichtSensor;
+	private Scherm scherm;
 
-	public Finish(EV3ColorSensor lichtSensor, GraphicsLCD LCD) {
+	public Finish(EV3ColorSensor lichtSensor, Scherm scherm) {
 		super();
 		this.lichtSensor = lichtSensor;
-		this.LCD = LCD;
+		this.scherm = scherm;
 	}
 
-	
 	public void finishIJken() {
-		System.out.println("Snuffel finish, druk op enter als ie klaarstaat");
+		scherm.printSnuffel();
 		Button.ENTER.waitForPress();
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting.meetKleurRGB();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();
-		System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", this.finishR,
-				this.finishG, this.finishB);
+		scherm.printKlaarOmTeRijden(this);
+		// (dit is de oude manier om te printen, behoeft waarschijnlijk aanpassing met
+		// nieuwe scherminterface): 	System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", this.finishR, this.finishG,
+		// this.finishB);
 		Button.ENTER.waitForPress();
 	}
 
@@ -63,5 +65,19 @@ public class Finish {
 	public int getAantalFinishPassages() {
 		return aantalFinishPassages;
 	}
+
+	public double getFinishR() {
+		return finishR;
+	}
+
+	public double getFinishG() {
+		return finishG;
+	}
+
+	public double getFinishB() {
+		return finishB;
+	}
+	
+	
 
 }
