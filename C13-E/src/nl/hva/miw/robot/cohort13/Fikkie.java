@@ -40,11 +40,11 @@ public class Fikkie {
 		this.aansluitenMotorsEnSensors();
 //		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
-		lijnvolger.tijdrit();
-		motorA.close();
-		motorB.close();
+		//lijnvolger.tijdrit();
+		//motorA.close();
+		//motorB.close();
 		Dollen dollen = new Dollen(motorA, motorB, motorC, infraroodSensor, touchSensor, scherm);
-		lijnvolger.tijdrit();
+		//lijnvolger.tijdrit();
 		lichtSensor.close();
 		dollen.startDollen();
 		sluitenMotorenSensors();

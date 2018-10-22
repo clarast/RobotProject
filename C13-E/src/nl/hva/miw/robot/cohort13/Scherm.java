@@ -27,6 +27,11 @@ public class Scherm {
 		LCD.clear();
 		LCD.drawString(rondetijd, 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 	}
+	
+	public void printTekst(String tekst) {
+		LCD.clear();
+		LCD.drawString(tekst, 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER );
+	}
 
 	public void printOgen() {
 
@@ -327,6 +332,6 @@ public class Scherm {
 				(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, 
 				(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, });
 
-		LCD.drawImage(ogen, 20, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		LCD.drawImage(ogen, 90, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 	}
 }
