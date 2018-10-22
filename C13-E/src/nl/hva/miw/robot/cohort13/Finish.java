@@ -2,27 +2,26 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.Button;
 import lejos.hardware.lcd.GraphicsLCD;
+import lejos.hardware.lcd.LCD;
 
 public class Finish {
 
 	private int aantalFinishPassages;
-	private LichtsensorMeting finishPassageMeting;
-	private GraphicsLCD LCD;
+	static LichtsensorMeting finishPassageMeting;
+	private Scherm scherm;
 	
-	public Finish(LichtsensorMeting finishPassageMeting, GraphicsLCD LCD) {
+	public Finish(LichtsensorMeting finishPassageMeting, Scherm scherm) {
 		super();
 		this.finishPassageMeting = finishPassageMeting;
-		this.LCD = LCD;
+		this.scherm = scherm;
 	}
 
 	public void finishIJken() {
-		LCD.clear();
-		System.out.println("Snuffel finish, druk op enter als ie klaarstaat");
+		scherm.printSnuffel();
 		Button.ENTER.waitForPress();
 		finishPassageMeting.meetKleurRGB();
-		LCD.clear();
-		System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.",
-				finishPassageMeting.getR(), finishPassageMeting.getG(), finishPassageMeting.getB());
+		// snuffel.wav toevoegen
+		scherm.printKlaarOmTeRijden();
 		Button.ENTER.waitForPress();
 		LCD.clear();
 	}

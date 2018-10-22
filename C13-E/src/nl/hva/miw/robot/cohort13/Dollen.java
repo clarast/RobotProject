@@ -1,31 +1,15 @@
 package nl.hva.miw.robot.cohort13;
 
 import java.io.File;
-
-import customrobot.library.TouchSensor;
-import lejos.ev3.tools.LCDDisplay;
-import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
-import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.UnregulatedMotor;
-import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
-import lejos.hardware.sensor.SensorModes;
-import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.Port;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.GraphicsLCD;
-import lejos.hardware.lcd.LCD;
-import lejos.hardware.lcd.TextLCD;
-import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MeanFilter;
-import lejos.robotics.pathfinding.RandomSelfGeneratingNode;
 import lejos.utility.Delay;
 
 public class Dollen {
@@ -35,6 +19,7 @@ public class Dollen {
 	private EV3MediumRegulatedMotor motorC;
 	private EV3IRSensor infraroodSensor;
 	private EV3TouchSensor touchSensor;
+	private Scherm scherm;
 	private GraphicsLCD LCD;
 	private final int NUMBER_OF_ACTIONS = 4;
 	private final int START_NUMBER = 1;
@@ -50,14 +35,14 @@ public class Dollen {
 	private final int AVOID_SPEED_LOW = 40;
 
 	public Dollen(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3MediumRegulatedMotor motorC,
-			EV3IRSensor infraroodSensor, EV3TouchSensor touchSensor, GraphicsLCD LCD) {
+			EV3IRSensor infraroodSensor, EV3TouchSensor touchSensor, Scherm scherm) {
 		super();
 		this.motorA = motorA;
 		this.motorB = motorB;
 		this.motorC = motorC;
 		this.infraroodSensor = infraroodSensor;
 		this.touchSensor = touchSensor;
-		this.LCD = LCD;
+		this.scherm = scherm;
 	}
 
 	public void startDollen() {
@@ -126,7 +111,7 @@ public class Dollen {
 	private void drawLCD() {
 		LCD.clear();
 		Delay.msDelay(200);
-		LCD.drawString("DOLMODUS", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		scherm.printOgen();
 	}
 
 	private void chooseAction() {

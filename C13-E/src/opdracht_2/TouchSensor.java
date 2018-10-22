@@ -1,4 +1,4 @@
-package customrobot.library;
+package opdracht_2;
 
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3TouchSensor;
