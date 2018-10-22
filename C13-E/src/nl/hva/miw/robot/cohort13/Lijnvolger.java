@@ -12,7 +12,7 @@ public class Lijnvolger {
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3ColorSensor lichtSensor;
-	private GraphicsLCD LCD;
+	private Scherm scherm;
 	
 	private int motorPowerA = 40; // 40 is de startsnelheid
 	private int motorPowerB = 40; // 40 is de startsnelheid
@@ -29,20 +29,21 @@ public class Lijnvolger {
 	private LichtsensorMeting finishPassageMeting; 
 	private Finish finish; 
 
-	public Lijnvolger(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3ColorSensor lichtSensor, GraphicsLCD LCD) {
+	public Lijnvolger(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3ColorSensor lichtSensor, Scherm scherm) {
 		super();
 		this.motorA = motorA;
 		this.motorB = motorB;
 		this.lichtSensor = lichtSensor;
-		this.LCD = LCD;
+		this.scherm = scherm;
 		meting = new LichtsensorMeting(lichtSensor);
 		finishPassageMeting = new LichtsensorMeting(lichtSensor);
-		finish = new Finish(finishPassageMeting, LCD);
+		finish = new Finish(finishPassageMeting, scherm);
 	}
 	
 	
 	void tijdrit() {
 		finish.finishIJken();
+		scherm.printOgen();
 		boolean stopwatchStarted = false;
 
 		motorA.backward();
@@ -62,8 +63,7 @@ public class Lijnvolger {
 		tijdswaarneming.stopStopwatch();
 		motorA.stop();
 		motorB.stop();
-		LCD.clear();
-		LCD.drawString(tijdswaarneming.toString(), 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		scherm.printRondeTijd(tijdswaarneming.toString());
 		Button.ENTER.waitForPress();
 	}
 

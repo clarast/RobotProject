@@ -1,7 +1,6 @@
 package nl.hva.miw.robot.cohort13;
 
 import java.io.File;
-
 import lejos.hardware.Brick;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Sound;
@@ -11,6 +10,7 @@ import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.utility.Delay;
 
 public class Fikkie {
 
@@ -19,6 +19,7 @@ public class Fikkie {
 	private UnregulatedMotor motorB;
 	private EV3ColorSensor lichtSensor;
 	private GraphicsLCD LCD;
+	private Scherm scherm;
 
 	public Fikkie() {
 		super();
@@ -32,8 +33,8 @@ public class Fikkie {
 
 	private void run() {
 		this.aansluitenMotorsEnSensors();
-		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
-		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, LCD);
+//		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
 		lijnvolger.tijdrit();
 		motorA.close();
 		motorB.close();
@@ -43,6 +44,7 @@ public class Fikkie {
 
 	private void aansluitenMotorsEnSensors() {
 		LCD = BrickFinder.getDefault().getGraphicsLCD();
+		scherm = new Scherm(LCD);
 		motorA = new UnregulatedMotor(MotorPort.A);
 		motorB = new UnregulatedMotor(MotorPort.B);
 		brick = BrickFinder.getDefault();
