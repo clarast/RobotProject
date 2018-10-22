@@ -1,8 +1,7 @@
-package roamingtest;
+package opdracht_2;
 
 import java.io.File;
 
-import customrobot.library.TouchSensor;
 import lejos.ev3.tools.LCDDisplay;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
