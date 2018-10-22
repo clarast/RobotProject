@@ -1,6 +1,5 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.GraphicsLCD;
 

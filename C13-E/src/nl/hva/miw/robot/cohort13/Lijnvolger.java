@@ -25,9 +25,9 @@ public class Lijnvolger {
 	
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 
-	private LichtsensorMeting meting = new LichtsensorMeting(lichtSensor);
-	private LichtsensorMeting finishPassageMeting = new LichtsensorMeting(lichtSensor);
-	private Finish finish = new Finish(finishPassageMeting, LCD);
+	private LichtsensorMeting meting; 
+	private LichtsensorMeting finishPassageMeting; 
+	private Finish finish; 
 
 	public Lijnvolger(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3ColorSensor lichtSensor, GraphicsLCD LCD) {
 		super();
@@ -35,6 +35,9 @@ public class Lijnvolger {
 		this.motorB = motorB;
 		this.lichtSensor = lichtSensor;
 		this.LCD = LCD;
+		meting = new LichtsensorMeting(lichtSensor);
+		finishPassageMeting = new LichtsensorMeting(lichtSensor);
+		finish = new Finish(finishPassageMeting, LCD);
 	}
 	
 	
@@ -59,7 +62,6 @@ public class Lijnvolger {
 		tijdswaarneming.stopStopwatch();
 		motorA.stop();
 		motorB.stop();
-		lichtSensor.close();
 		LCD.clear();
 		LCD.drawString(tijdswaarneming.toString(), 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 		Button.ENTER.waitForPress();
