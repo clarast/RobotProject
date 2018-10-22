@@ -21,16 +21,20 @@ public class Scherm {
 		System.out.println("Snuffel finish, druk op enter als ie klaarstaat");
 	}
 
-	public void printKlaarOmTeRijden() {
-		schoonScherm();
+	public void printKlaarOmTeRijden(Finish finish) {
+	schoonScherm();
 		System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", // **
-				Finish.finishPassageMeting.getR(), Finish.finishPassageMeting.getG(),
-				Finish.finishPassageMeting.getB());
+				finish.getFinishR(), finish.getFinishG(), finish.getFinishB());
 	}
 
 	public void printRondeTijd(String rondetijd) {
 		schoonScherm();
 		LCD.drawString(rondetijd, 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+	}
+	
+	public void printTekst(String tekst) {
+		LCD.clear();
+		LCD.drawString(tekst, 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER );
 	}
 
 	public void printOgen() {
@@ -224,6 +228,6 @@ public class Scherm {
 				(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				(byte) 0x00, (byte) 0x00, });
 
-		LCD.drawImage(ogen, 20, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		LCD.drawImage(ogen, 90, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 	}
 }

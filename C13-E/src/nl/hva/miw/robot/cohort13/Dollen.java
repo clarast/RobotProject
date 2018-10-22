@@ -54,7 +54,8 @@ public class Dollen {
 		// verkrijg een instantie van de afstandsmodus
 
 		while (Button.ESCAPE.isUp()) {
-
+			if (isTouched())
+				break;
 			Delay.msDelay(500);
 
 			motorA.setPower(200);
@@ -63,11 +64,13 @@ public class Dollen {
 			motorB.backward();
 
 			SampleProvider average = new MeanFilter(distance, 5);
-			float[] sample = new float[average.sampleSize()];
-			average.fetchSample(sample, 0);
-			int dist = (int) sample[0];
+			float[] sample2 = new float[average.sampleSize()];
+			average.fetchSample(sample2, 0);
+			int dist = (int) sample2[0];
 
 			while (dist < 35 && Button.ESCAPE.isUp()) {
+				if (isTouched())
+					break;
 				// switch case om een modus te kiezen wanneer er iets gedetecteerd wordt.
 				chooseAction();
 
@@ -77,12 +80,12 @@ public class Dollen {
 				average = new MeanFilter(distance, 5);
 
 				// initialize an array of floats for fetching samples
-				sample = new float[average.sampleSize()];
+				sample2 = new float[average.sampleSize()];
 
 				// fetch a sample
-				average.fetchSample(sample, 0);
+				average.fetchSample(sample2, 0);
 
-				dist = (int) sample[0];
+				dist = (int) sample2[0];
 			}
 		}
 		stopMotors();
@@ -92,12 +95,24 @@ public class Dollen {
 
 	private void initiateDollen() {
 		Sound.beepSequence(); // make sound when ready.
-		LCD.drawString("DRUK OP DE KNOP", 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		scherm.printTekst("Druk op de knop!");
 		Button.waitForAnyPress();
 	}
 
+	public boolean isTouched() {
+		SampleProvider touch = touchSensor.getTouchMode();
+		float[] sample = new float[touch.sampleSize()];
+
+		touch.fetchSample(sample, 0);
+
+		if (sample[0] == 0)
+			return false;
+		else
+			return true;
+	}
+
 	private void drawLCD() {
-		LCD.clear();
+		//LCD.clear();
 		Delay.msDelay(200);
 		scherm.printOgen();
 	}
