@@ -33,7 +33,7 @@ public class Scherm {
 	}
 	
 	public void printTekst(String tekst) {
-		LCD.clear();
+		schoonScherm();
 		LCD.drawString(tekst, 100, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER );
 	}
 
