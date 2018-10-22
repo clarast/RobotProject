@@ -12,19 +12,18 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 
-
 public class Fikkie {
 
 	Brick brick;
+	private GraphicsLCD LCD;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3MediumRegulatedMotor motorC;
 	private EV3ColorSensor lichtSensor;
-	private GraphicsLCD LCD;
+	private GeluidSpeler geluidspeler;
 	private Scherm scherm;
 	private EV3IRSensor infraroodSensor;
 	private EV3TouchSensor touchSensor;
-
 
 	public Fikkie() {
 		super();
@@ -38,7 +37,7 @@ public class Fikkie {
 
 	private void run() {
 		this.aansluitenMotorsEnSensors();
-//		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+		geluidspeler.speelWelkomstBlaf();
 		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
 		lijnvolger.tijdrit();
 		motorA.close();
@@ -54,6 +53,7 @@ public class Fikkie {
 	private void aansluitenMotorsEnSensors() {
 		LCD = BrickFinder.getDefault().getGraphicsLCD();
 		scherm = new Scherm(LCD);
+		geluidspeler = new GeluidSpeler();
 		motorA = new UnregulatedMotor(MotorPort.A);
 		motorB = new UnregulatedMotor(MotorPort.B);
 		motorC = new EV3MediumRegulatedMotor(MotorPort.C);
@@ -64,7 +64,7 @@ public class Fikkie {
 		lichtSensor = new EV3ColorSensor(s1);
 		infraroodSensor = new EV3IRSensor(s2);
 		touchSensor = new EV3TouchSensor(s3);
-		
+
 	}
 
 	private void sluitenMotorenSensors() {

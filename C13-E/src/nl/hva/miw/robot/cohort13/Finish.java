@@ -9,6 +9,7 @@ public class Finish {
 	private int aantalFinishPassages;
 	static LichtsensorMeting finishPassageMeting;
 	private Scherm scherm;
+	private GeluidSpeler geluidspeler;
 	
 	public Finish(LichtsensorMeting finishPassageMeting, Scherm scherm) {
 		super();
@@ -20,7 +21,7 @@ public class Finish {
 		scherm.printSnuffel();
 		Button.ENTER.waitForPress();
 		finishPassageMeting.meetKleurRGB();
-		// snuffel.wav toevoegen
+		geluidspeler.speelSnuffel();
 		scherm.printKlaarOmTeRijden();
 		Button.ENTER.waitForPress();
 		LCD.clear();
