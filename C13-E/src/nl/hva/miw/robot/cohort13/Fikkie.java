@@ -32,9 +32,13 @@ public class Fikkie {
 
 	private void run() {
 		this.aansluitenMotorsEnSensors();
-		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+		
+		
+		
+//		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, LCD);
 		lijnvolger.tijdrit();
+	//	lijnvolger.lichttest();
 		motorA.close();
 		motorB.close();
 		lichtSensor.close();
