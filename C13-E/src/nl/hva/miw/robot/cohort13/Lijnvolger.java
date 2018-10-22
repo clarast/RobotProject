@@ -8,26 +8,27 @@ import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Lijnvolger {
 
-	// De sensors en motoren worden in Fikkie aangemaakt, en hier doorgegeven met de constructor.
+	// De sensors en motoren worden in Fikkie aangemaakt, en hier doorgegeven met de
+	// constructor.
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3ColorSensor lichtSensor;
 	private Scherm scherm;
-	
+
 	private int motorPowerA = 40; // 40 is de startsnelheid
 	private int motorPowerB = 40; // 40 is de startsnelheid
-	
+
 	private final double INTENSITEIT_DREMPEL_LAAG1 = 0.15;
 	private final double INTENSITEIT_DREMPEL_LAAG2 = 0.25;
 	private final double INTENSITEIT_RICHTWAARDE = 0.5;
 	private final double INTENSITEIT_DREMPEL_HOOG1 = 0.40;
 	private final double INTENSITEIT_DREMPEL_HOOG2 = 0.50;
-	
+
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 
-	private LichtsensorMeting meting; 
-	private LichtsensorMeting finishPassageMeting; 
-	private Finish finish; 
+	private LichtsensorMeting meting;
+	private LichtsensorMeting finishPassageMeting;
+	private Finish finish;
 
 	public Lijnvolger(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3ColorSensor lichtSensor, Scherm scherm) {
 		super();
@@ -39,8 +40,7 @@ public class Lijnvolger {
 		finishPassageMeting = new LichtsensorMeting(lichtSensor);
 		finish = new Finish(lichtSensor, scherm);
 	}
-	
-	
+
 	public void lichttest() {
 		while (Button.ESCAPE.isUp()) {
 			meting.meetIntensiteit();
@@ -49,7 +49,7 @@ public class Lijnvolger {
 		System.exit(1);
 
 	}
-	
+
 	void tijdrit() {
 		finish.finishIJken();
 		scherm.printOgen();
@@ -77,9 +77,11 @@ public class Lijnvolger {
 	private void bepaalTypeBocht() {
 		// scherpe bocht (draai op plek) als boven of onder drempelwaarde. Flauwe bocht
 		// als onder tweede drempelwaarde. Anders geen bocht maar rechtdoor.
-		if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG2 || meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG1) {
+		if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG2
+				|| meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG1) {
 			this.draaiOpDePlek();
-		} else if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG1 || meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG2) {
+		} else if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG1
+				|| meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG2) {
 			this.flauweBocht();
 		} else
 			this.rechtdoor();
@@ -120,6 +122,6 @@ public class Lijnvolger {
 		motorA.setPower(motorPowerA);
 		motorB.setPower(motorPowerB);
 		Delay.msDelay(100);
-	}	
+	}
 
 }

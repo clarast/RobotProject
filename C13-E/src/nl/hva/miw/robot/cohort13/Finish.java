@@ -13,7 +13,6 @@ public class Finish {
 	private double finishB;
 	private EV3ColorSensor lichtSensor;
 	private Scherm scherm;
-
 	private GeluidSpeler geluidspeler;
 	
 
@@ -28,6 +27,7 @@ public class Finish {
 		Button.ENTER.waitForPress();
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting.meetKleurRGB();
+		geluidspeler.speelSnuffel();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();
