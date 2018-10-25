@@ -3,7 +3,9 @@ package nl.hva.miw.robot.cohort13;
 import java.io.File;
 import lejos.hardware.Sound;
 
-public class GeluidSpeler implements Runnable {
+public class GeluidSpeler extends Thread {
+	
+	private Thread thread;
 
 	public void speelWelkomstBlaf() {
 		Sound.playSample(new File("welkomstblaf.wav"), Sound.VOL_MAX);
@@ -35,10 +37,16 @@ public class GeluidSpeler implements Runnable {
 	
 	@Override
 	public void run() {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 100; i++) {
 			speelKauwen();
-			speelSnuffel();
 		}
 		
+	}
+	
+		public void start () {
+			if (thread == null) {
+				thread = new Thread (this);
+				thread.start ();
+			}
 	}
 }

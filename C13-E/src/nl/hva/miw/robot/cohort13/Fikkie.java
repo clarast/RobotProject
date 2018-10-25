@@ -38,32 +38,22 @@ public class Fikkie {
 	}
 
 	private void run() {
-		this.aansluitenMotorsEnSensors();
-		Button.LEDPattern(4);
-		geluidspeler.speelWelkomstBlaf();
 		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
-		//oefenen thread geluid afspelen tijdens dollen
-		GeluidSpeler geluidje = new GeluidSpeler();
-		System.out.println("Hoi");
-		Delay.msDelay(1000);
-		Thread draadje = new Thread(geluidje);
-		draadje.start();
-		//System.out.println(draadje.getName());
-		System.out.println("Doe je dit");
-		//System.out.println(draadje.isAlive());
-		Delay.msDelay(1000);
+		Dollen dollen = new Dollen(motorA, motorB, motorC, infraroodSensor, touchSensor, scherm);
+		KopLampen lichtje = new KopLampen();
+		
+		this.aansluitenMotorsEnSensors();
+		geluidspeler.speelWelkomstBlaf();
+		lichtje.start();
 		lijnvolger.tijdrit();
 		motorA.close();
 	    motorB.close();
-		Dollen dollen = new Dollen(motorA, motorB, motorC, infraroodSensor, touchSensor, scherm);
 		lichtSensor.close();
 		dollen.startDollen();
 		sluitenMotorenSensors();
-		//exception en joinen van thread 
 		try {
-			draadje.join();
+			lichtje.join();
 			} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			}
 	}
