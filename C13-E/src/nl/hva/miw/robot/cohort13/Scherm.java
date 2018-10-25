@@ -2,6 +2,7 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
+import lejos.hardware.LED;
 
 public class Scherm {
 
@@ -229,5 +230,9 @@ public class Scherm {
 				(byte) 0x00, (byte) 0x00, });
 
 		LCD.drawImage(ogen, 90, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+	}
+	
+	public void setPattern(int pattern) {
+		
 	}
 }

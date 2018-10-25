@@ -50,7 +50,7 @@ public class Lijnvolger {
 
 	}
 
-	void tijdrit() {
+	public void tijdrit() {
 		finish.finishIJken();
 		scherm.printOgen();
 		boolean stopwatchStarted = false;
@@ -74,7 +74,7 @@ public class Lijnvolger {
 		Button.ENTER.waitForPress();
 	}
 
-	private void bepaalTypeBocht() {
+	public void bepaalTypeBocht() {
 		// scherpe bocht (draai op plek) als boven of onder drempelwaarde. Flauwe bocht
 		// als onder tweede drempelwaarde. Anders geen bocht maar rechtdoor.
 		if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG2
@@ -111,7 +111,7 @@ public class Lijnvolger {
 		}
 	}
 
-	private void rechtdoor() {
+	public void rechtdoor() {
 		motorA.forward();
 		motorB.forward();
 		this.motorPowerA = 40;

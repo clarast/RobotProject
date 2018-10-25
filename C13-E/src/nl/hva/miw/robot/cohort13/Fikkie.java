@@ -11,6 +11,8 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.utility.Delay;
+import lejos.hardware.Button;
 
 public class Fikkie {
 
@@ -37,17 +39,35 @@ public class Fikkie {
 
 	private void run() {
 		this.aansluitenMotorsEnSensors();
+		Button.LEDPattern(3);
 		geluidspeler.speelWelkomstBlaf();
-		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
-		lijnvolger.tijdrit();
+		//Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
+		//oefenen thread geluid afspelen tijdens dollen
+		GeluidSpeler geluidje = new GeluidSpeler();
+		System.out.println("Hoi");
+		Delay.msDelay(1000);
+		Thread draadje = new Thread(geluidje);
+		draadje.start();
+		//System.out.println(draadje.getName());
+		System.out.println("Doe je dit");
+		//System.out.println(draadje.isAlive());
+		Delay.msDelay(1000);
+		//hieronder gaat bestaande code verder
+		//lijnvolger.tijdrit();
 		motorA.close();
-		motorB.close();
+	    motorB.close();
 		Dollen dollen = new Dollen(motorA, motorB, motorC, infraroodSensor, touchSensor, scherm);
 		//lijnvolger.tijdrit();
 		lichtSensor.close();
 		dollen.startDollen();
 		sluitenMotorenSensors();
-
+		//exception en joinen van thread 
+		try {
+			draadje.join();
+			} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
 	}
 
 	private void aansluitenMotorsEnSensors() {

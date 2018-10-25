@@ -12,7 +12,7 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MeanFilter;
 import lejos.utility.Delay;
 
-public class Dollen {
+public class Dollen  {
 
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
@@ -94,7 +94,7 @@ public class Dollen {
 	}
 
 	private void initiateDollen() {
-		Sound.beepSequence(); // make sound when ready.
+		//Sound.beepSequence(); // make sound when ready.
 		scherm.printTekst("Druk op de knop!");
 		Button.waitForAnyPress();
 	}

@@ -3,7 +3,7 @@ package nl.hva.miw.robot.cohort13;
 import java.io.File;
 import lejos.hardware.Sound;
 
-public class GeluidSpeler {
+public class GeluidSpeler implements Runnable {
 
 	public void speelWelkomstBlaf() {
 		Sound.playSample(new File("welkomstblaf.wav"), Sound.VOL_MAX);
@@ -29,5 +29,16 @@ public class GeluidSpeler {
 
 	public void speelBlaf3() {
 		Sound.playSample(new File("blaf3.wav"), Sound.VOL_MAX);
+	}
+
+	//loop moet uiteindelijk iets anders worden maar dit is een beginnetje
+	
+	@Override
+	public void run() {
+		for (int i = 0; i < 5; i++) {
+			speelKauwen();
+			speelSnuffel();
+		}
+		
 	}
 }
