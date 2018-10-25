@@ -39,9 +39,9 @@ public class Fikkie {
 
 	private void run() {
 		this.aansluitenMotorsEnSensors();
-		Button.LEDPattern(3);
+		Button.LEDPattern(4);
 		geluidspeler.speelWelkomstBlaf();
-		//Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
+		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
 		//oefenen thread geluid afspelen tijdens dollen
 		GeluidSpeler geluidje = new GeluidSpeler();
 		System.out.println("Hoi");
@@ -52,8 +52,7 @@ public class Fikkie {
 		System.out.println("Doe je dit");
 		//System.out.println(draadje.isAlive());
 		Delay.msDelay(1000);
-		//hieronder gaat bestaande code verder
-		//lijnvolger.tijdrit();
+		lijnvolger.tijdrit();
 		motorA.close();
 	    motorB.close();
 		Dollen dollen = new Dollen(motorA, motorB, motorC, infraroodSensor, touchSensor, scherm);

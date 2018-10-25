@@ -33,25 +33,12 @@ public class Finish {
 		Button.ENTER.waitForPress();
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting.meetKleurRGB();
-<<<<<<< HEAD
-	//	geluidspeler.speelSnuffel();
-		this.finishR = finishMeting.getR();
-		this.finishG = finishMeting.getG();
-		this.finishB = finishMeting.getB();
-	//	scherm.printKlaarOmTeRijden(this);
-		// // de regel hierboven moet nog getest worden. Het is de bedoeling dat deze instantie van de finish wordt meegegeven aan de Scherm klasse.
-		// (dit is de oude manier om te printen, behoeft waarschijnlijk aanpassing met
-		// nieuwe scherminterface): 	
-		System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", this.finishR, this.finishG,
-		 this.finishB);
-=======
 		GeluidSpeler geluidspeler = new GeluidSpeler();
 		geluidspeler.speelSnuffel();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();
 		scherm.printKlaarOmTeRijden(this.finishR, this.finishG, this.finishB);
->>>>>>> bdebfde7f31ac1c15b7013237208df08a88f552f
 		Button.ENTER.waitForPress();
 	}
 
