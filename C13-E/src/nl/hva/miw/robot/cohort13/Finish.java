@@ -21,21 +21,24 @@ public class Finish {
 		this.lichtSensor = lichtSensor;
 		this.scherm = scherm;
 	}
+	
+	public Finish(double finishR, double finishG, double finishB) {
+		this.finishR = finishR;
+		this.finishG = finishG;
+		this.finishB = finishB;
+	}
 
 	public void finishIJken() {
 		scherm.printSnuffel();
 		Button.ENTER.waitForPress();
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting.meetKleurRGB();
+		GeluidSpeler geluidspeler = new GeluidSpeler();
 		geluidspeler.speelSnuffel();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();
-		scherm.printKlaarOmTeRijden(this);
-		// // de regel hierboven moet nog getest worden. Het is de bedoeling dat deze instantie van de finish wordt meegegeven aan de Scherm klasse.
-		// (dit is de oude manier om te printen, behoeft waarschijnlijk aanpassing met
-		// nieuwe scherminterface): 	System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", this.finishR, this.finishG,
-		// this.finishB);
+		scherm.printKlaarOmTeRijden(this.finishR, this.finishG, this.finishB);
 		Button.ENTER.waitForPress();
 	}
 
@@ -53,9 +56,8 @@ public class Finish {
 
 		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
 			aantalFinishPassages++;
-			LCD.clear();
+			scherm.schoonScherm();
 			System.out.println("kleurpassage");
-			LCD.clear();
 		}
 	}
 

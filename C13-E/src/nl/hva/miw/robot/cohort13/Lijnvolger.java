@@ -19,10 +19,10 @@ public class Lijnvolger {
 	private int motorPowerB = 40; // 40 is de startsnelheid
 
 	private final double INTENSITEIT_DREMPEL_LAAG1 = 0.15;
-	private final double INTENSITEIT_DREMPEL_LAAG2 = 0.25;
-	private final double INTENSITEIT_RICHTWAARDE = 0.5;
-	private final double INTENSITEIT_DREMPEL_HOOG1 = 0.40;
-	private final double INTENSITEIT_DREMPEL_HOOG2 = 0.50;
+	private final double INTENSITEIT_DREMPEL_LAAG2 = 0.30;
+	private final double INTENSITEIT_RICHTWAARDE = 0.33;
+	private final double INTENSITEIT_DREMPEL_HOOG1 = 0.35;
+	private final double INTENSITEIT_DREMPEL_HOOG2 = 0.40;
 
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
 
@@ -41,15 +41,6 @@ public class Lijnvolger {
 		finish = new Finish(lichtSensor, scherm);
 	}
 
-	public void lichttest() {
-		while (Button.ESCAPE.isUp()) {
-			meting.meetIntensiteit();
-			System.out.println(meting.getIntensiteit());
-		}
-		System.exit(1);
-
-	}
-
 	void tijdrit() {
 		finish.finishIJken();
 		scherm.printOgen();
@@ -58,7 +49,6 @@ public class Lijnvolger {
 		while (finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
 			finish.setAantalFinishPassages(finishPassageMeting);
 			meting.meetIntensiteit();
-			System.out.println(meting.getIntensiteit());
 			this.bepaalTypeBocht();
 			this.rijden();
 			if (finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
@@ -72,6 +62,7 @@ public class Lijnvolger {
 		motorB.stop();
 		scherm.printRondeTijd(tijdswaarneming.toString());
 		Button.ENTER.waitForPress();
+		scherm.schoonScherm();
 	}
 
 	private void bepaalTypeBocht() {
@@ -94,6 +85,7 @@ public class Lijnvolger {
 			motorA.backward();
 			motorB.forward();
 		} else {
+			this.motorPowerB = 45;
 			motorA.forward();
 			motorB.backward();
 		}
@@ -122,6 +114,6 @@ public class Lijnvolger {
 		motorA.setPower(motorPowerA);
 		motorB.setPower(motorPowerB);
 		Delay.msDelay(100);
-	}
+	}	
 
 }

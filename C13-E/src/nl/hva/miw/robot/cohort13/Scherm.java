@@ -21,10 +21,10 @@ public class Scherm {
 		System.out.println("Snuffel finish, druk op enter als ie klaarstaat");
 	}
 
-	public void printKlaarOmTeRijden(Finish finish) {
+	public void printKlaarOmTeRijden(double finishR, double finishG, double finishB) {
 	schoonScherm();
 		System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", // **
-				finish.getFinishR(), finish.getFinishG(), finish.getFinishB());
+				finishR, finishG, finishB);
 	}
 
 	public void printRondeTijd(String rondetijd) {

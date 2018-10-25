@@ -43,7 +43,6 @@ public class Fikkie {
 		motorA.close();
 		motorB.close();
 		Dollen dollen = new Dollen(motorA, motorB, motorC, infraroodSensor, touchSensor, scherm);
-		//lijnvolger.tijdrit();
 		lichtSensor.close();
 		dollen.startDollen();
 		sluitenMotorenSensors();
