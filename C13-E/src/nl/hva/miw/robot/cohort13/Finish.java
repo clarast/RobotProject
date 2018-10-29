@@ -14,9 +14,9 @@ public class Finish {
 	private GeluidSpeler geluidspeler;
 	
 
-	public Finish(LichtsensorMeting finishPassageMeting, Scherm scherm2, GeluidSpeler geluidspeler2) {
+	public Finish(EV3ColorSensor lichtSensor, Scherm scherm, GeluidSpeler geluidspeler) {
 		super();
-		this.lichtSensor =lichtSensor;
+		this.lichtSensor = lichtSensor;
 		this.scherm = scherm;
 		this.geluidspeler = geluidspeler;
 	}

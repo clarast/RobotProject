@@ -36,18 +36,13 @@ public class Lijnvolger {
 	public Lijnvolger(Hardware hardware) {
 		//this.brick = super.maakBrick();
 		this.motorA = hardware.maakMotorA();
-		System.out.println("1");
 		this.motorB = hardware.maakMotorB();
-		System.out.println(" 2");
 		this.lichtSensor = hardware.maakLichtsensor();
-		System.out.println("  3");
 		this.scherm = hardware.maakScherm();
-		System.out.println("   4");
 		this.geluidspeler = hardware.maakGeluidSpeler();
-		System.out.println("    5");
 		meting = new LichtsensorMeting(lichtSensor);
 		finishPassageMeting = new LichtsensorMeting(lichtSensor);
-		finish = new Finish(finishPassageMeting, scherm, geluidspeler);
+		finish = new Finish(lichtSensor, scherm, geluidspeler);
 	}
 
 	public void lichttest() {

@@ -19,10 +19,10 @@ public class Fikkie {
 	private void run() {
 
 		Hardware hardware = new Hardware();
-		// Lijnvolger lijnvolger = new Lijnvolger(hardware);
-		// lijnvolger.tijdrit();
-		Dollen dollen = new Dollen(hardware);
-		dollen.startDollen();
+		Lijnvolger lijnvolger = new Lijnvolger(hardware);
+		lijnvolger.tijdrit();
+		//Dollen dollen = new Dollen(hardware);
+		//dollen.startDollen();
 
 	}
 }
