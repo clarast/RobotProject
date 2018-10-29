@@ -41,9 +41,8 @@ public class Fikkie {
 		this.aansluitenMotorsEnSensors();
 		Lijnvolger lijnvolger = new Lijnvolger(motorA, motorB, lichtSensor, scherm);
 		Dollen dollen = new Dollen(motorA, motorB, motorC, infraroodSensor, touchSensor, scherm);
-		KopLampen lichtje = new KopLampen();
-		
-		geluidspeler.speelWelkomstBlaf();
+	    KopLampen lichtje = new KopLampen();
+		//geluidspeler.speelWelkomstBlaf();
 		lichtje.start();
 		lijnvolger.tijdrit();
 		motorA.close();
