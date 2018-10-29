@@ -15,8 +15,7 @@ public class LichtsensorMeting {
 	private double oudeB;
 	private EV3ColorSensor lichtSensor;
 
-	public LichtsensorMeting(EV3ColorSensor lichtSensor) {
-		super();
+	public LichtsensorMeting(EV3ColorSensor lichtsensor) {
 		this.lichtSensor = lichtSensor;
 	}
 

@@ -1,5 +1,6 @@
 package nl.hva.miw.robot.cohort13;
 
+import lejos.hardware.Brick;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.utility.Delay;
@@ -10,10 +11,12 @@ public class Lijnvolger {
 
 	// De sensors en motoren worden in Fikkie aangemaakt, en hier doorgegeven met de
 	// constructor.
+	Brick brick;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3ColorSensor lichtSensor;
 	private Scherm scherm;
+	private GeluidSpeler geluidspeler;
 
 	private int motorPowerA = 40; // 40 is de startsnelheid
 	private int motorPowerB = 40; // 40 is de startsnelheid
@@ -30,15 +33,21 @@ public class Lijnvolger {
 	private LichtsensorMeting finishPassageMeting;
 	private Finish finish;
 
-	public Lijnvolger(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3ColorSensor lichtSensor, Scherm scherm) {
-		super();
-		this.motorA = motorA;
-		this.motorB = motorB;
-		this.lichtSensor = lichtSensor;
-		this.scherm = scherm;
+	public Lijnvolger(Hardware hardware) {
+		//this.brick = super.maakBrick();
+		this.motorA = hardware.maakMotorA();
+		System.out.println("1");
+		this.motorB = hardware.maakMotorB();
+		System.out.println(" 2");
+		this.lichtSensor = hardware.maakLichtsensor();
+		System.out.println("  3");
+		this.scherm = hardware.maakScherm();
+		System.out.println("   4");
+		this.geluidspeler = hardware.maakGeluidSpeler();
+		System.out.println("    5");
 		meting = new LichtsensorMeting(lichtSensor);
 		finishPassageMeting = new LichtsensorMeting(lichtSensor);
-		finish = new Finish(lichtSensor, scherm);
+		finish = new Finish(finishPassageMeting, scherm, geluidspeler);
 	}
 
 	public void lichttest() {

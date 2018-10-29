@@ -1,13 +1,11 @@
 package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.Button;
-import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Finish {
 
 	private int aantalFinishPassages;
-	private GraphicsLCD LCD;
 	private double finishR;
 	private double finishG;
 	private double finishB;
@@ -16,10 +14,11 @@ public class Finish {
 	private GeluidSpeler geluidspeler;
 	
 
-	public Finish(EV3ColorSensor lichtSensor, Scherm scherm) {
+	public Finish(LichtsensorMeting finishPassageMeting, Scherm scherm2, GeluidSpeler geluidspeler2) {
 		super();
-		this.lichtSensor = lichtSensor;
+		this.lichtSensor =lichtSensor;
 		this.scherm = scherm;
+		this.geluidspeler = geluidspeler;
 	}
 
 	public void finishIJken() {
@@ -27,11 +26,14 @@ public class Finish {
 		Button.ENTER.waitForPress();
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting.meetKleurRGB();
-		geluidspeler.speelSnuffel();
+		//geluidspeler.speelSnuffel();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();
-		scherm.printKlaarOmTeRijden(this);
+		//regel hieronder moet weer naar scherm + printf aangepast zodat het binnen Finish opgelost is
+		System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", // **
+				this.finishR, this.finishG, this.finishB);
+		//scherm.printKlaarOmTeRijden(this);
 		// // de regel hierboven moet nog getest worden. Het is de bedoeling dat deze instantie van de finish wordt meegegeven aan de Scherm klasse.
 		// (dit is de oude manier om te printen, behoeft waarschijnlijk aanpassing met
 		// nieuwe scherminterface): 	System.out.printf("Finish:\nR%.1f - G%.1f - B%.1f\nEnter als Fikkie klaar is om te rijden.", this.finishR, this.finishG,
@@ -53,9 +55,7 @@ public class Finish {
 
 		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
 			aantalFinishPassages++;
-			LCD.clear();
-			System.out.println("kleurpassage");
-			LCD.clear();
+			scherm.printKleurpassage();
 		}
 	}
 

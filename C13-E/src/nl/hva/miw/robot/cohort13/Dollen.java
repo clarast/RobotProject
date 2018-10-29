@@ -1,9 +1,8 @@
 package nl.hva.miw.robot.cohort13;
 
-import java.io.File;
+import lejos.hardware.Brick;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
-import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.sensor.EV3IRSensor;
@@ -14,13 +13,23 @@ import lejos.utility.Delay;
 
 public class Dollen {
 
-	private UnregulatedMotor motorA;
-	private UnregulatedMotor motorB;
-	private EV3MediumRegulatedMotor motorC;
-	private EV3IRSensor infraroodSensor;
-	private EV3TouchSensor touchSensor;
-	private Scherm scherm;
-	private GraphicsLCD LCD;
+	Brick brick;
+	protected UnregulatedMotor motorA;
+    protected UnregulatedMotor motorB;
+    private EV3MediumRegulatedMotor motorC;
+    private EV3IRSensor infraroodSensor;
+    protected EV3TouchSensor touchSensor;
+    protected Scherm scherm;
+    protected GeluidSpeler geluidspeler;
+    
+    private SampleProvider distance;
+	private SampleProvider average;
+	private SampleProvider touch;
+	private float[] sample;
+	private float[] sample2;
+	private int dist;
+    
+	private final int SAMPLE_LENGTH = 5;
 	private final int NUMBER_OF_ACTIONS = 4;
 	private final int START_NUMBER = 1;
 	private final int MAX_DEGREES = 60;
@@ -34,19 +43,25 @@ public class Dollen {
 	private final int AVOID_SPEED_HIGH = 120;
 	private final int AVOID_SPEED_LOW = 40;
 
-	public Dollen(UnregulatedMotor motorA, UnregulatedMotor motorB, EV3MediumRegulatedMotor motorC,
-			EV3IRSensor infraroodSensor, EV3TouchSensor touchSensor, Scherm scherm) {
+	public Dollen(Hardware hardware) {
 		super();
-		this.motorA = motorA;
-		this.motorB = motorB;
-		this.motorC = motorC;
-		this.infraroodSensor = infraroodSensor;
-		this.touchSensor = touchSensor;
-		this.scherm = scherm;
+	    //this.brick = super.maakBrick();
+		this.motorA = hardware.maakMotorA();
+		this.motorB = hardware.maakMotorB();
+		this.motorC = hardware.maakMotorC();
+		this.infraroodSensor = hardware.maakInfraroodSensor();
+		this.touchSensor = hardware.maakTouchSensor();
+		this.scherm = hardware.maakScherm();
+		this.geluidspeler = hardware.maakGeluidSpeler();
+		this.distance = infraroodSensor.getDistanceMode();
+		this.touch = touchSensor.getTouchMode();
+		this.average = new MeanFilter(distance, SAMPLE_LENGTH);
+		this.sample = new float[touch.sampleSize()];
+		this.sample2 = new float[average.sampleSize()];
+		
 	}
 
 	public void startDollen() {
-		SampleProvider distance = infraroodSensor.getDistanceMode();
 		initiateDollen();
 		drawLCD();
 		// bark();
@@ -58,15 +73,13 @@ public class Dollen {
 				break;
 			Delay.msDelay(500);
 
-			motorA.setPower(200);
-			motorB.setPower(200);
-			motorA.backward();
-			motorB.backward();
+			motorA.setPower(100);
+			motorB.setPower(100);
+			motorA.forward();
+			motorB.forward();
 
-			SampleProvider average = new MeanFilter(distance, 5);
-			float[] sample2 = new float[average.sampleSize()];
 			average.fetchSample(sample2, 0);
-			int dist = (int) sample2[0];
+			dist = (int) sample2[0];
 
 			while (dist < 35 && Button.ESCAPE.isUp()) {
 				if (isTouched())
@@ -77,10 +90,11 @@ public class Dollen {
 				// maak opnieuw een meting om te detecteren of er iets in de baan van de sensor
 				// staat.
 
-				average = new MeanFilter(distance, 5);
+				// average = new MeanFilter(distance, 5);
 
 				// initialize an array of floats for fetching samples
-				sample2 = new float[average.sampleSize()];
+
+				// sample2 = new float[average.sampleSize()];
 
 				// fetch a sample
 				average.fetchSample(sample2, 0);
@@ -100,9 +114,6 @@ public class Dollen {
 	}
 
 	public boolean isTouched() {
-		SampleProvider touch = touchSensor.getTouchMode();
-		float[] sample = new float[touch.sampleSize()];
-
 		touch.fetchSample(sample, 0);
 
 		if (sample[0] == 0)
@@ -112,7 +123,7 @@ public class Dollen {
 	}
 
 	private void drawLCD() {
-		//LCD.clear();
+		// LCD.clear();
 		Delay.msDelay(200);
 		scherm.printOgen();
 	}
@@ -136,7 +147,7 @@ public class Dollen {
 	}
 
 	private void bark() {
-		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+		//Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 	}
 
 	private void stopMotors() {
