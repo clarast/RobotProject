@@ -1,13 +1,11 @@
 package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.Button;
-import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Finish {
 
 	private int aantalFinishPassages;
-	private GraphicsLCD LCD;
 	private double finishR;
 	private double finishG;
 	private double finishB;
@@ -16,10 +14,11 @@ public class Finish {
 	private GeluidSpeler geluidspeler;
 	
 
-	public Finish(EV3ColorSensor lichtSensor, Scherm scherm) {
+	public Finish(EV3ColorSensor lichtSensor, Scherm scherm, GeluidSpeler geluidspeler) {
 		super();
 		this.lichtSensor = lichtSensor;
 		this.scherm = scherm;
+		this.geluidspeler = geluidspeler;
 	}
 	
 	public Finish(double finishR, double finishG, double finishB) {
@@ -34,7 +33,7 @@ public class Finish {
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting.meetKleurRGB();
 		GeluidSpeler geluidspeler = new GeluidSpeler();
-		geluidspeler.speelSnuffel();
+		//geluidspeler.speelSnuffel();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();
@@ -56,8 +55,7 @@ public class Finish {
 
 		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
 			aantalFinishPassages++;
-			scherm.schoonScherm();
-			System.out.println("kleurpassage");
+			scherm.printKleurpassage();
 		}
 	}
 
