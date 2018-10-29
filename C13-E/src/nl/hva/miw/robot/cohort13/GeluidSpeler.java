@@ -32,8 +32,9 @@ public class GeluidSpeler extends Thread {
 	public void speelBlaf3() {
 		Sound.playSample(new File("blaf3.wav"), Sound.VOL_MAX);
 	}
+	
 
-	//loop moet uiteindelijk iets anders worden maar dit is een beginnetje
+	// code om te threaden 
 	
 	@Override
 	public void run() {

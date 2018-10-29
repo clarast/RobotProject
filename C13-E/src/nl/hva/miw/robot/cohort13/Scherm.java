@@ -232,7 +232,5 @@ public class Scherm {
 		LCD.drawImage(ogen, 90, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 	}
 	
-	public void setPattern(int pattern) {
-		
-	}
+	
 }
