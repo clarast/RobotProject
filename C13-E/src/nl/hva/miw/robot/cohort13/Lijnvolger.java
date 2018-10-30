@@ -1,26 +1,18 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.Brick;
 import lejos.hardware.Button;
-import lejos.hardware.lcd.GraphicsLCD;
-import lejos.hardware.lcd.TextLCD;
+import lejos.hardware.motor.UnregulatedMotor;
 import lejos.utility.Delay;
-import lejos.hardware.motor.*;
 import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Lijnvolger {
 
-	// De sensors en motoren worden in Fikkie aangemaakt, en hier doorgegeven met de
-	// constructor.
-//	Brick brick;
-	private UnregulatedMotor motorA;
-	private UnregulatedMotor motorB;
 	private EV3ColorSensor lichtSensor;
 	private Scherm scherm;
-	private GeluidSpeler geluidspeler;
-
-	private int motorPowerA = 40; // 40 is de startsnelheid
-	private int motorPowerB = 40; // 40 is de startsnelheid
+	private UnregulatedMotor motorA;
+	private UnregulatedMotor motorB;
+	private int motorPowerA;
+	private int motorPowerB;
 
 	private final double INTENSITEIT_DREMPEL_LAAG1 = 0.15;
 	private final double INTENSITEIT_DREMPEL_LAAG2 = 0.30;
@@ -29,43 +21,49 @@ public class Lijnvolger {
 	private final double INTENSITEIT_DREMPEL_HOOG2 = 0.40;
 
 	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
-
-	private LichtsensorMeting meting;
-	private LichtsensorMeting finishPassageMeting;
+	private LichtsensorMeting lijnMeting;
+	private LichtsensorMeting finishMeting;
 	private Finish finish;
 
+	/**
+	 * @param hardware:
+	 *            als deze wordt doorgegeven kunnen motors, sensors en scherm aan
+	 *            worden gesloten. Ook worden in de constructor objecten van
+	 *            lichtsensormeting en finish aangemaakt, zodat deze respectievelijk
+	 *            gebruikt kunnen worden om te meten of Fikkie goed loopt en of hij
+	 *            de finish passeert.
+	 */
 	public Lijnvolger(Hardware hardware) {
-		// this.brick = super.maakBrick();
 		this.motorA = hardware.maakMotorA();
 		this.motorB = hardware.maakMotorB();
 		this.lichtSensor = hardware.maakLichtsensor();
 		this.scherm = hardware.maakScherm();
-		this.geluidspeler = hardware.maakGeluidSpeler();
-		meting = new LichtsensorMeting(lichtSensor);
-		finishPassageMeting = new LichtsensorMeting(lichtSensor);
-		finish = new Finish(lichtSensor, scherm, geluidspeler);
+		lijnMeting = new LichtsensorMeting(lichtSensor);
+		finishMeting = new LichtsensorMeting(lichtSensor);
+		finish = new Finish(scherm);
 	}
 
+	/**
+	 * Deze methode laat Fikkie de tijdrit lopen zolang hij in de while loop blijft.
+	 * Hij kan hier uit geraken door de finish twee keer te passeren (een keer bij
+	 * start en een keer bij finish) of als er op escape wordt gedrukt. De stopwatch
+	 * wordt bij de eerste passage gestart, stopgezet enw eergegeven bij de tweede
+	 * passage.
+	 */
 	public void tijdrit() {
+		scherm.klaarVoorTijdrit();
+		Button.ENTER.waitForPress();
 		scherm.printOgen();
-//		while (Button.ESCAPE.isUp()) {
-//			meting.meetIntensiteit();
-//			meting.meetKleurRGB();
-//			System.out.printf("%.2f, %.2f I%.2f\n", meting.getR(), meting.getG(), meting.getIntensiteit());
-//		}
-//	
 		boolean stopwatchStarted = false;
 		while (finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
-			finish.setAantalFinishPassages(finishPassageMeting);
-			meting.meetIntensiteit();
-//			System.out.printf("%.2f, %.2f I%.2f\n", meting.getR(), meting.getG(), meting.getIntensiteit());
+			finish.setAantalFinishPassages(finishMeting);
+			lijnMeting.meetIntensiteit();
 			this.bepaalTypeBocht();
 			this.rijden();
 			if (finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
 				tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
 			}
-//			scherm.printTekst(tijdswaarneming.toString());
 		}
 
 		tijdswaarneming.stopStopwatch();
@@ -76,36 +74,52 @@ public class Lijnvolger {
 		scherm.schoonScherm();
 	}
 
+	/**
+	 * In deze methode wordt afhankelijk van de gemeten intensiteit bepaald of er
+	 * (i) een "draaiOpPlek" bocht nodig is, (ii) een "flauweBocht of (iii) dat er
+	 * "rechtdoor" gelopen kan worden.
+	 */
 	public void bepaalTypeBocht() {
-		// scherpe bocht (draai op plek) als boven of onder drempelwaarde. Flauwe bocht
-		// als onder tweede drempelwaarde. Anders geen bocht maar rechtdoor.
-		if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG2
-				|| meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG1) {
+		if (lijnMeting.getI() > INTENSITEIT_DREMPEL_HOOG2 || lijnMeting.getI() < INTENSITEIT_DREMPEL_LAAG1) {
 			this.draaiOpDePlek();
-		} else if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG1
-				|| meting.getIntensiteit() < INTENSITEIT_DREMPEL_LAAG2) {
+		} else if (lijnMeting.getI() > INTENSITEIT_DREMPEL_HOOG1 || lijnMeting.getI() < INTENSITEIT_DREMPEL_LAAG2) {
 			this.flauweBocht();
 		} else
 			this.rechtdoor();
 	}
 
+	/**
+	 * Bij deze methode wordt de snelheid en richting van de motoren gezet voor het
+	 * type bocht "draaiOpPlek". Er staan magic numbers in de methode. Dit zijn
+	 * proefondervindelijk gevonden waarden. Er is vanwege de leesbaarheid gekozen
+	 * om geen final variabelen aan te maken omdat de waarden uitsluitend hier
+	 * voorkomen.
+	 */
 	public void draaiOpDePlek() {
 		this.motorPowerA = 35;
 		this.motorPowerB = 30;
-		if (meting.getIntensiteit() > INTENSITEIT_DREMPEL_HOOG2) {
+		if (lijnMeting.getI() > INTENSITEIT_DREMPEL_HOOG2) {
 			motorA.backward();
 			motorB.forward();
 		} else {
-			this.motorPowerB = 45;
+			this.motorPowerB = 45; // bij intense zwartmeting extra krachtig (tov afwijking in wit) wegsturen om
+									// ongewenst "oversteken" van de lijn bij haakse bocht te voorkomen
 			motorA.forward();
 			motorB.backward();
 		}
 	}
 
+	/**
+	 * Bij deze methode wordt de snelheid en richting van de motoren gezet voor het
+	 * type bocht "flauweBocht". Er staan magic numbers in de methode. Dit zijn
+	 * proefondervindelijk gevonden waarden. Er is vanwege de leesbaarheid gekozen
+	 * om geen final variabelen aan te maken omdat de waarden uitsluitend hier
+	 * voorkomen.
+	 */
 	public void flauweBocht() {
 		motorA.forward();
 		motorB.forward();
-		if (meting.getIntensiteit() > INTENSITEIT_RICHTWAARDE) {
+		if (lijnMeting.getI() > INTENSITEIT_RICHTWAARDE) {
 			this.motorPowerA = 20;
 			this.motorPowerB = 40;
 		} else {
@@ -114,6 +128,13 @@ public class Lijnvolger {
 		}
 	}
 
+	/**
+	 * Bij deze methode wordt de snelheid en richting van de motoren gezet voor
+	 * rechtdoor rijden. Er staan magic numbers in de methode. Dit zijn
+	 * proefondervindelijk gevonden waarden. Er is vanwege de leesbaarheid gekozen
+	 * om geen final variabelen aan te maken omdat de waarden uitsluitend hier
+	 * voorkomen.
+	 */
 	public void rechtdoor() {
 		motorA.forward();
 		motorB.forward();
@@ -121,6 +142,11 @@ public class Lijnvolger {
 		this.motorPowerB = 40;
 	}
 
+	/**
+	 * Als de metingen zijn gedaan en de snelheid van de motoren zijn gezet wordt
+	 * deze methode aangeroepen. Fikkie rijdt dan 100 ms voordat er een nieuwe
+	 * meting wordt gedaan.
+	 */
 	public void rijden() {
 		motorA.setPower(motorPowerA);
 		motorB.setPower(motorPowerB);
