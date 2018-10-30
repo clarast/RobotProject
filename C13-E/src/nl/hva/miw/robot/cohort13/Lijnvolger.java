@@ -13,6 +13,7 @@ public class Lijnvolger {
 	private UnregulatedMotor motorB;
 	private int motorPowerA;
 	private int motorPowerB;
+	private KopLampen koplampen;
 
 	private final double INTENSITEIT_DREMPEL_LAAG1 = 0.15;
 	private final double INTENSITEIT_DREMPEL_LAAG2 = 0.30;
@@ -41,6 +42,7 @@ public class Lijnvolger {
 		lijnMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting = new LichtsensorMeting(lichtSensor);
 		finish = new Finish(scherm);
+		this.koplampen = new KopLampen();
 	}
 
 	/**
@@ -51,6 +53,7 @@ public class Lijnvolger {
 	 * passage.
 	 */
 	public void tijdrit() {
+		this.koplampen.groenPulse();
 		scherm.klaarVoorTijdrit();
 		Button.ENTER.waitForPress();
 		scherm.printOgen();
@@ -67,6 +70,7 @@ public class Lijnvolger {
 		}
 
 		tijdswaarneming.stopStopwatch();
+		koplampen.roodKnipper();
 		motorA.stop();
 		motorB.stop();
 		scherm.printRondeTijd(tijdswaarneming.toString());
@@ -99,9 +103,11 @@ public class Lijnvolger {
 		this.motorPowerA = 35;
 		this.motorPowerB = 30;
 		if (lijnMeting.getI() > INTENSITEIT_DREMPEL_HOOG2) {
+			koplampen.groenConstant();
 			motorA.backward();
 			motorB.forward();
 		} else {
+			koplampen.roodConstant();
 			this.motorPowerB = 45; // bij intense zwartmeting extra krachtig (tov afwijking in wit) wegsturen om
 									// ongewenst "oversteken" van de lijn bij haakse bocht te voorkomen
 			motorA.forward();
@@ -120,9 +126,11 @@ public class Lijnvolger {
 		motorA.forward();
 		motorB.forward();
 		if (lijnMeting.getI() > INTENSITEIT_RICHTWAARDE) {
+			koplampen.groenConstant();
 			this.motorPowerA = 20;
 			this.motorPowerB = 40;
 		} else {
+			koplampen.roodConstant();
 			this.motorPowerA = 40;
 			this.motorPowerB = 20;
 		}
@@ -136,6 +144,7 @@ public class Lijnvolger {
 	 * voorkomen.
 	 */
 	public void rechtdoor() {
+		koplampen.oranjeConstant();
 		motorA.forward();
 		motorB.forward();
 		this.motorPowerA = 40;

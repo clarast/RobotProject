@@ -20,12 +20,7 @@ public class Scherm {
 
 	public void printKleurpassage() {
 		schoonScherm();
-		System.out.println("Kleurpassage");
-	}
-
-	public void printSnuffel() {
-		schoonScherm();
-		System.out.println("Snuffel finish, \ndruk op enter als ie klaarstaat");
+		System.out.println("Tijd gestart");
 	}
 
 	public void printKlaarOmTeRijden(double finishR, double finishG, double finishB) {
@@ -36,7 +31,7 @@ public class Scherm {
 
 	public void printRondeTijd(String rondetijd) {
 		schoonScherm();
-		System.out.printf("%s\nDruk enter om door te gaan", rondetijd);
+		System.out.printf("%s\n\n\n\n\nDruk enter om \ndoor te gaan", rondetijd);
 	}
 
 	public void printTekst(String tekst) {
