@@ -7,6 +7,7 @@ import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Lijnvolger {
 
+	private GeluidSpeler geluidspeler;
 	private EV3ColorSensor lichtSensor;
 	private Scherm scherm;
 	private UnregulatedMotor motorA;
@@ -35,6 +36,7 @@ public class Lijnvolger {
 	 *            de finish passeert.
 	 */
 	public Lijnvolger(Hardware hardware) {
+		this.geluidspeler = hardware.maakGeluidSpeler();
 		this.motorA = hardware.maakMotorA();
 		this.motorB = hardware.maakMotorB();
 		this.lichtSensor = hardware.maakLichtsensor();
@@ -57,6 +59,7 @@ public class Lijnvolger {
 		scherm.klaarVoorTijdrit();
 		Button.ENTER.waitForPress();
 		scherm.printOgen();
+		geluidspeler.speelWelkomstBlaf();
 		boolean stopwatchStarted = false;
 		while (finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
 			finish.setAantalFinishPassages(finishMeting);

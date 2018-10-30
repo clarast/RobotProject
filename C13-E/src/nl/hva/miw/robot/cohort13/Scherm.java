@@ -36,11 +36,13 @@ public class Scherm {
 
 	public void printTekst(String tekst) {
 		schoonScherm();
+		LCD.clear();
 		System.out.println(tekst);
 	}
 
 	public void printOgen() {
 
+		LCD.clear();
 		schoonScherm();
 
 		Image ogen = new Image(134, 87, new byte[] { (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
@@ -409,7 +411,7 @@ public class Scherm {
 
 	public void koekjeGegeten() {
 		schoonScherm();
-		System.out.println("Bedankt voor het koekje!");
+		System.out.println("Yummie dat was een lekker koekje!");
 		Delay.msDelay(500);
 	}
 

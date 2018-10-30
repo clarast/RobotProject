@@ -80,5 +80,29 @@ public class Hardware {
 		this.geluidSpeler = new GeluidSpeler();
 		return geluidSpeler;
 	}
+	
+	public void sluitMotorA() {
+		this.motorA.close();
+	}
+
+	public void sluitMotorB() {
+		this.motorB.close();
+	}
+
+	public void sluitMotorC() {
+		this.motorC.close();
+	}
+
+	public void sluitLichtSensor() {
+		this.lichtSensor.close();
+	}
+
+	public void sluitTouchsensor() {
+		this.touchSensor.close();
+	}
+
+	public void sluitInfraroodSensor() {
+		this.infraroodSensor.close();
+	}
 
 }

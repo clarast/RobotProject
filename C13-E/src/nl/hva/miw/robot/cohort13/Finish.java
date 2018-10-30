@@ -8,6 +8,7 @@ public class Finish {
 	public Finish(Scherm scherm) {
 		super();
 		this.scherm = scherm;
+
 	}
 
 	/**
