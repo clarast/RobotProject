@@ -49,7 +49,7 @@ public class MelodieSpeler extends Thread {
 	// Lengte van een break
 	final static int BREAK = -1;
 	// Default volume = maximaal volume
-	final static int VOLUME = setVolume(3);
+	final static int VOLUME = 10;
 	// tweedimensionale array die melodie opslaat
 	private int[][] melodie = null;
 	// thread object dat wordt aangeroepen in de start() method
@@ -58,10 +58,6 @@ public class MelodieSpeler extends Thread {
 
 	public void setLiedNummer(int liednummer) {
 		this.liednummer = liednummer;
-	}
-
-	private static int setVolume(int volume) {
-		return 0;
 	}
 
 	private int liednummer;
@@ -77,6 +73,9 @@ public class MelodieSpeler extends Thread {
 	};
 
 	// Melodie 2
+
+	// Melodie 2 tijdens lijnvolger
+
 	final static int STADIUMTHEME[][] = { { AIS4, 2 * KWART }, { F4, 2 * KWART }, { G4, 2 * KWART }, { A4, 2 * KWART },
 			{ BREAK, BREAK }, { AIS4, 2 * KWART }, { F4, 2 * KWART }, { G4, 2 * KWART }, { A4, 2 * KWART },
 			{ BREAK, BREAK }, { B4, 2 * KWART }, { FIS4, 2 * KWART }, { GIS4, 2 * KWART }, { AIS4, 2 * KWART },
@@ -92,10 +91,15 @@ public class MelodieSpeler extends Thread {
 			{ A5, KWART }, { G5, KWART }, { E5, BREAK }, { C5, BREAK }
 
 	};
+	
+	//speel vader jacob
+	public void speelVaderJacob() {
+		for (int i = 0; i < VADERJACOB.length; i++) {
+			Sound.playTone(VADERJACOB[i][0], VADERJACOB[i][1]);
+		}
 
-	
-	
-	
+	}
+
 	// start method die wordt aangeroepen in main op het threadobject
 
 	public void start() {
@@ -106,12 +110,6 @@ public class MelodieSpeler extends Thread {
 
 	}
 
-	boolean beeindig = false;
-
-	public void shutDown() {
-		beeindig = true;
-	}
-
 	// run method
 	@Override
 	public void run() {
@@ -120,19 +118,21 @@ public class MelodieSpeler extends Thread {
 		int nootlengte = KWART;
 		int count = 0;
 		koplamp = new KopLampen();
+
 		if (liednummer == 1) {
 			for (int i = 0; i < VADERJACOB.length; i++) {
 				Sound.playTone(VADERJACOB[i][0], VADERJACOB[i][1]);
 			}
 		} else if (liednummer == 2) {
+
 			while (count < 2) {
 				for (int i = 0; i < STARTMELODIE.length; i++) {
-					koplamp.
+					koplamp.kleurenWisselKnipper();
 					Sound.playTone(STARTMELODIE[i][0], STARTMELODIE[i][1]);
-
 				}
 				count++;
 			}
 		}
 	}
+
 }

@@ -3,61 +3,26 @@ package nl.hva.miw.robot.cohort13;
 import java.io.File;
 import lejos.hardware.Sound;
 
-public class GeluidSpeler extends Thread {
-	
-	private Thread thread;
+/**
+ * In deze klasse staan de methods die .wav files afspelen
+ */
+
+
+public class GeluidSpeler {
 
 
 	public void speelWelkomstBlaf() {
-		Sound.playSample(new File("welkomstblaf.wav"), Sound.VOL_MAX);
-	}
-
-	public void speelSnuffel() {
-		Sound.playSample(new File("snuffel.wav"), Sound.VOL_MAX);
+		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 
 	}
 
-	public void speelKauwen() {
-		Sound.playSample(new File("kauwen.wav"), Sound.VOL_MAX);
-
+	public void speelBlaf3x() {
+		Sound.playSample(new File("blaf3x.wav"), Sound.VOL_MAX);
 	}
 
-	public void speelBlaf1() {
-		Sound.playSample(new File("blaf1.wav"), Sound.VOL_MAX);
-	}
+	public void speelDeuntje() {
+		Sound.beepSequenceUp();
 
-	public void speelBlaf2() {
-		Sound.playSample(new File("blaf2.wav"), Sound.VOL_MAX);
-	}
 
-	public void speelBlaf3() {
-		Sound.playSample(new File("blaf3.wav"), Sound.VOL_MAX);
-	}
-	
-
-	public void speelGrom() {
-		Sound.playSample(new File("grom.wav"), Sound.VOL_MAX);
-	}
-	
-	public void speelKef() {
-		Sound.playSample(new File("kef.wav"), Sound.VOL_MAX);
-	}
-	
-	
-	// code om geluidspelerobjecten te threaden 
-	
-	@Override
-	public void run() {
-		for (int i = 0; i < 100; i++) {
-			speelKauwen();
-		}
-		
-	}
-	
-		public void start () {
-			if (thread == null) {
-				thread = new Thread (this);
-				thread.start ();
-			}
-	}
+  }
 }

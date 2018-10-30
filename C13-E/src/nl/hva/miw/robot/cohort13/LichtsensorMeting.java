@@ -5,11 +5,11 @@ import lejos.robotics.SampleProvider;
 
 public class LichtsensorMeting {
 
-	private float intensiteit;
-	private float kleur;
-	private double R;
-	private double G;
-	private double B;
+	private double i;
+	private double r;
+	private double g;
+	private double b;
+	private double oudeI;
 	private double oudeR;
 	private double oudeG;
 	private double oudeB;
@@ -19,60 +19,59 @@ public class LichtsensorMeting {
 		this.lichtSensor = lichtSensor;
 	}
 
+	/**
+	 *  Stappen in deze methode: 
+	 *  1. Zet sensor op RedMode (type meting voor lichtintensiteit).
+	 *  2. Maak float array aan, deze is nodig om resultaat in op te slaan.
+	 *  3. Haal een meting op en zet deze in de eerste index van de gemaakte sample array.
+	 *  4. Cast float naar double en zet attribuut voor intensiteit op laatste metingswaarde.
+	 */
 	public void meetIntensiteit() {
-		// zet sensor op RedMode (type meting voor lichtintensiteit)
-		SampleProvider redMode = lichtSensor.getRedMode();
-		// maak float array aan, deze is nodig om resultaat in op te slaan
-		float[] sample = new float[redMode.sampleSize()];
-		// haal een meting op en zet deze in de eerste index van de gemaakte sample
-		// array
-		redMode.fetchSample(sample, 0);
-		// zet attribuut op laatste metingswaarde
-		this.intensiteit = sample[0];
+		SampleProvider intensiteit = lichtSensor.getRedMode();
+		float[] sample = new float[intensiteit.sampleSize()];
+		intensiteit.fetchSample(sample, 0);
+		this.i = (double) sample[0];
 	}
 
+	/**
+	 *  Stappen in deze methode: 
+	 *  1. Zet sensor op getRGBMode (type meting voor RGB meting).
+	 *  2. Maak float array aan, deze is nodig om resultaat in op te slaan.
+	 *  3. Haal een meting op en zet deze in de eerste index van de gemaakte sample array.
+	 *  4. Geef R, G en B door aan de methode afronden(), en zet de waarden die uit die methode terugkomen als waarde voor de attributen.
+	 */
 	public void meetKleurRGB() {
-		// zet sensor op RedMode (type meting voor kleurmeting)
 		SampleProvider rgb = lichtSensor.getRGBMode();
-		// maak float array aan, deze is nodig om resultaat in op te slaan
 		float[] sample = new float[rgb.sampleSize()];
-		// haal een sample op
 		rgb.fetchSample(sample, 0);
-		// zet attribuut op laatste metingswaarde
-		this.R = afronden(sample[0]);
-		this.G = afronden(sample[1]);
-		this.B = afronden(sample[2]);
+		this.r = (double) sample[0];
+		this.g = (double) sample[1];
+		this.b = (double) sample[2];
 	}
 
-	public double afronden(float onafgerond) {
-		double onafgerondeDouble = (double) onafgerond;
-		return (Math.round(onafgerondeDouble * 10) / 10.0);
-	}
 
 	public void nieuweMetingWordtOudeMeting() {
-		this.oudeR = this.R;
-		this.oudeG = this.G;
-		this.oudeB = this.B;
+		this.oudeR = this.r;
+		this.oudeG = this.g;
+		this.oudeB = this.b;
+		this.oudeI = this.i;
 	}
 	
-	public float getIntensiteit() {
-		return intensiteit;
+	public double getI() {
+		return i;
 	}
 	
-	public float getKleur() {
-		return kleur;
-	}
 
 	public double getR() {
-		return R;
+		return r;
 	}
 
 	public double getG() {
-		return G;
+		return g;
 	}
 
 	public double getB() {
-		return B;
+		return b;
 	}
 
 	public double getOudeR() {
@@ -86,4 +85,10 @@ public class LichtsensorMeting {
 	public double getOudeB() {
 		return oudeB;
 	}
+
+	public double getOudeI() {
+		return oudeI;
+	}
+	
+	
 }

@@ -11,40 +11,47 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MeanFilter;
 import lejos.utility.Delay;
 
-public class Dollen  {
+public class Dollen {
 
-	Brick brick;
-	protected UnregulatedMotor motorA;
-    protected UnregulatedMotor motorB;
-    private EV3MediumRegulatedMotor motorC;
-    private EV3IRSensor infraroodSensor;
-    protected EV3TouchSensor touchSensor;
-    protected Scherm scherm;
-    protected GeluidSpeler geluidspeler;
-    
-    private SampleProvider distance;
+	private Hardware hardware;
+	private UnregulatedMotor motorA;
+	private UnregulatedMotor motorB;
+	private EV3MediumRegulatedMotor motorC;
+	private EV3IRSensor infraroodSensor;
+	private EV3TouchSensor touchSensor;
+	private Scherm scherm;
+	private GeluidSpeler geluidspeler;
+	private MelodieSpeler melodieSpeler;
+	private KopLampen koplampen;
+
+	private SampleProvider distance;
 	private SampleProvider average;
 	private SampleProvider touch;
 	private float[] sample;
 	private float[] sample2;
 	private int dist;
-    
+
+	private int counter = 0;
+	private int spelTel = 1;
 	private final int SAMPLE_LENGTH = 5;
-	private final int NUMBER_OF_ACTIONS = 4;
+	private final int NUMBER_OF_AVOIDS = 4;
+	private final int NUMBER_OF_ACTIONS = 5;
 	private final int START_NUMBER = 1;
 	private final int MAX_DEGREES = 60;
 	private final int START_DEGREES = 30;
-	private final int START_KWISPELS = 3;
-	private final int MAX_KWISPELS = 8;
+	private final int START_KWISPELS = 2;
+	private final int MAX_KWISPELS = 3;
 	private final int STARTPOINT_TAIL = 0;
 	private final int ACTION_1 = 1;
 	private final int ACTION_2 = 2;
 	private final int ACTION_3 = 3;
-	private final int AVOID_SPEED_HIGH = 120;
-	private final int AVOID_SPEED_LOW = 40;
+	private final int ACTION_4 = 4;
+	private final int AVOID_SPEED_HIGH = 100;
+	private final int AVOID_SPEED_LOW = 50;
 
 	public Dollen(Hardware hardware) {
 		super();
+		this.hardware = hardware;
 		this.motorA = hardware.maakMotorA();
 		this.motorB = hardware.maakMotorB();
 		this.motorC = hardware.maakMotorC();
@@ -52,62 +59,98 @@ public class Dollen  {
 		this.touchSensor = hardware.maakTouchSensor();
 		this.scherm = hardware.maakScherm();
 		this.geluidspeler = hardware.maakGeluidSpeler();
+		this.koplampen = new KopLampen();
 		this.distance = infraroodSensor.getDistanceMode();
 		this.touch = touchSensor.getTouchMode();
 		this.average = new MeanFilter(distance, SAMPLE_LENGTH);
 		this.sample = new float[touch.sampleSize()];
 		this.sample2 = new float[average.sampleSize()];
-		
+
 	}
 
 	public void startDollen() {
 		initiateDollen();
 		drawLCD();
-		// bark();
+		geluidspeler.speelWelkomstBlaf();
+		koplampen.kleurenWisselKortKnipper();
 
 		// verkrijg een instantie van de afstandsmodus
 
 		while (Button.ESCAPE.isUp()) {
-			if (isTouched())
-				break;
-			Delay.msDelay(500);
-
-			motorA.setPower(100);
-			motorB.setPower(100);
-			motorA.forward();
-			motorB.forward();
 
 			average.fetchSample(sample2, 0);
 			dist = (int) sample2[0];
 
-			while (dist < 35 && Button.ESCAPE.isUp()) {
-				if (isTouched())
+			while (dist > 50 && Button.ESCAPE.isUp()) {
+				counter++;
+				if (isTouched()) {
+					stopMotors();
+					koplampen.oranjeKnipper();
+					spelTel = startSpel(spelTel);
+					Sound.twoBeeps();
+					counter = 0;
 					break;
-				// switch case om een modus te kiezen wanneer er iets gedetecteerd wordt.
-				chooseAction();
+				}
 
-				// maak opnieuw een meting om te detecteren of er iets in de baan van de sensor
-				// staat.
+				motorA.setPower(50);
+				motorB.setPower(50);
+				motorA.forward();
+				motorB.forward();
+				Delay.msDelay(100);
 
-				// average = new MeanFilter(distance, 5);
-
-				// initialize an array of floats for fetching samples
-
-				// sample2 = new float[average.sampleSize()];
-
-				// fetch a sample
 				average.fetchSample(sample2, 0);
-
 				dist = (int) sample2[0];
+
+				if (counter == 10) {
+					// switch case om een modus te kiezen wanneer er iets gedetecteerd wordt.
+					chooseAction();
+					counter = 0;
+				}
 			}
+
+			chooseAvoid();
 		}
 		stopMotors();
-		// bark();
+		koplampen.kleurenWisselKort();
+		geluidspeler.speelBlaf3x();
+
+	}
+
+	private void chooseAvoid() {
+
+		switch (makeRandomNumber(ACTION_1)) {
+		case 1:
+			avoidRight();
+			break;
+		case 2:
+			avoidLeft();
+			break;
+		case 3:
+			fullTurnLeft();
+			break;
+		case 4:
+			fullTurnRight();
+			break;
+		}
+	}
+
+	private int startSpel(int spelTel) {
+		if (spelTel == 1) {
+			Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorA, motorC, scherm,
+					geluidspeler, melodieSpeler, koplampen);
+			kleurenspel.startKleurenspel();
+			spelTel = 2;
+		} else if (spelTel == 2) {
+			BalSpel balspel = new BalSpel(hardware, motorA, motorB, infraroodSensor, touchSensor, scherm);
+			balspel.findBall();
+			spelTel = 1;
+		}
+		return spelTel;
 
 	}
 
 	private void initiateDollen() {
-		//Sound.beepSequence(); // make sound when ready.
+		Sound.beepSequence(); // make sound when ready.
 		scherm.printTekst("Druk op de knop!");
 		Button.waitForAnyPress();
 	}
@@ -122,31 +165,33 @@ public class Dollen  {
 	}
 
 	private void drawLCD() {
-		// LCD.clear();
-		Delay.msDelay(200);
 		scherm.printOgen();
 	}
 
 	private void chooseAction() {
-		switch (makeRandomNumber(ACTION_1)) {
+		switch (makeRandomNumber(ACTION_4)) {
 		case 1: // ga naar links
-			avoidleft();
+			avoidLeft();
 			break;
-		// zet 'm naar rechts
 		case 2:
-			avoidRight();
+			avoidLeft();
 			break;
 		case 3:
-			wagTail();
+			bark();
 			break;
 		case 4:
 			// wag tail
 			wagTail();
+			break;
+		case 5:
+			fullTurnLeft();
+			fullTurnLeft();
+			break;
 		}
 	}
 
 	private void bark() {
-		//Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+		geluidspeler.speelWelkomstBlaf();
 	}
 
 	private void stopMotors() {
@@ -159,11 +204,13 @@ public class Dollen  {
 	public int makeRandomNumber(int actie) {
 		int random = 0;
 		if (actie == ACTION_1) {
-			random = (int) (Math.random() * NUMBER_OF_ACTIONS) + START_NUMBER;
+			random = (int) (Math.random() * NUMBER_OF_AVOIDS) + START_NUMBER;
 		} else if (actie == ACTION_2) {
 			random = (int) (Math.random() * MAX_DEGREES) + START_DEGREES;
 		} else if (actie == ACTION_3) {
 			random = (int) (Math.random() * MAX_KWISPELS) + START_KWISPELS;
+		} else if (actie == ACTION_4) {
+			random = (int) (Math.random() * NUMBER_OF_ACTIONS) + START_KWISPELS;
 		}
 		return random;
 	}
@@ -180,17 +227,38 @@ public class Dollen  {
 		// make random
 	}
 
-	public void avoidleft() {
+	public void avoidLeft() {
 
-		motorB.forward();
 		motorB.setPower(AVOID_SPEED_HIGH);
 		motorA.setPower(AVOID_SPEED_LOW);
+		motorA.backward();
+		motorB.forward();
+		Delay.msDelay(800);
 	}
 
 	public void avoidRight() {
-		motorA.forward();
+
 		motorA.setPower(AVOID_SPEED_HIGH);
 		motorB.setPower(AVOID_SPEED_LOW);
+		motorB.backward();
+		motorA.forward();
+		Delay.msDelay(800);
+	}
+
+	public void fullTurnRight() {
+		motorA.setPower(AVOID_SPEED_HIGH);
+		motorB.setPower(AVOID_SPEED_LOW);
+		motorB.backward();
+		motorA.forward();
+		Delay.msDelay(1100);
+	}
+
+	public void fullTurnLeft() {
+		motorB.setPower(AVOID_SPEED_HIGH);
+		motorA.setPower(AVOID_SPEED_LOW);
+		motorA.backward();
+		motorB.forward();
+		Delay.msDelay(1100);
 	}
 
 }

@@ -16,23 +16,18 @@ public class Fikkie {
 
 	private void run() {
 
+		
 		Hardware hardware = new Hardware();
-		Lijnvolger lijnvolger = new Lijnvolger(hardware);
-		KopLampen lichtje = new KopLampen();
-		lichtje.start();
-		MelodieSpeler melodietje = new MelodieSpeler();
-		melodietje.setLiedNummer(2);
-		melodietje.start();
-		lijnvolger.tijdrit();
-		
-		melodietje.shutDown();
-
-		/*
-		 * Dollen dollen = new Dollen(hardware); dollen.startDollen();
-		 * melodietje.setLiedNummer(1); melodietje.start();
-		 */
-
-		
-
+		// Lijnvolger lijnvolger = new Lijnvolger(hardware);
+		// KopLampen lichtje = new KopLampen();
+		// lichtje.start();
+		// lijnvolger.tijdrit();
+		Dollen dollen = new Dollen(hardware);
+		dollen.startDollen();
+		// try {
+		// lichtje.join();
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
 	}
 }

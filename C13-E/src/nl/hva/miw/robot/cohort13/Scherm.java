@@ -2,8 +2,11 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
-import lejos.hardware.LED;
 import lejos.utility.Delay;
+
+/**
+ * In deze klasse staan de methods die teksten en afbeeldingen op het LCD scherm tonen
+ */
 
 public class Scherm {
 
@@ -20,12 +23,7 @@ public class Scherm {
 
 	public void printKleurpassage() {
 		schoonScherm();
-		System.out.println("Kleurpassage");
-	}
-
-	public void printSnuffel() {
-		schoonScherm();
-		System.out.println("Snuffel finish, \ndruk op enter als ie klaarstaat");
+		System.out.println("Tijd gestart");
 	}
 
 	public void printKlaarOmTeRijden(double finishR, double finishG, double finishB) {
@@ -36,16 +34,18 @@ public class Scherm {
 
 	public void printRondeTijd(String rondetijd) {
 		schoonScherm();
-		System.out.println(rondetijd);
+		System.out.printf("%s\n\n\n\n\nDruk enter om \ndoor te gaan", rondetijd);
 	}
 
 	public void printTekst(String tekst) {
 		schoonScherm();
+		LCD.clear();
 		System.out.println(tekst);
 	}
 
 	public void printOgen() {
 
+		LCD.clear();
 		schoonScherm();
 
 		Image ogen = new Image(134, 87, new byte[] { (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
@@ -414,14 +414,25 @@ public class Scherm {
 
 	public void koekjeGegeten() {
 		schoonScherm();
-		System.out.println("Bedankt voor het koekje!");
+		System.out.println("Yummie dat was een lekker koekje!");
 		Delay.msDelay(500);
 	}
 
 	public void plaatsKoekje() {
 		LCD.clear();
-		System.out.println("Plaats het koekje onder de sensor en druk op de neus van Fikkie.");
+		schoonScherm();
+		System.out.println("Plaats het koekje onder de sensor,\n "
+				+ "druk daarna op mijn neus.");
 	}
 
+
+
+
+	public void klaarVoorTijdrit() {
+		schoonScherm();
+		System.out.println("Klaar voor de start!\n"
+				+ "Druk Enter om te beginnen.");
+		
+	}
 
 }

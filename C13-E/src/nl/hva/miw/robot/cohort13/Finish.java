@@ -1,66 +1,48 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.Button;
-import lejos.hardware.sensor.EV3ColorSensor;
-
 public class Finish {
 
 	private int aantalFinishPassages;
-	private double finishR;
-	private double finishG;
-	private double finishB;
-	private EV3ColorSensor lichtSensor;
 	private Scherm scherm;
-	private GeluidSpeler geluidspeler;
-	
 
-	public Finish(EV3ColorSensor lichtSensor, Scherm scherm, GeluidSpeler geluidspeler) {
+	public Finish(Scherm scherm) {
 		super();
-		this.lichtSensor = lichtSensor;
 		this.scherm = scherm;
-		this.geluidspeler = geluidspeler;
-	}
-	
-	public Finish(double finishR, double finishG, double finishB) {
-		this.finishR = finishR;
-		this.finishG = finishG;
-		this.finishB = finishB;
-	}
 
-	public void finishIJken() {
-		scherm.printSnuffel();
-		Button.ENTER.waitForPress();
-		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
-		finishMeting.meetKleurRGB();
-		GeluidSpeler geluidspeler = new GeluidSpeler();
-		//geluidspeler.speelSnuffel();
-		this.finishR = finishMeting.getR();
-		this.finishG = finishMeting.getG();
-		this.finishB = finishMeting.getB();
-		scherm.printKlaarOmTeRijden(this.finishR, this.finishG, this.finishB);
-		Button.ENTER.waitForPress();
 	}
 
 	/**
-	 * Deze methode hoogt de aantal passages op als de finishlijn zoals besnuffeld
-	 * wordt gepasseerd.
+	 * Deze methode hoogt het aantal passages op als de vorige meting finish was en de nieuwe meting niet.
 	 */
-	public void setAantalFinishPassages(LichtsensorMeting kleurmeting) {
-		kleurmeting.nieuweMetingWordtOudeMeting();
-		kleurmeting.meetKleurRGB();
+	public void setAantalFinishPassages(LichtsensorMeting finishmeting) {
+		finishmeting.nieuweMetingWordtOudeMeting();
+		finishmeting.meetKleurRGB();
+		finishmeting.meetIntensiteit();
 
-		boolean oudeKleurMetingFinish = this.finishkleur(kleurmeting.getOudeR(), kleurmeting.getOudeG(),
-				kleurmeting.getOudeB());
-		boolean nieuweKleurMetingFinish = this.finishkleur(kleurmeting.getR(), kleurmeting.getG(), kleurmeting.getB());
+		boolean oudeFinishMetingIsFinish = this.isFinishKleur(finishmeting.getOudeR(), finishmeting.getOudeG(),
+				finishmeting.getOudeI());
+		boolean nieuweFinishMetingIsFinish = this.isFinishKleur(finishmeting.getR(), finishmeting.getG(),
+				finishmeting.getI());
 
-		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
+		if (oudeFinishMetingIsFinish && !nieuweFinishMetingIsFinish) {
 			aantalFinishPassages++;
 			scherm.printKleurpassage();
 		}
 	}
 
-	public boolean finishkleur(double kleur1, double kleur2, double kleur3) {
-		if (kleur1 == this.finishR && kleur2 == this.finishG && kleur3 == this.finishB) {
+	/**
+	 * @param r meting voor roodwaarde
+	 * @param g meting voor groenwaarde
+	 * @param i meting voor intensiteitswaarde
+	 * @return true als de waarden overeenkomen met de waarden van de finish.
+	 * 
+	 * Er staan magic numbers in de methode. Dit zijn
+	 * proefondervindelijk gevonden waarden. Er is vanwege de leesbaarheid gekozen
+	 * om geen final variabelen aan te maken omdat de waarden uitsluitend hier
+	 * voorkomen.
+	 */
+	public boolean isFinishKleur(double r, double g, double i) {
+		if (r > 0.10 && g < 0.10 && i > 0.20) {
 			return true;
 		} else
 			return false;
@@ -69,19 +51,5 @@ public class Finish {
 	public int getAantalFinishPassages() {
 		return aantalFinishPassages;
 	}
-
-	public double getFinishR() {
-		return finishR;
-	}
-
-	public double getFinishG() {
-		return finishG;
-	}
-
-	public double getFinishB() {
-		return finishB;
-	}
-	
-	
 
 }
