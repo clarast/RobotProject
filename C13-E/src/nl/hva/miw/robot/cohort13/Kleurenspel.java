@@ -21,13 +21,15 @@ public class Kleurenspel {
 	private EV3TouchSensor touchSensor;
 	private Scherm scherm;
 	private GeluidSpeler geluidspeler;
+	private MelodieSpeler melodieSpeler;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3MediumRegulatedMotor motorC;
 	private EV3ColorSensor kleurSensor;
+	private KopLampen koplampen;
 
 	public Kleurenspel(Hardware hardware, EV3TouchSensor touchSensor, UnregulatedMotor motorA, UnregulatedMotor motorB,
-			EV3MediumRegulatedMotor motorC, Scherm scherm, GeluidSpeler geluidspeler) {
+			EV3MediumRegulatedMotor motorC, Scherm scherm, GeluidSpeler geluidspeler, MelodieSpeler melodieSpeler,KopLampen koplampen) {
 		this.hardware = hardware;
 		this.kleurSensor = hardware.maakLichtsensor();
 		this.motorA = motorA;
@@ -36,6 +38,7 @@ public class Kleurenspel {
 		this.touchSensor = touchSensor;
 		this.scherm = scherm;
 		this.geluidspeler = geluidspeler;
+		this.melodieSpeler = melodieSpeler;
 	}
 
 	/**
@@ -56,11 +59,12 @@ public class Kleurenspel {
 	 * genomen. Wanneer de array vol is stoppen de metingen.
 	 */
 	private void neemMetingen() {
+		
 		for (int meting = 0; meting < kleuren.length; meting++) {
 			scherm.plaatsKoekje();
 			Button.ENTER.waitForPress();
 			kleuren[meting] = kleurMeting();
-			// LED kleurtje
+			koplampen.kleurenWisselKort();
 			scherm.koekjeGegeten();
 		}
 
@@ -90,9 +94,7 @@ public class Kleurenspel {
 				schuifelen();
 				break;
 			case 1: // = groen = deuntje
-				Sound.beepSequenceUp();
-				Sound.buzz();
-				Sound.beepSequence();
+				melodieSpeler.speelVaderJacob();
 				break;
 			case 2: // = blauw = kwispel
 				kwispel();

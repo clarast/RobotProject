@@ -21,6 +21,8 @@ public class Dollen {
 	private EV3TouchSensor touchSensor;
 	private Scherm scherm;
 	private GeluidSpeler geluidspeler;
+	private MelodieSpeler melodieSpeler;
+	private KopLampen koplampen;
 
 	private SampleProvider distance;
 	private SampleProvider average;
@@ -57,6 +59,7 @@ public class Dollen {
 		this.touchSensor = hardware.maakTouchSensor();
 		this.scherm = hardware.maakScherm();
 		this.geluidspeler = hardware.maakGeluidSpeler();
+		this.koplampen = new KopLampen();
 		this.distance = infraroodSensor.getDistanceMode();
 		this.touch = touchSensor.getTouchMode();
 		this.average = new MeanFilter(distance, SAMPLE_LENGTH);
@@ -69,6 +72,7 @@ public class Dollen {
 		initiateDollen();
 		drawLCD();
 		geluidspeler.speelWelkomstBlaf();
+		koplampen.kleurenWisselKortKnipper();
 
 		// verkrijg een instantie van de afstandsmodus
 
@@ -81,6 +85,7 @@ public class Dollen {
 				counter++;
 				if (isTouched()) {
 					stopMotors();
+					koplampen.oranjeKnipper();
 					spelTel = startSpel(spelTel);
 					Sound.twoBeeps();
 					counter = 0;
@@ -103,9 +108,10 @@ public class Dollen {
 				}
 			}
 
-			chooseAvoid(); 
+			chooseAvoid();
 		}
 		stopMotors();
+		koplampen.kleurenWisselKort();
 		geluidspeler.speelBlaf3x();
 
 	}
@@ -130,7 +136,8 @@ public class Dollen {
 
 	private int startSpel(int spelTel) {
 		if (spelTel == 1) {
-			Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorA, motorC, scherm, geluidspeler);
+			Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorA, motorC, scherm,
+					geluidspeler, melodieSpeler, koplampen);
 			kleurenspel.startKleurenspel();
 			spelTel = 2;
 		} else if (spelTel == 2) {

@@ -127,4 +127,10 @@ public class MelodieSpeler extends Thread {
 		}
 	}
 
+	public void speelVaderJacob() {
+		for (int i = 0; i < VADERJACOB.length; i++) {
+			Sound.playTone(VADERJACOB[i][0], VADERJACOB[i][1]);
+		}
+
+	}
 }
