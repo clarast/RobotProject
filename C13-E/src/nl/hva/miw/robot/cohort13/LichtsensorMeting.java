@@ -6,10 +6,10 @@ import lejos.robotics.SampleProvider;
 public class LichtsensorMeting {
 
 	private float intensiteit;
-	private float kleur;
 	private double R;
 	private double G;
 	private double B;
+	private float oudeIntensiteit;
 	private double oudeR;
 	private double oudeG;
 	private double oudeB;
@@ -46,22 +46,20 @@ public class LichtsensorMeting {
 
 	public double afronden(float onafgerond) {
 		double onafgerondeDouble = (double) onafgerond;
-		return (Math.round(onafgerondeDouble * 10) / 10.0);
+		return (Math.round(onafgerondeDouble * 100) / 100.0);
 	}
 
 	public void nieuweMetingWordtOudeMeting() {
 		this.oudeR = this.R;
 		this.oudeG = this.G;
 		this.oudeB = this.B;
+		this.oudeIntensiteit = this.intensiteit;
 	}
 	
 	public float getIntensiteit() {
 		return intensiteit;
 	}
 	
-	public float getKleur() {
-		return kleur;
-	}
 
 	public double getR() {
 		return R;
@@ -86,4 +84,10 @@ public class LichtsensorMeting {
 	public double getOudeB() {
 		return oudeB;
 	}
+
+	public float getOudeIntensiteit() {
+		return oudeIntensiteit;
+	}
+	
+	
 }

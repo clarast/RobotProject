@@ -3,6 +3,7 @@ package nl.hva.miw.robot.cohort13;
 import lejos.hardware.Brick;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.GraphicsLCD;
+import lejos.hardware.lcd.TextLCD;
 import lejos.utility.Delay;
 import lejos.hardware.motor.*;
 import lejos.hardware.sensor.EV3ColorSensor;
@@ -11,7 +12,7 @@ public class Lijnvolger {
 
 	// De sensors en motoren worden in Fikkie aangemaakt, en hier doorgegeven met de
 	// constructor.
-	Brick brick;
+//	Brick brick;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3ColorSensor lichtSensor;
@@ -34,7 +35,7 @@ public class Lijnvolger {
 	private Finish finish;
 
 	public Lijnvolger(Hardware hardware) {
-		//this.brick = super.maakBrick();
+		// this.brick = super.maakBrick();
 		this.motorA = hardware.maakMotorA();
 		this.motorB = hardware.maakMotorB();
 		this.lichtSensor = hardware.maakLichtsensor();
@@ -46,19 +47,25 @@ public class Lijnvolger {
 	}
 
 	public void tijdrit() {
-		finish.finishIJken();
 		scherm.printOgen();
+//		while (Button.ESCAPE.isUp()) {
+//			meting.meetIntensiteit();
+//			meting.meetKleurRGB();
+//			System.out.printf("%.2f, %.2f I%.2f\n", meting.getR(), meting.getG(), meting.getIntensiteit());
+//		}
+//	
 		boolean stopwatchStarted = false;
-
 		while (finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
 			finish.setAantalFinishPassages(finishPassageMeting);
 			meting.meetIntensiteit();
+//			System.out.printf("%.2f, %.2f I%.2f\n", meting.getR(), meting.getG(), meting.getIntensiteit());
 			this.bepaalTypeBocht();
 			this.rijden();
 			if (finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
 				tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
 			}
+//			scherm.printTekst(tijdswaarneming.toString());
 		}
 
 		tijdswaarneming.stopStopwatch();
@@ -118,6 +125,6 @@ public class Lijnvolger {
 		motorA.setPower(motorPowerA);
 		motorB.setPower(motorPowerB);
 		Delay.msDelay(100);
-	}	
+	}
 
 }

@@ -9,6 +9,7 @@ public class Finish {
 	private double finishR;
 	private double finishG;
 	private double finishB;
+	private double finishIntensiteit;
 	private EV3ColorSensor lichtSensor;
 	private Scherm scherm;
 	private GeluidSpeler geluidspeler;
@@ -20,23 +21,19 @@ public class Finish {
 		this.scherm = scherm;
 		this.geluidspeler = geluidspeler;
 	}
-	
-	public Finish(double finishR, double finishG, double finishB) {
-		this.finishR = finishR;
-		this.finishG = finishG;
-		this.finishB = finishB;
-	}
 
 	public void finishIJken() {
 		scherm.printSnuffel();
 		Button.ENTER.waitForPress();
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
 		finishMeting.meetKleurRGB();
+		finishMeting.meetIntensiteit();
 		GeluidSpeler geluidspeler = new GeluidSpeler();
 		//geluidspeler.speelSnuffel();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();
+		this.finishIntensiteit = finishMeting.afronden(finishMeting.getIntensiteit());
 		scherm.printKlaarOmTeRijden(this.finishR, this.finishG, this.finishB);
 		Button.ENTER.waitForPress();
 	}
@@ -48,10 +45,11 @@ public class Finish {
 	public void setAantalFinishPassages(LichtsensorMeting kleurmeting) {
 		kleurmeting.nieuweMetingWordtOudeMeting();
 		kleurmeting.meetKleurRGB();
+		kleurmeting.meetIntensiteit();
 
 		boolean oudeKleurMetingFinish = this.finishkleur(kleurmeting.getOudeR(), kleurmeting.getOudeG(),
-				kleurmeting.getOudeB());
-		boolean nieuweKleurMetingFinish = this.finishkleur(kleurmeting.getR(), kleurmeting.getG(), kleurmeting.getB());
+				kleurmeting.getOudeB(), (double) kleurmeting.getOudeIntensiteit());
+		boolean nieuweKleurMetingFinish = this.finishkleur(kleurmeting.getR(), kleurmeting.getG(), kleurmeting.getB(), (double) kleurmeting.getIntensiteit());
 
 		if (oudeKleurMetingFinish && !nieuweKleurMetingFinish) {
 			aantalFinishPassages++;
@@ -59,8 +57,8 @@ public class Finish {
 		}
 	}
 
-	public boolean finishkleur(double kleur1, double kleur2, double kleur3) {
-		if (kleur1 == this.finishR && kleur2 == this.finishG && kleur3 == this.finishB) {
+	public boolean finishkleur(double kleur1, double kleur2, double kleur3, double intensiteit) {
+		if (kleur1 > 0.10 && kleur2 < 0.10 && intensiteit > 0.20) {
 			return true;
 		} else
 			return false;
