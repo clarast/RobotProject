@@ -31,9 +31,6 @@ public class Finish {
 		scherm.printSnuffel();
 		Button.ENTER.waitForPress();
 		LichtsensorMeting finishMeting = new LichtsensorMeting(lichtSensor);
-		finishMeting.meetKleurRGB();
-		GeluidSpeler geluidspeler = new GeluidSpeler();
-		//geluidspeler.speelSnuffel();
 		this.finishR = finishMeting.getR();
 		this.finishG = finishMeting.getG();
 		this.finishB = finishMeting.getB();

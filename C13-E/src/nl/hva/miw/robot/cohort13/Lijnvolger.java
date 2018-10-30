@@ -34,7 +34,6 @@ public class Lijnvolger {
 	private Finish finish;
 
 	public Lijnvolger(Hardware hardware) {
-		//this.brick = super.maakBrick();
 		this.motorA = hardware.maakMotorA();
 		this.motorB = hardware.maakMotorB();
 		this.lichtSensor = hardware.maakLichtsensor();
@@ -48,6 +47,7 @@ public class Lijnvolger {
 	public void tijdrit() {
 		finish.finishIJken();
 		scherm.printOgen();
+		geluidspeler.speelWelkomstBlaf();
 		boolean stopwatchStarted = false;
 
 		while (finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
@@ -118,6 +118,6 @@ public class Lijnvolger {
 		motorA.setPower(motorPowerA);
 		motorB.setPower(motorPowerB);
 		Delay.msDelay(100);
-	}	
+	}
 
 }
