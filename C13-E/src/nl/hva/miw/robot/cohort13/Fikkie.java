@@ -12,17 +12,20 @@ public class Fikkie {
 	}
 
 	private void run() {
+		KopLampen k = new KopLampen();
+		k.kleurenDemonstratie();
+		
 		Hardware hardware = new Hardware();
-		//Lijnvolger lijnvolger = new Lijnvolger(hardware);
-	    //KopLampen lichtje = new KopLampen();
-		//lichtje.start();
-		//lijnvolger.tijdrit();
+		// Lijnvolger lijnvolger = new Lijnvolger(hardware);
+		// KopLampen lichtje = new KopLampen();
+		// lichtje.start();
+		// lijnvolger.tijdrit();
 		Dollen dollen = new Dollen(hardware);
 		dollen.startDollen();
-//		try {
-//			lichtje.join();
-//			} catch (InterruptedException e) {
-//			e.printStackTrace();
-//			}
+		// try {
+		// lichtje.join();
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
 	}
 }
