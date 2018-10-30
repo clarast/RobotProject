@@ -35,8 +35,8 @@ public class Scherm {
 	}
 
 	public void printRondeTijd(String rondetijd) {
-		LCD.clear();
-		System.out.println(rondetijd);
+		schoonScherm();
+		System.out.printf("%s\nDruk enter om door te gaan", rondetijd);
 	}
 
 	public void printTekst(String tekst) {
@@ -427,5 +427,11 @@ public class Scherm {
 
 	public void setPattern(int pattern) {
 
+	}
+
+	public void klaarVoorTijdrit() {
+		schoonScherm();
+		System.out.println("Klaar voor de start!\nDruk Enter om te beginnen.");
+		
 	}
 }
