@@ -12,8 +12,6 @@ public class Fikkie {
 	}
 
 	private void run() {
-		KopLampen k = new KopLampen();
-		k.kleurenDemonstratie();
 		
 		Hardware hardware = new Hardware();
 		// Lijnvolger lijnvolger = new Lijnvolger(hardware);

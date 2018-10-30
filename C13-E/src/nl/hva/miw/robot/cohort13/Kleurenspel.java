@@ -39,6 +39,7 @@ public class Kleurenspel {
 		this.scherm = scherm;
 		this.geluidspeler = geluidspeler;
 		this.melodieSpeler = melodieSpeler;
+		this.koplampen = koplampen;
 	}
 
 	/**
