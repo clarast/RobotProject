@@ -3,6 +3,11 @@ package nl.hva.miw.robot.cohort13;
 import java.util.concurrent.TimeUnit;
 import lejos.utility.Stopwatch;
 
+
+/**
+ * In deze klasse staan de methods die gebruikt worden om de rontetijd bij te houden
+ */
+
 public class Tijdswaarneming {
 	private Stopwatch stopwatch;
 	private int eindtijd;

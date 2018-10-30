@@ -101,24 +101,12 @@ public class Dollen {
 					chooseAction();
 					counter = 0;
 				}
-
-				// maak opnieuw een meting om te detecteren of er iets in de baan van de sensor
-				// staat.
-
-				// average = new MeanFilter(distance, 5);
-
-				// initialize an array of floats for fetching samples
-
-				// sample2 = new float[average.sampleSize()];
-
-				// fetch a sample
 			}
 
-			chooseAvoid(); // method nog uitschrijven (random kiezen van avoidleft / -right of 180 graden
-							// draai
+			chooseAvoid(); 
 		}
 		stopMotors();
-		geluidspeler.speelBlaf3x();;
+		geluidspeler.speelBlaf3x();
 
 	}
 
@@ -155,7 +143,7 @@ public class Dollen {
 	}
 
 	private void initiateDollen() {
-		// Sound.beepSequence(); // make sound when ready.
+		Sound.beepSequence(); // make sound when ready.
 		scherm.printTekst("Druk op de knop!");
 		Button.waitForAnyPress();
 	}
