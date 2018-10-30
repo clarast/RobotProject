@@ -2,14 +2,22 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.Button;
 
-public class KopLampen extends Thread {
+public class KopLampen implements Runnable {
 
 	private Thread thread;
 
 	public void setGreenBlinkingLight() {
 		Button.LEDPattern(4);
 	}
+	
+	
 
+	
+	
+	
+
+	
+	//thread
 	@Override
 	public void run() {
 

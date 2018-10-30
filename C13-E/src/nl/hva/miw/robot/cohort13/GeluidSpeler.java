@@ -7,6 +7,7 @@ public class GeluidSpeler extends Thread {
 	
 	private Thread thread;
 
+
 	public void speelWelkomstBlaf() {
 		Sound.playSample(new File("welkomstblaf.wav"), Sound.VOL_MAX);
 	}
@@ -34,7 +35,16 @@ public class GeluidSpeler extends Thread {
 	}
 	
 
-	// code om te threaden 
+	public void speelGrom() {
+		Sound.playSample(new File("grom.wav"), Sound.VOL_MAX);
+	}
+	
+	public void speelKef() {
+		Sound.playSample(new File("kef.wav"), Sound.VOL_MAX);
+	}
+	
+	
+	// code om geluidspelerobjecten te threaden 
 	
 	@Override
 	public void run() {
