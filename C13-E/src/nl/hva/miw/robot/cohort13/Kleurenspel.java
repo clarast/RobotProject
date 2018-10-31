@@ -28,7 +28,6 @@ public class Kleurenspel {
 
 	public Kleurenspel(Hardware hardware) {
 		this.hardware = hardware;
-		this.kleurSensor = hardware.getLichtsensor();
 		this.motorA = hardware.getMotorA();
 		this.motorB = hardware.getMotorB();
 		this.motorC = hardware.getMotorC();
@@ -71,10 +70,13 @@ public class Kleurenspel {
 	 * Deze method neemt een enkele kleurmeting.
 	 */
 	public int kleurMeting() {
+		this.hardware.zetLichtSensorWeerAan();
+		this.kleurSensor = hardware.getLichtsensor();
 		SensorMode kleur = kleurSensor.getColorIDMode();
 		float[] sample = new float[kleur.sampleSize()];
 		kleur.fetchSample(sample, 0);
 		this.kleurNummer = (int) sample[0];
+		this.hardware.sluitLichtSensor();
 		return kleurNummer;
 	}
 
@@ -161,7 +163,6 @@ public class Kleurenspel {
 	}
 
 	private void afscheid() {
-//		hardware.sluitLichtSensor();
 		scherm.printOgen();
 		Delay.msDelay(500);
 	}

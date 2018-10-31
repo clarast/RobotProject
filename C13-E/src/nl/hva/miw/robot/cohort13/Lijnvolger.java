@@ -174,6 +174,7 @@ public class Lijnvolger {
 		this.scherm.printRondeTijd(tijdswaarneming.toString());
 		Button.ENTER.waitForPress();
 		this.scherm.schoonScherm();
+		this.hardware.sluitLichtSensor();
 	}
 
 	public void kwispel() {

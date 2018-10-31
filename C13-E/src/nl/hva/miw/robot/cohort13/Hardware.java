@@ -80,30 +80,25 @@ public class Hardware {
 		return this.melodieSpeler;
 	}
 	
-	public void sluitMotorA() {
+	public void sluitAllesBehalveLichtsensor() {
 		this.motorA.close();
-	}
-
-	public void sluitMotorB() {
 		this.motorB.close();
-	}
-
-	public void sluitMotorC() {
 		this.motorC.close();
+		this.touchSensor.close();
+		this.infraroodSensor.close();
 	}
-
+	
 	public void sluitLichtSensor() {
 		this.lichtSensor.close();
 	}
 
-	public void sluitTouchsensor() {
-		this.touchSensor.close();
+	public void sluitAlleHardware() {
+		sluitAllesBehalveLichtsensor();
+		sluitLichtSensor();
 	}
-
-	public void sluitInfraroodSensor() {
-		this.infraroodSensor.close();
+	
+	public void zetLichtSensorWeerAan() {
+		this.lichtSensor = new EV3ColorSensor(s1);
 	}
-
-
 
 }

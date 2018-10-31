@@ -18,5 +18,6 @@ public class Fikkie {
 		lijnvolger.tijdrit();
 		Dollen dollen = new Dollen(hardware);
 		dollen.startDollen();
+		hardware.sluitAlleHardware();
 	}
 }
