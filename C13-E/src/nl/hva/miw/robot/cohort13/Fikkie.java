@@ -21,11 +21,11 @@ public class Fikkie {
 		if (Button.RIGHT.isDown()) {
 			Lijnvolger lijnvolger = new Lijnvolger(hardware);
 			lijnvolger.tijdrit();
-			hardware.sluitAlleHardware();
+			hardware.sluitAllesBehalveLichtsensor();
 		} else if (Button.LEFT.isDown()) {
 			Dollen dollen = new Dollen(hardware);
 			dollen.startDollen();
-			hardware.sluitAlleHardware();
+			hardware.sluitAllesBehalveLichtsensor();
 		}
 	}
 }
