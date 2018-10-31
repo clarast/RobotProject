@@ -15,8 +15,8 @@ public class LichtsensorMeting {
 	private double oudeB;
 	private EV3ColorSensor lichtSensor;
 
-	public LichtsensorMeting(Hardware hardware) {
-		this.lichtSensor = hardware.getLichtsensor();
+	public LichtsensorMeting(EV3ColorSensor lichtSensor) {
+		this.lichtSensor = lichtSensor;
 	}
 
 	/**
@@ -49,6 +49,7 @@ public class LichtsensorMeting {
 		this.b = (double) sample[2];
 	}
 
+
 	public void nieuweMetingWordtOudeMeting() {
 		this.oudeR = this.r;
 		this.oudeG = this.g;
@@ -60,6 +61,7 @@ public class LichtsensorMeting {
 		return i;
 	}
 	
+
 	public double getR() {
 		return r;
 	}

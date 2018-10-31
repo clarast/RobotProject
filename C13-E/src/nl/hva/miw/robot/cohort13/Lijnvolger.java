@@ -42,8 +42,9 @@ public class Lijnvolger {
 		this.motorB = this.hardware.getMotorB();
 		this.motorC = this.hardware.getMotorC();
 		this.scherm = this.hardware.getScherm();
-		this.lijnMeting = new LichtsensorMeting(this.hardware);
-		this.finishMeting = new LichtsensorMeting(this.hardware);
+		this.hardware.zetLichtSensorWeerAan();
+		this.lijnMeting = new LichtsensorMeting(this.hardware.getLichtsensor());
+		this.finishMeting = new LichtsensorMeting(this.hardware.getLichtsensor());
 		this.finish = new Finish(this.hardware);
 		this.koplampen = this.hardware.getKoplampen();
 		this.melodiespeler = this.hardware.getMelodieSpeler();
@@ -66,13 +67,16 @@ public class Lijnvolger {
 		boolean stopwatchStarted = false;
 		while (this.finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
 			this.lijnMeting.meetIntensiteit();
-			this.finish.setAantalFinishPassages(this.finishMeting, this);
 			this.bepaalTypeBocht();
+			this.finish.setAantalFinishPassages(this.finishMeting, this);
 			this.rijden();
 			if (this.finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
 				this.tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
-				this.melodiespeler.start();
+				// this.melodiespeler.start();
+			}
+			if(stopwatchStarted) {
+				scherm.toonTijdwaarneming(tijdswaarneming);
 			}
 		}
 
@@ -140,7 +144,7 @@ public class Lijnvolger {
 
 	/**
 	 * Bij deze methode wordt de snelheid en richting van de motoren gezet voor
-	 * rechtdoor rijden. Er staan magic numbers in de methode. Dit zijn
+	 * rechtdoor )rijden. Er staan magic numbers in de methode. Dit zijn
 	 * proefondervindelijk gevonden waarden. Er is vanwege de leesbaarheid gekozen
 	 * om geen final variabelen aan te maken omdat de waarden uitsluitend hier
 	 * voorkomen.
@@ -186,11 +190,6 @@ public class Lijnvolger {
 			this.motorC.rotateTo(-45);
 		}
 		this.motorC.rotateTo(0);
-	}
-
-	public void extraGasBijStart() {
-		this.motorA.setPower(70);
-		this.motorB.setPower(70);
 	}
 
 	public void setMotorPowerA(int motorPowerA) {

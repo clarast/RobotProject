@@ -25,6 +25,13 @@ public class Tijdswaarneming {
 		this.eindtijd = stopwatch.elapsed();
 	}
 
+	public String toonElapsed() {
+		int t = stopwatch.elapsed();
+		return String.format("%02d min, %02d sec", TimeUnit.MILLISECONDS.toMinutes(t),
+				TimeUnit.MILLISECONDS.toSeconds(t)
+						- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(t)));
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%02d min, %02d sec", TimeUnit.MILLISECONDS.toMinutes(this.eindtijd),

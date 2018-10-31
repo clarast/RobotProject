@@ -26,12 +26,11 @@ public class Finish {
 
 		if (oudeFinishMetingIsFinish && !nieuweFinishMetingIsFinish) {
 			aantalFinishPassages++;
-			scherm.printKleurpassage();
 		}
 		
 		if (nieuweFinishMetingIsFinish) {
-			lijnvolger.setMotorPowerA(100);
-			lijnvolger.setMotorPowerB(100);
+			lijnvolger.setMotorPowerA(60);
+			lijnvolger.setMotorPowerB(40);
 		}
 	}
 

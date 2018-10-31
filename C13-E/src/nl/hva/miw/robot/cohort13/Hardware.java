@@ -36,8 +36,8 @@ public class Hardware {
 		this.motorA = new UnregulatedMotor(MotorPort.A);
 		this.motorB = new UnregulatedMotor(MotorPort.B);
 		this.motorC = new EV3MediumRegulatedMotor(MotorPort.C);
-		this.lichtSensor = new EV3ColorSensor(s1);
-		this.scherm = new Scherm(BrickFinder.getDefault().getGraphicsLCD());
+//		this.lichtSensor = new EV3ColorSensor(s1);
+		this.scherm = new Scherm(BrickFinder.getDefault().getGraphicsLCD(), brick.getTextLCD());
 		this.infraroodSensor = new EV3IRSensor(s2);
 		this.touchSensor = new EV3TouchSensor(s3);
 		this.koplampen = new KopLampen();

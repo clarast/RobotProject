@@ -2,6 +2,7 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
+import lejos.hardware.lcd.TextLCD;
 import lejos.utility.Delay;
 
 /**
@@ -12,19 +13,16 @@ import lejos.utility.Delay;
 public class Scherm {
 
 	private GraphicsLCD LCD;
+	private TextLCD textLCD;
 
-	public Scherm(GraphicsLCD LCD) {
+	public Scherm(GraphicsLCD LCD, TextLCD textLCD) {
 		this.LCD = LCD;
+		this.textLCD = textLCD;
 	}
 
 	public void schoonScherm() {
 		for (int i = 0; i < 8; i++)
 			System.out.println();
-	}
-
-	public void printKleurpassage() {
-		schoonScherm();
-		System.out.println("Tijd gestart");
 	}
 
 	public void printKlaarOmTeRijden(double finishR, double finishG, double finishB) {
@@ -1749,4 +1747,9 @@ public class Scherm {
 
 		LCD.drawImage(hondEnBal, 90, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 	}
+	
+	public void toonTijdwaarneming (Tijdswaarneming t) {
+		textLCD.drawString(t.toonElapsed(), 0, 6);
+	}
+	
 }
