@@ -62,17 +62,11 @@ public class MelodieSpeler extends Thread {
 	final static int BREAK = -1;
 	// Default volume = maximaal volume
 	final static int VOLUME = 3;
-	// tweedimensionale array die melodie opslaat
-	private int[][] melodie = null;
 	// thread object dat wordt aangeroepen in de start() method
 	private Thread thread;
 	private KopLampen koplamp;
 
-	public void setLiedNummer(int liednummer) {
-		this.liednummer = liednummer;
-	}
-
-	private int liednummer;
+	
 	// Melodie 1 voor kleurenspel
 	final static int VADERJACOB[][] = { { C5, KWART }, { D5, KWART }, { E5, KWART }, { C5, KWART }, { C5, KWART },
 			{ D5, KWART }, { E5, KWART }, { C5, KWART }, { E5, KWART }, { F5, KWART }, { G5, HALF }, { E5, KWART },
@@ -83,7 +77,7 @@ public class MelodieSpeler extends Thread {
 
 	};
 
-	//Melodie 2 voor kleurenspel
+	// Melodie 2 voor kleurenspel
 	final static int TWINKLETWINKLE[][] = { { C5, KWART }, { C5, KWART }, { G5, KWART }, { G5, KWART }, { A5, KWART },
 			{ A5, KWART }, { G5, HALF }, { F5, KWART }, { F5, KWART }, { E5, KWART }, { E5, KWART }, { D5, KWART },
 			{ D5, KWART }, { C5, HALF }, { G5, KWART }, { G5, KWART }, { F5, KWART }, { F5, KWART }, { E5, KWART },
@@ -92,71 +86,55 @@ public class MelodieSpeler extends Thread {
 			{ A5, KWART }, { G5, HALF }, { F5, KWART }, { F5, KWART }, { E5, KWART }, { E5, KWART }, { D5, KWART },
 			{ D5, KWART }, { C5, HALF }, };
 
-	// Melodie 2 tijdens lijnvolger
-
-	final static int STADIUMTHEME[][] = { { AIS4, KWART }, { F4, KWART }, { G4, KWART }, { A4, KWART }, { AIS4, KWART },
-			{ F4, KWART }, { G4, KWART }, { A4, KWART }, { B4, KWART }, { FIS4, KWART }, { GIS4, KWART },
-			{ AIS4, KWART }, { B4, KWART }, { FIS4, KWART }, { GIS4, KWART }, { AIS4, KWART }, { C5, KWART },
-			{ G4, KWART }, { A4, KWART }, { B4, KWART }, { C5, KWART }, { G4, KWART }, { A4, KWART }, { B4, KWART },
-			{ C4, HEEL }, { G4, TRIPLET }, { C5, TRIPLET }, { E5, TRIPLET }, { G5, DOTTEIGHT }, { E5, ZESTIENDE },
-			{ G5, HEEL } };
 
 	// startmelodie voor lijnvolger
 	final static int STARTMELODIE[][] = { { C4, KWART }, { E5, KWART }, { G5, KWART }, { BREAK, BREAK }, { G5, KWART },
-			{ A5, KWART }, { G5, KWART }, { E5, KWART }, { C5, BREAK }, { BREAK, BREAK }, { C5, HALF },  
-			{ C5, TRIPLET }, { E5, TRIPLET }, { G5, DOTTEIGHT }, { E5, ZESTIENDE },
-			{ G5, HEEL }
+			{ A5, KWART }, { G5, KWART }, { E5, KWART }, { C5, BREAK }, { BREAK, BREAK }, { C5, HALF }, { C5, TRIPLET },
+			{ E5, TRIPLET }, { G5, DOTTEIGHT }, { E5, ZESTIENDE }, { G5, HEEL }
 
 	};
 
+	
+	
+	
 	// speel vader jacob
 	public void speelVaderJacob() {
 		for (int i = 0; i < VADERJACOB.length; i++) {
 			Sound.playTone(VADERJACOB[i][0], VADERJACOB[i][1]);
 		}
-
 	}
-	
-	//speel twinkle twinkle 
+
+	// speel twinkle twinkle
 	public void speelTwinkleTwinkle() {
-		for (int i = 0; i<TWINKLETWINKLE.length; i++) {
+		koplamp = new KopLampen();
+		
+		for (int i = 0; i < TWINKLETWINKLE.length; i++) {
+			koplamp.randomConstant();
 			Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][0]);
 		}
 	}
 
 	// start method die wordt aangeroepen in main op het threadobject
-
 	public void start() {
 		if (thread == null) {
 			thread = new Thread(this);
 			thread.start();
 		}
-
 	}
 
-	// run method
+	// run method om in thread te gebruiken
 	@Override
 	public void run() {
 
-		int noot = A5;
-		int nootlengte = KWART;
 		int count = 0;
 		koplamp = new KopLampen();
-
-		if (liednummer == 1) {
+		
+		while (count < 2) {
 			for (int i = 0; i < STARTMELODIE.length; i++) {
+				koplamp.randomConstant();
 				Sound.playTone(STARTMELODIE[i][0], STARTMELODIE[i][1]);
 			}
-		} else if (liednummer == 2) {
-
-			while (count < 2) {
-				for (int i = 0; i < TWINKLETWINKLE.length; i++) {
-					koplamp.randomConstant();
-					Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][1]);
-				}
-				count++;
-			}
+			count++;
 		}
 	}
-
 }

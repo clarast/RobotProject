@@ -19,7 +19,7 @@ public class Fikkie {
 		Hardware hardware = new Hardware();
 		Lijnvolger lijnvolger = new Lijnvolger(hardware);
 		MelodieSpeler melodietest = new MelodieSpeler();
-		melodietest.setLiedNummer(1);
+
 		melodietest.start();
 		lijnvolger.tijdrit();
 		Dollen dollen = new Dollen(hardware);
