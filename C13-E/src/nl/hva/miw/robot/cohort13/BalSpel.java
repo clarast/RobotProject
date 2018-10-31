@@ -2,14 +2,11 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.SensorMode;
-import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
-import lejos.utility.Delay;
 
 /**
  * @author BR Deze klasse wordt vanuit roamingmode aangeroepen. In deze modus
@@ -23,37 +20,32 @@ public class BalSpel {
 	private EV3TouchSensor touchSensor;
 	private Hardware hardware;
 	private Scherm scherm;
-	private GeluidSpeler geluidspeler;
+	private Geluid melodieSpeler;
 	private SensorMode seek;
 	private float[] sample;
 	private int direction;
 	private int distance;
 	private SampleProvider touch;
 	private float[] sample2;
-	private KopLampen koplampen;
 
 	/**
 	 * 
 	 * @param hardware: Hij geeft alle hardware door vanuit de dollen klasse.
 	 * 
 	 */
-	public BalSpel(Hardware hardware, UnregulatedMotor motorA, UnregulatedMotor motorB, EV3IRSensor infraroodSensor,
-			EV3TouchSensor touchSensor, Scherm scherm, GeluidSpeler geluidspeler) {
+	public BalSpel(Hardware hardware) {
 		super();
 		this.hardware = hardware;
-		this.motorA = motorA;
-		this.motorB = motorB;
-		this.infraroodSensor = infraroodSensor;
-		this.touchSensor = touchSensor;
-		this.scherm = scherm;
-		this.geluidspeler = geluidspeler;
-		this.seek = infraroodSensor.getSeekMode();
-		this.touch = touchSensor.getTouchMode();
+		this.motorA = this.hardware.getMotorA();
+		this.motorB = this.hardware.getMotorB();
+		this.infraroodSensor = this.hardware.getInfraroodSensor();
+		this.touchSensor = this.hardware.getTouchSensor();
+		this.scherm = this.hardware.getScherm();
+		this.melodieSpeler = this.hardware.getMelodieSpeler();
+		this.seek = this.infraroodSensor.getSeekMode();
+		this.touch = this.touchSensor.getTouchMode();
 		this.sample = new float[seek.sampleSize()];
 		this.sample2 = new float[touch.sampleSize()];
-		this.geluidspeler = geluidspeler;
-		this.koplampen = new KopLampen();
-
 	}
 
 	/**
@@ -79,7 +71,6 @@ public class BalSpel {
 				goLeft();
 			} else {
 				if (distance < Integer.MAX_VALUE) {
-					geluidspeler.speelWelkomstBlaf();
 					goFwd();
 				} else {
 					stopMotors();
@@ -121,10 +112,8 @@ public class BalSpel {
 	 */
 	public void initiateBalspel() {
 		Sound.beepSequence(); // make sound when ready.
-		scherm.printTekst("Druk op de knop!");
+		scherm.printHondEnBal();
 		Button.waitForAnyPress();
-		if (Button.ESCAPE.isDown())
-			System.exit(0);
 	}
 
 	/*
@@ -132,7 +121,7 @@ public class BalSpel {
 	 */
 	public void ready() {
 		scherm.printOgen();
-		geluidspeler.speelWelkomstBlaf();
+		melodieSpeler.speelWelkomstBlaf();
 	}
 
 	/**

@@ -27,8 +27,7 @@ public class Dollen {
 	private EV3IRSensor infraroodSensor;
 	private EV3TouchSensor touchSensor;
 	private Scherm scherm;
-	private GeluidSpeler geluidspeler;
-	private MelodieSpeler melodieSpeler;
+	private Geluid melodieSpeler;
 	private KopLampen koplampen;
 
 	private SampleProvider distance;
@@ -66,17 +65,16 @@ public class Dollen {
 	public Dollen(Hardware hardware) {
 		super();
 		this.hardware = hardware;
-		this.motorA = hardware.maakMotorA();
-		this.motorB = hardware.maakMotorB();
-		this.motorC = hardware.maakMotorC();
-		this.infraroodSensor = hardware.maakInfraroodSensor();
-		this.touchSensor = hardware.maakTouchSensor();
-		this.scherm = hardware.maakScherm();
-		this.geluidspeler = hardware.maakGeluidSpeler();
-		this.koplampen = new KopLampen();
-		this.melodieSpeler = new MelodieSpeler();
-		this.distance = infraroodSensor.getDistanceMode();
-		this.touch = touchSensor.getTouchMode();
+		this.motorA = this.hardware.getMotorA();
+		this.motorB = this.hardware.getMotorB();
+		this.motorC = this.hardware.getMotorC();
+		this.infraroodSensor = this.hardware.getInfraroodSensor();
+		this.touchSensor = this.hardware.getTouchSensor();
+		this.scherm = this.hardware.getScherm();
+		this.koplampen = hardware.getKoplampen();
+		this.melodieSpeler = this.hardware.getMelodieSpeler();
+		this.distance = this.infraroodSensor.getDistanceMode();
+		this.touch = this.touchSensor.getTouchMode();
 		this.average = new MeanFilter(distance, SAMPLE_LENGTH);
 		this.sample = new float[touch.sampleSize()];
 		this.sample2 = new float[average.sampleSize()];
@@ -125,7 +123,7 @@ public class Dollen {
 
 	public void afscheid() {
 		koplampen.kleurenWisselKort();
-		geluidspeler.speelBlaf3x();
+		melodieSpeler.speelWelkomstBlaf();
 	}
 
 	public void startSpel() {
@@ -137,9 +135,9 @@ public class Dollen {
 	}
 
 	public void welkom() {
-		initiateDollen();
+		proloogDollen();
 		drawLCD();
-		geluidspeler.speelWelkomstBlaf();
+		melodieSpeler.speelWelkomstBlaf();
 		koplampen.kleurenWisselKortKnipper();
 	}
 
@@ -202,24 +200,35 @@ public class Dollen {
 	}
 
 	public void maakBalspel() {
-		BalSpel balspel = new BalSpel(hardware, motorA, motorB, infraroodSensor, touchSensor, scherm,geluidspeler);
+		BalSpel balspel = new BalSpel(hardware);
 		balspel.findBall();
 	}
 
 	public void maakKleurenSpel() {
-		Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorA, motorC, scherm, geluidspeler,
-				melodieSpeler, koplampen);
+		Kleurenspel kleurenspel = new Kleurenspel(hardware);
 		kleurenspel.startKleurenspel();
 	}
 
-	private void initiateDollen() {
-		Sound.beepSequence(); // make sound when ready.
-		scherm.printTekst("Druk op de knop!");
+	/**
+	 * Deze methode verzorgt de inleiding op het programma (tijdens presentatie).
+	 * Fikkie knippert met zijn ogen en wacht tot er op ESC en daarna op Button
+	 * gedrukt wordt.
+	 */
+	private void proloogDollen() {
+		while (Button.ESCAPE.isUp()) {
+			scherm.printOgen();
+			koplampen.groenPulse();
+			Delay.msDelay(1500);
+			scherm.printOgenDicht();
+			Delay.msDelay(500);
+		}
+		scherm.printSpelendeHond();
+		Sound.beepSequence();
 		Button.waitForAnyPress();
 	}
 
 	/**
-	 * deze methode zorgt neemt een sample of de touchsensor is aangeraakt.
+	 * deze methode neemt een sample of de touchsensor is aangeraakt.
 	 * 
 	 * @return true als de sensor is aangeraakt.
 	 */
@@ -236,6 +245,10 @@ public class Dollen {
 		scherm.printOgen();
 	}
 
+	/**
+	 * Na 10 afstandmetingen kiest Fikkie via deze method een willekeurige actie om uit te
+	 * voeren.
+	 */
 	private void chooseAction() {
 		switch (makeRandomNumber(ACTION_4)) {
 		case 1: // ga naar links
@@ -264,11 +277,10 @@ public class Dollen {
 	}
 
 	private void bark() {
-		geluidspeler.speelWelkomstBlaf();
+		melodieSpeler.speelWelkomstBlaf();
 	}
 
 	private void stopMotors() {
-		// stop de motoren
 		motorA.stop();
 		motorB.stop();
 		motorC.stop();
@@ -310,7 +322,6 @@ public class Dollen {
 			motorC.rotateTo(-makeRandomNumber(ACTION_2));
 		}
 		motorC.rotateTo(STARTPOINT_TAIL);
-		// make random
 	}
 
 	public void avoidLeft() {

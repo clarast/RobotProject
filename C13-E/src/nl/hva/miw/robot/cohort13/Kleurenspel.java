@@ -19,27 +19,22 @@ public class Kleurenspel {
 	private Hardware hardware;
 	private EV3TouchSensor touchSensor;
 	private Scherm scherm;
-	private GeluidSpeler geluidspeler;
-	private MelodieSpeler melodieSpeler;
+	private Geluid melodieSpeler;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3MediumRegulatedMotor motorC;
 	private EV3ColorSensor kleurSensor;
 	private KopLampen koplampen;
 
-	public Kleurenspel(Hardware hardware, EV3TouchSensor touchSensor, UnregulatedMotor motorA, UnregulatedMotor motorB,
-			EV3MediumRegulatedMotor motorC, Scherm scherm, GeluidSpeler geluidspeler, MelodieSpeler melodieSpeler,
-			KopLampen koplampen) {
+	public Kleurenspel(Hardware hardware) {
 		this.hardware = hardware;
-		this.kleurSensor = hardware.maakLichtsensor();
-		this.motorA = motorA;
-		this.motorB = motorB;
-		this.motorC = motorC;
-		this.touchSensor = touchSensor;
-		this.scherm = scherm;
-		this.geluidspeler = geluidspeler;
-		this.melodieSpeler = melodieSpeler;
-		this.koplampen = koplampen;
+		this.motorA = hardware.getMotorA();
+		this.motorB = hardware.getMotorB();
+		this.motorC = hardware.getMotorC();
+		this.touchSensor = hardware.getTouchSensor();
+		this.scherm = hardware.getScherm();
+		this.melodieSpeler = hardware.getMelodieSpeler();
+		this.koplampen = hardware.getKoplampen();
 	}
 
 	/**
@@ -75,10 +70,13 @@ public class Kleurenspel {
 	 * Deze method neemt een enkele kleurmeting.
 	 */
 	public int kleurMeting() {
+		this.hardware.zetLichtSensorWeerAan();
+		this.kleurSensor = hardware.getLichtsensor();
 		SensorMode kleur = kleurSensor.getColorIDMode();
 		float[] sample = new float[kleur.sampleSize()];
 		kleur.fetchSample(sample, 0);
 		this.kleurNummer = (int) sample[0];
+		this.hardware.sluitLichtSensor();
 		return kleurNummer;
 	}
 
@@ -97,7 +95,7 @@ public class Kleurenspel {
 				break;
 			case 1: // = groen = deuntje
 				scherm.printNoten();
-				melodieSpeler.speelVaderJacob();
+				melodieSpeler.speelTwinkleTwinkle();
 				break;
 			case 2: // = blauw = kwispel
 				scherm.printOgen();
@@ -121,6 +119,8 @@ public class Kleurenspel {
 			motorA.forward();
 			Delay.msDelay(200);
 		}
+		
+		motorA.stop();
 
 		for (int i = 0; i < 4; i++) {
 			motorB.setPower(MOTOR_POWER);
@@ -129,7 +129,6 @@ public class Kleurenspel {
 			motorB.forward();
 			Delay.msDelay(200);
 		}
-		motorA.stop();
 		motorB.stop();
 
 	}
@@ -165,7 +164,6 @@ public class Kleurenspel {
 	}
 
 	private void afscheid() {
-		hardware.sluitLichtSensor();
 		scherm.printOgen();
 		Delay.msDelay(500);
 	}

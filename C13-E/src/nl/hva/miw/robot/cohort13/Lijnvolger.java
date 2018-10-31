@@ -4,12 +4,10 @@ import lejos.hardware.Button;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.utility.Delay;
-import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Lijnvolger {
 
-	private GeluidSpeler geluidspeler;
-	private EV3ColorSensor lichtSensor;
+	private Hardware hardware;
 	private Scherm scherm;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
@@ -23,30 +21,33 @@ public class Lijnvolger {
 	private final double INTENSITEIT_DREMPEL_HOOG1 = 0.35;
 	private final double INTENSITEIT_DREMPEL_HOOG2 = 0.40;
 
-	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
+	private Tijdswaarneming tijdswaarneming;
 	private LichtsensorMeting lijnMeting;
 	private LichtsensorMeting finishMeting;
 	private Finish finish;
 	private EV3MediumRegulatedMotor motorC;
+	private Geluid melodiespeler;
 
 	/**
-	 * @param hardware: als deze wordt doorgegeven kunnen motors, sensors en scherm
-	 *        aan worden gesloten. Ook worden in de constructor objecten van
-	 *        lichtsensormeting en finish aangemaakt, zodat deze respectievelijk
-	 *        gebruikt kunnen worden om te meten of Fikkie goed loopt en of hij de
-	 *        finish passeert.
+	 * @param hardware:
+	 *            als deze wordt doorgegeven kunnen motors, sensors en scherm aan
+	 *            worden gesloten. Ook worden in de constructor objecten van
+	 *            lichtsensormeting en finish aangemaakt, zodat deze respectievelijk
+	 *            gebruikt kunnen worden om te meten of Fikkie goed loopt en of hij
+	 *            de finish passeert.
 	 */
 	public Lijnvolger(Hardware hardware) {
-		this.geluidspeler = hardware.maakGeluidSpeler();
-		this.motorA = hardware.maakMotorA();
-		this.motorB = hardware.maakMotorB();
-		this.motorC = hardware.maakMotorC();
-		this.lichtSensor = hardware.maakLichtsensor();
-		this.scherm = hardware.maakScherm();
-		lijnMeting = new LichtsensorMeting(lichtSensor);
-		finishMeting = new LichtsensorMeting(lichtSensor);
-		finish = new Finish(scherm);
-		this.koplampen = new KopLampen();
+		this.hardware = hardware;
+		this.motorA = this.hardware.getMotorA();
+		this.motorB = this.hardware.getMotorB();
+		this.motorC = this.hardware.getMotorC();
+		this.scherm = this.hardware.getScherm();
+		this.lijnMeting = new LichtsensorMeting(this.hardware);
+		this.finishMeting = new LichtsensorMeting(this.hardware);
+		this.finish = new Finish(this.hardware);
+		this.koplampen = this.hardware.getKoplampen();
+		this.melodiespeler = this.hardware.getMelodieSpeler();
+		this.tijdswaarneming = new Tijdswaarneming();
 	}
 
 	/**
@@ -58,21 +59,21 @@ public class Lijnvolger {
 	 */
 	public void tijdrit() {
 		this.koplampen.groenPulse();
-		scherm.klaarVoorTijdrit();
+		this.scherm.klaarVoorTijdrit();
 		Button.ENTER.waitForPress();
-		scherm.printOgen();
-		geluidspeler.speelWelkomstBlaf();
+		this.scherm.printOgen();
+		this.melodiespeler.speelWelkomstBlaf();
 		boolean stopwatchStarted = false;
-		while (finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
-			finish.setAantalFinishPassages(finishMeting);
-			lijnMeting.meetIntensiteit();
+		while (this.finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
+			this.finish.setAantalFinishPassages(this.finishMeting);
+			this.lijnMeting.meetIntensiteit();
 			this.bepaalTypeBocht();
 			this.rijden();
-			if (finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
-				tijdswaarneming.startStopwatch();
+			if (this.finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
+				this.tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
+				this.melodiespeler.start();
 			}
-			scherm.printTekst(tijdswaarneming.toString());
 		}
 
 		beëindigTijdrit();
@@ -104,15 +105,15 @@ public class Lijnvolger {
 		this.motorPowerA = 35;
 		this.motorPowerB = 30;
 		if (lijnMeting.getI() > INTENSITEIT_DREMPEL_HOOG2) {
-			koplampen.groenConstant();
-			motorA.backward();
-			motorB.forward();
+			this.koplampen.groenConstant();
+			this.motorA.backward();
+			this.motorB.forward();
 		} else {
-			koplampen.roodConstant();
+			this.koplampen.roodConstant();
 			this.motorPowerB = 45; // bij intense zwartmeting extra krachtig (tov afwijking in wit) wegsturen om
 									// ongewenst "oversteken" van de lijn bij haakse bocht te voorkomen
-			motorA.forward();
-			motorB.backward();
+			this.motorA.forward();
+			this.motorB.backward();
 		}
 	}
 
@@ -124,10 +125,10 @@ public class Lijnvolger {
 	 * voorkomen.
 	 */
 	public void flauweBocht() {
-		motorA.forward();
-		motorB.forward();
-		if (lijnMeting.getI() > INTENSITEIT_RICHTWAARDE) {
-			koplampen.groenConstant();
+		this.motorA.forward();
+		this.motorB.forward();
+		if (this.lijnMeting.getI() > this.INTENSITEIT_RICHTWAARDE) {
+			this.koplampen.groenConstant();
 			this.motorPowerA = 20;
 			this.motorPowerB = 40;
 		} else {
@@ -145,9 +146,9 @@ public class Lijnvolger {
 	 * voorkomen.
 	 */
 	public void rechtdoor() {
-		koplampen.oranjeConstant();
-		motorA.forward();
-		motorB.forward();
+		this.koplampen.oranjeConstant();
+		this.motorA.forward();
+		this.motorB.forward();
 		this.motorPowerA = 40;
 		this.motorPowerB = 40;
 	}
@@ -158,31 +159,33 @@ public class Lijnvolger {
 	 * meting wordt gedaan.
 	 */
 	public void rijden() {
-		motorA.setPower(motorPowerA);
-		motorB.setPower(motorPowerB);
+		this.motorA.setPower(motorPowerA);
+		this.motorB.setPower(motorPowerB);
 		Delay.msDelay(100);
 	}
 
 	private void beëindigTijdrit() {
-		tijdswaarneming.stopStopwatch();
-		koplampen.roodKnipper();
-		scherm.printKnipOog();
-		motorA.stop();
-		motorB.stop();
-		scherm.printRondeTijd(tijdswaarneming.toString());
+		this.tijdswaarneming.stopStopwatch();
+		this.koplampen.roodKnipper();
+		this.scherm.printKnipOog();
+		this.kwispel();
+		this.motorA.stop();
+		this.motorB.stop();
+		this.scherm.printRondeTijd(tijdswaarneming.toString());
 		Button.ENTER.waitForPress();
-		scherm.schoonScherm();
+		this.scherm.schoonScherm();
+		this.hardware.sluitLichtSensor();
 	}
 
-	public void kwispel() {
 
+	public void kwispel() {
 		for (int aantalKeer = 0; aantalKeer < 3; aantalKeer++) {
-			motorC.setSpeed(600);
-			motorC.rotateTo(45);
+			this.motorC.setSpeed(600);
+			this.motorC.rotateTo(45);
 			Delay.msDelay(1);
-			motorC.rotateTo(-45);
+			this.motorC.rotateTo(-45);
 		}
-		motorC.rotateTo(0);
+		this.motorC.rotateTo(0);
 	}
 
 }

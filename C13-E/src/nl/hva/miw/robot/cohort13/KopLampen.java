@@ -3,6 +3,11 @@ package nl.hva.miw.robot.cohort13;
 import lejos.hardware.Button;
 import lejos.utility.Delay;
 
+
+/**
+ * De klasse Koplampen regelt de LED effects van de Brick.
+ */
+
 public class KopLampen extends Thread {
 
 	private Thread thread;

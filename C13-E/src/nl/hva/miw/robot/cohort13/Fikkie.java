@@ -1,8 +1,5 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.Button;
-import lejos.utility.Delay;
-
 public class Fikkie {
 
 	public Fikkie() {
@@ -17,14 +14,11 @@ public class Fikkie {
 	private void run() {
 
 		Hardware hardware = new Hardware();
-		/*Lijnvolger lijnvolger = new Lijnvolger(hardware);
-		MelodieSpeler melodietest = new MelodieSpeler();
-		melodietest.setLiedNummer(2);
-		melodietest.start();
-		lijnvolger.tijdrit();*/
+		Lijnvolger lijnvolger = new Lijnvolger(hardware);
+		lijnvolger.tijdrit();
+
 		Dollen dollen = new Dollen(hardware);
 		dollen.startDollen();
-		
-
+		hardware.sluitAlleHardware();
 	}
 }
