@@ -28,13 +28,15 @@ public class Lijnvolger {
 	private LichtsensorMeting finishMeting;
 	private Finish finish;
 	private EV3MediumRegulatedMotor motorC;
+	private MelodieSpeler melodiespeler;
 
 	/**
-	 * @param hardware: als deze wordt doorgegeven kunnen motors, sensors en scherm
-	 *        aan worden gesloten. Ook worden in de constructor objecten van
-	 *        lichtsensormeting en finish aangemaakt, zodat deze respectievelijk
-	 *        gebruikt kunnen worden om te meten of Fikkie goed loopt en of hij de
-	 *        finish passeert.
+	 * @param hardware:
+	 *            als deze wordt doorgegeven kunnen motors, sensors en scherm aan
+	 *            worden gesloten. Ook worden in de constructor objecten van
+	 *            lichtsensormeting en finish aangemaakt, zodat deze respectievelijk
+	 *            gebruikt kunnen worden om te meten of Fikkie goed loopt en of hij
+	 *            de finish passeert.
 	 */
 	public Lijnvolger(Hardware hardware) {
 		this.geluidspeler = hardware.maakGeluidSpeler();
@@ -47,6 +49,7 @@ public class Lijnvolger {
 		this.finishMeting = new LichtsensorMeting(lichtSensor);
 		this.finish = new Finish(scherm);
 		this.koplampen = new KopLampen();
+		this.melodiespeler = new MelodieSpeler();
 	}
 
 	/**
@@ -71,6 +74,7 @@ public class Lijnvolger {
 			if (this.finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
 				this.tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
+				melodiespeler.start();
 			}
 		}
 
@@ -173,7 +177,7 @@ public class Lijnvolger {
 		Button.ENTER.waitForPress();
 		this.scherm.schoonScherm();
 	}
-	
+
 	public void kwispel() {
 		for (int aantalKeer = 0; aantalKeer < 3; aantalKeer++) {
 			this.motorC.setSpeed(600);
@@ -183,5 +187,7 @@ public class Lijnvolger {
 		}
 		this.motorC.rotateTo(0);
 	}
+
+	
 
 }
