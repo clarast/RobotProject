@@ -425,9 +425,8 @@ public class Scherm {
 				+ "druk daarna op mijn neus.");
 	}
 
-	public void setPattern(int pattern) {
 
-	}
+
 
 	public void klaarVoorTijdrit() {
 		schoonScherm();
@@ -435,4 +434,5 @@ public class Scherm {
 				+ "Druk Enter om te beginnen.");
 		
 	}
+
 }
