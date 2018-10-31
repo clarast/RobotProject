@@ -19,6 +19,7 @@ public class BalSpel {
 	private EV3TouchSensor touchSensor;
 	private Hardware hardware;
 	private Scherm scherm;
+	private GeluidSpeler geluidspeler;
 	private SensorMode seek;
 	private float[] sample;
 	private int direction;
@@ -27,7 +28,7 @@ public class BalSpel {
 	private float[] sample2;
 
 	public BalSpel(Hardware hardware, UnregulatedMotor motorA, UnregulatedMotor motorB, EV3IRSensor infraroodSensor,
-			EV3TouchSensor touchSensor, Scherm scherm) {
+			EV3TouchSensor touchSensor, Scherm scherm, GeluidSpeler geluidspeler) {
 		super();
 		this.hardware = hardware;
 		this.motorA = motorA;
@@ -35,6 +36,7 @@ public class BalSpel {
 		this.infraroodSensor = infraroodSensor;
 		this.touchSensor = touchSensor;
 		this.scherm = scherm;
+		this.geluidspeler = geluidspeler;
 		this.seek = infraroodSensor.getSeekMode();
 		this.touch = touchSensor.getTouchMode();
 		this.sample = new float[seek.sampleSize()];
@@ -63,6 +65,7 @@ public class BalSpel {
 				motorA.stop();
 			} else {
 				if (distance < Integer.MAX_VALUE) {
+					geluidspeler.speelWelkomstBlaf();
 					motorA.forward();
 					motorB.forward();
 				} else {

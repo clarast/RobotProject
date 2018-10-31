@@ -28,7 +28,8 @@ public class Kleurenspel {
 	private KopLampen koplampen;
 
 	public Kleurenspel(Hardware hardware, EV3TouchSensor touchSensor, UnregulatedMotor motorA, UnregulatedMotor motorB,
-			EV3MediumRegulatedMotor motorC, Scherm scherm, GeluidSpeler geluidspeler, MelodieSpeler melodieSpeler,KopLampen koplampen) {
+			EV3MediumRegulatedMotor motorC, Scherm scherm, GeluidSpeler geluidspeler, MelodieSpeler melodieSpeler,
+			KopLampen koplampen) {
 		this.hardware = hardware;
 		this.kleurSensor = hardware.maakLichtsensor();
 		this.motorA = motorA;
@@ -59,13 +60,13 @@ public class Kleurenspel {
 	 * genomen. Wanneer de array vol is stoppen de metingen.
 	 */
 	private void neemMetingen() {
-		
+
 		for (int meting = 0; meting < kleuren.length; meting++) {
-			scherm.plaatsKoekje();
+			scherm.printHondEet();
 			Button.ENTER.waitForPress();
 			kleuren[meting] = kleurMeting();
 			koplampen.kleurenWisselKort();
-			scherm.koekjeGegeten();
+			scherm.printKnipOog();
 		}
 
 	}
@@ -91,15 +92,19 @@ public class Kleurenspel {
 			switch (kleuren[kleur]) {
 
 			case 0: // = rood = schuifelen links / rechts
+				scherm.printOgen();
 				schuifelen();
 				break;
 			case 1: // = groen = deuntje
+				scherm.printNoten();
 				melodieSpeler.speelVaderJacob();
 				break;
 			case 2: // = blauw = kwispel
+				scherm.printOgen();
 				kwispel();
 				break;
-			case 6: // = geelwit = draai op de plaats
+			case 3: // = geelwit = draai op de plaats
+				scherm.printDraaiOgen();
 				maakDraai();
 				break;
 			}
@@ -109,13 +114,18 @@ public class Kleurenspel {
 
 	private void schuifelen() {
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 4; i++) {
 			motorA.setPower(MOTOR_POWER);
-			motorB.setPower(MOTOR_POWER);
 			motorA.backward();
-			motorB.backward();
 			Delay.msDelay(200);
 			motorA.forward();
+			Delay.msDelay(200);
+		}
+
+		for (int i = 0; i < 4; i++) {
+			motorB.setPower(MOTOR_POWER);
+			motorB.backward();
+			Delay.msDelay(200);
 			motorB.forward();
 			Delay.msDelay(200);
 		}

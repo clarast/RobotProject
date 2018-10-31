@@ -28,12 +28,11 @@ public class Lijnvolger {
 	private Finish finish;
 
 	/**
-	 * @param hardware:
-	 *            als deze wordt doorgegeven kunnen motors, sensors en scherm aan
-	 *            worden gesloten. Ook worden in de constructor objecten van
-	 *            lichtsensormeting en finish aangemaakt, zodat deze respectievelijk
-	 *            gebruikt kunnen worden om te meten of Fikkie goed loopt en of hij
-	 *            de finish passeert.
+	 * @param hardware: als deze wordt doorgegeven kunnen motors, sensors en scherm
+	 *        aan worden gesloten. Ook worden in de constructor objecten van
+	 *        lichtsensormeting en finish aangemaakt, zodat deze respectievelijk
+	 *        gebruikt kunnen worden om te meten of Fikkie goed loopt en of hij de
+	 *        finish passeert.
 	 */
 	public Lijnvolger(Hardware hardware) {
 		this.geluidspeler = hardware.maakGeluidSpeler();
@@ -72,13 +71,7 @@ public class Lijnvolger {
 			}
 		}
 
-		tijdswaarneming.stopStopwatch();
-		koplampen.roodKnipper();
-		motorA.stop();
-		motorB.stop();
-		scherm.printRondeTijd(tijdswaarneming.toString());
-		Button.ENTER.waitForPress();
-		scherm.schoonScherm();
+		beëindigTijdrit();
 	}
 
 	/**
@@ -165,4 +158,14 @@ public class Lijnvolger {
 		Delay.msDelay(100);
 	}
 
+	private void beëindigTijdrit() {
+		tijdswaarneming.stopStopwatch();
+		koplampen.roodKnipper();
+		scherm.printKnipOog();
+		motorA.stop();
+		motorB.stop();
+		scherm.printRondeTijd(tijdswaarneming.toString());
+		Button.ENTER.waitForPress();
+		scherm.schoonScherm();
+	}
 }

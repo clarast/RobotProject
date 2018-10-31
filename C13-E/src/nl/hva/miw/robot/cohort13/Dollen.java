@@ -137,12 +137,12 @@ public class Dollen {
 
 	private int startSpel(int spelTel) {
 		if (spelTel == 1) {
-			Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorA, motorC, scherm,
+			Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorB, motorC, scherm,
 					geluidspeler, melodieSpeler, koplampen);
 			kleurenspel.startKleurenspel();
 			spelTel = 2;
 		} else if (spelTel == 2) {
-			BalSpel balspel = new BalSpel(hardware, motorA, motorB, infraroodSensor, touchSensor, scherm);
+			BalSpel balspel = new BalSpel(hardware, motorA, motorB, infraroodSensor, touchSensor, scherm, geluidspeler);
 			balspel.findBall();
 			spelTel = 1;
 		}
@@ -185,8 +185,10 @@ public class Dollen {
 			wagTail();
 			break;
 		case 5:
+			scherm.printDraaiOgen();
 			fullTurnLeft();
 			fullTurnLeft();
+			scherm.printOgen();
 			break;
 		}
 	}
