@@ -27,8 +27,7 @@ public class Dollen {
 	private EV3IRSensor infraroodSensor;
 	private EV3TouchSensor touchSensor;
 	private Scherm scherm;
-	private GeluidSpeler geluidspeler;
-	private MelodieSpeler melodieSpeler;
+	private Geluid melodieSpeler;
 	private KopLampen koplampen;
 
 	private SampleProvider distance;
@@ -66,17 +65,16 @@ public class Dollen {
 	public Dollen(Hardware hardware) {
 		super();
 		this.hardware = hardware;
-		this.motorA = hardware.maakMotorA();
-		this.motorB = hardware.maakMotorB();
-		this.motorC = hardware.maakMotorC();
-		this.infraroodSensor = hardware.maakInfraroodSensor();
-		this.touchSensor = hardware.maakTouchSensor();
-		this.scherm = hardware.maakScherm();
-		this.geluidspeler = hardware.maakGeluidSpeler();
-		this.koplampen = new KopLampen();
-		this.melodieSpeler = new MelodieSpeler();
-		this.distance = infraroodSensor.getDistanceMode();
-		this.touch = touchSensor.getTouchMode();
+		this.motorA = this.hardware.getMotorA();
+		this.motorB = this.hardware.getMotorB();
+		this.motorC = this.hardware.getMotorC();
+		this.infraroodSensor = this.hardware.getInfraroodSensor();
+		this.touchSensor = this.hardware.getTouchSensor();
+		this.scherm = this.hardware.getScherm();
+		this.koplampen = hardware.getKoplampen();
+		this.melodieSpeler = this.hardware.getMelodieSpeler();
+		this.distance = this.infraroodSensor.getDistanceMode();
+		this.touch = this.touchSensor.getTouchMode();
 		this.average = new MeanFilter(distance, SAMPLE_LENGTH);
 		this.sample = new float[touch.sampleSize()];
 		this.sample2 = new float[average.sampleSize()];
@@ -125,7 +123,7 @@ public class Dollen {
 
 	public void afscheid() {
 		koplampen.kleurenWisselKort();
-		geluidspeler.speelBlaf3x();
+		melodieSpeler.speelWelkomstBlaf();
 	}
 
 	public void startSpel() {
@@ -139,7 +137,7 @@ public class Dollen {
 	public void welkom() {
 		initiateDollen();
 		drawLCD();
-		geluidspeler.speelWelkomstBlaf();
+		melodieSpeler.speelWelkomstBlaf();
 		koplampen.kleurenWisselKortKnipper();
 	}
 
@@ -202,13 +200,12 @@ public class Dollen {
 	}
 
 	public void maakBalspel() {
-		BalSpel balspel = new BalSpel(hardware, motorA, motorB, infraroodSensor, touchSensor, scherm,geluidspeler);
+		BalSpel balspel = new BalSpel(hardware);
 		balspel.findBall();
 	}
 
 	public void maakKleurenSpel() {
-		Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorA, motorC, scherm, geluidspeler,
-				melodieSpeler, koplampen);
+		Kleurenspel kleurenspel = new Kleurenspel(hardware);
 		kleurenspel.startKleurenspel();
 	}
 
@@ -264,7 +261,7 @@ public class Dollen {
 	}
 
 	private void bark() {
-		geluidspeler.speelWelkomstBlaf();
+		melodieSpeler.speelWelkomstBlaf();
 	}
 
 	private void stopMotors() {

@@ -3,9 +3,6 @@ package nl.hva.miw.robot.cohort13;
 import lejos.hardware.Brick;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.Font;
-import lejos.hardware.lcd.GraphicsLCD;
-import lejos.hardware.lcd.Image;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.port.MotorPort;
@@ -24,13 +21,11 @@ public class Hardware {
 	private Scherm scherm;
 	private EV3IRSensor infraroodSensor;
 	private EV3TouchSensor touchSensor;
-	private GraphicsLCD LCD;
-	private GeluidSpeler geluidSpeler;
+	private KopLampen koplampen;
 	private Port s1;
 	private Port s2;
 	private Port s3;
-	
-	
+	private Geluid melodieSpeler;
 
 	public Hardware() {
 		this.brick = LocalEV3.get();
@@ -38,47 +33,51 @@ public class Hardware {
 		this.s1 = brick.getPort("S1");
 		this.s2 = brick.getPort("S2");
 		this.s3 = brick.getPort("S3");
-	}
-
-	public UnregulatedMotor maakMotorA() {
 		this.motorA = new UnregulatedMotor(MotorPort.A);
-		return motorA;
-	}
-
-	public UnregulatedMotor maakMotorB() {
 		this.motorB = new UnregulatedMotor(MotorPort.B);
-		return motorB;
-	}
-
-	public EV3MediumRegulatedMotor maakMotorC() {
 		this.motorC = new EV3MediumRegulatedMotor(MotorPort.C);
-		return motorC;
-	}
-
-	public EV3ColorSensor maakLichtsensor() {
 		this.lichtSensor = new EV3ColorSensor(s1);
-		return lichtSensor;
-	}
-
-	public Scherm maakScherm() {
-		this.LCD = BrickFinder.getDefault().getGraphicsLCD();
-		this.scherm = new Scherm(LCD);
-		return scherm;
-	}
-
-	public EV3IRSensor maakInfraroodSensor() {
+		this.scherm = new Scherm(BrickFinder.getDefault().getGraphicsLCD());
 		this.infraroodSensor = new EV3IRSensor(s2);
-		return infraroodSensor;
-	}
-
-	public EV3TouchSensor maakTouchSensor() {
 		this.touchSensor = new EV3TouchSensor(s3);
-		return touchSensor;
+		this.koplampen = new KopLampen();
+		this.melodieSpeler = new Geluid();
 	}
 
-	public GeluidSpeler maakGeluidSpeler() {
-		this.geluidSpeler = new GeluidSpeler();
-		return geluidSpeler;
+	public KopLampen getKoplampen() {
+		return this.koplampen;
+	}
+	
+	public UnregulatedMotor getMotorA() {
+		return this.motorA;
+	}
+
+	public UnregulatedMotor getMotorB() {
+		return this.motorB;
+	}
+
+	public EV3MediumRegulatedMotor getMotorC() {
+		return this.motorC;
+	}
+
+	public EV3ColorSensor getLichtsensor() {
+		return this.lichtSensor;
+	}
+
+	public Scherm getScherm() {
+		return this.scherm;
+	}
+
+	public EV3IRSensor getInfraroodSensor() {
+		return this.infraroodSensor;
+	}
+
+	public EV3TouchSensor getTouchSensor() {
+		return this.touchSensor;
+	}
+
+	public Geluid getMelodieSpeler() {
+		return this.melodieSpeler;
 	}
 	
 	public void sluitMotorA() {
@@ -104,5 +103,7 @@ public class Hardware {
 	public void sluitInfraroodSensor() {
 		this.infraroodSensor.close();
 	}
+
+
 
 }

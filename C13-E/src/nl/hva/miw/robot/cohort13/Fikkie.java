@@ -1,8 +1,5 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.Button;
-import lejos.utility.Delay;
-
 public class Fikkie {
 
 	public Fikkie() {

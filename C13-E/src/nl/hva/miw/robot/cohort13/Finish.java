@@ -5,10 +5,9 @@ public class Finish {
 	private int aantalFinishPassages;
 	private Scherm scherm;
 
-	public Finish(Scherm scherm) {
+	public Finish(Hardware hardware) {
 		super();
-		this.scherm = scherm;
-
+		this.scherm = hardware.getScherm();
 	}
 
 	/**

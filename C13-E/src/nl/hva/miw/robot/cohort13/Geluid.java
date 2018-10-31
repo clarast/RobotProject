@@ -1,5 +1,7 @@
 package nl.hva.miw.robot.cohort13;
 
+import java.io.File;
+
 import lejos.hardware.Sound;
 
 /**
@@ -8,7 +10,7 @@ import lejos.hardware.Sound;
  * laten spelen (in een loop maar ook zonder loop)
  */
 
-public class MelodieSpeler extends Thread {
+public class Geluid extends Thread {
 
 	/**
 	 * Declaratie finals en array
@@ -136,5 +138,9 @@ public class MelodieSpeler extends Thread {
 			}
 			count++;
 		}
+	}
+	
+	public void speelWelkomstBlaf() {
+		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
 	}
 }

@@ -4,12 +4,10 @@ import lejos.hardware.Button;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.utility.Delay;
-import lejos.hardware.sensor.EV3ColorSensor;
 
 public class Lijnvolger {
 
-	private GeluidSpeler geluidspeler;
-	private EV3ColorSensor lichtSensor;
+	private Hardware hardware;
 	private Scherm scherm;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
@@ -23,12 +21,12 @@ public class Lijnvolger {
 	private final double INTENSITEIT_DREMPEL_HOOG1 = 0.35;
 	private final double INTENSITEIT_DREMPEL_HOOG2 = 0.40;
 
-	private Tijdswaarneming tijdswaarneming = new Tijdswaarneming();
+	private Tijdswaarneming tijdswaarneming;
 	private LichtsensorMeting lijnMeting;
 	private LichtsensorMeting finishMeting;
 	private Finish finish;
 	private EV3MediumRegulatedMotor motorC;
-	private MelodieSpeler melodiespeler;
+	private Geluid melodiespeler;
 
 	/**
 	 * @param hardware:
@@ -39,17 +37,17 @@ public class Lijnvolger {
 	 *            de finish passeert.
 	 */
 	public Lijnvolger(Hardware hardware) {
-		this.geluidspeler = hardware.maakGeluidSpeler();
-		this.motorA = hardware.maakMotorA();
-		this.motorB = hardware.maakMotorB();
-		this.motorC = hardware.maakMotorC();
-		this.lichtSensor = hardware.maakLichtsensor();
-		this.scherm = hardware.maakScherm();
-		this.lijnMeting = new LichtsensorMeting(lichtSensor);
-		this.finishMeting = new LichtsensorMeting(lichtSensor);
-		this.finish = new Finish(scherm);
-		this.koplampen = new KopLampen();
-		this.melodiespeler = new MelodieSpeler();
+		this.hardware = hardware;
+		this.motorA = this.hardware.getMotorA();
+		this.motorB = this.hardware.getMotorB();
+		this.motorC = this.hardware.getMotorC();
+		this.scherm = this.hardware.getScherm();
+		this.lijnMeting = new LichtsensorMeting(this.hardware);
+		this.finishMeting = new LichtsensorMeting(this.hardware);
+		this.finish = new Finish(this.hardware);
+		this.koplampen = this.hardware.getKoplampen();
+		this.melodiespeler = this.hardware.getMelodieSpeler();
+		this.tijdswaarneming = new Tijdswaarneming();
 	}
 
 	/**
@@ -64,9 +62,9 @@ public class Lijnvolger {
 		this.scherm.klaarVoorTijdrit();
 		Button.ENTER.waitForPress();
 		this.scherm.printOgen();
-		this.geluidspeler.speelWelkomstBlaf();
+		this.melodiespeler.speelWelkomstBlaf();
 		boolean stopwatchStarted = false;
-		while (finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
+		while (this.finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
 			this.finish.setAantalFinishPassages(this.finishMeting);
 			this.lijnMeting.meetIntensiteit();
 			this.bepaalTypeBocht();
@@ -74,7 +72,7 @@ public class Lijnvolger {
 			if (this.finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
 				this.tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
-				melodiespeler.start();
+				this.melodiespeler.start();
 			}
 		}
 
@@ -107,9 +105,9 @@ public class Lijnvolger {
 		this.motorPowerA = 35;
 		this.motorPowerB = 30;
 		if (lijnMeting.getI() > INTENSITEIT_DREMPEL_HOOG2) {
-			koplampen.groenConstant();
-			motorA.backward();
-			motorB.forward();
+			this.koplampen.groenConstant();
+			this.motorA.backward();
+			this.motorB.forward();
 		} else {
 			this.koplampen.roodConstant();
 			this.motorPowerB = 45; // bij intense zwartmeting extra krachtig (tov afwijking in wit) wegsturen om
@@ -129,7 +127,7 @@ public class Lijnvolger {
 	public void flauweBocht() {
 		this.motorA.forward();
 		this.motorB.forward();
-		if (lijnMeting.getI() > INTENSITEIT_RICHTWAARDE) {
+		if (this.lijnMeting.getI() > this.INTENSITEIT_RICHTWAARDE) {
 			this.koplampen.groenConstant();
 			this.motorPowerA = 20;
 			this.motorPowerB = 40;
@@ -187,7 +185,5 @@ public class Lijnvolger {
 		}
 		this.motorC.rotateTo(0);
 	}
-
-	
 
 }
