@@ -201,7 +201,7 @@ public class Dollen {
 	}
 
 	public void maakBalspel() {
-		BalSpel balspel = new BalSpel(hardware, motorA, motorB, infraroodSensor, touchSensor, scherm);
+		BalSpel balspel = new BalSpel(hardware, motorA, motorB, infraroodSensor, touchSensor, scherm,geluidspeler);
 		balspel.findBall();
 	}
 

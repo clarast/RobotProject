@@ -29,6 +29,8 @@ public class BalSpel {
 	private int distance;
 	private SampleProvider touch;
 	private float[] sample2;
+	private KopLampen koplampen;
+	private GeluidSpeler geluidspeler;
 
 	/**
 	 * 
@@ -36,7 +38,7 @@ public class BalSpel {
 	 * 
 	 */
 	public BalSpel(Hardware hardware, UnregulatedMotor motorA, UnregulatedMotor motorB, EV3IRSensor infraroodSensor,
-			EV3TouchSensor touchSensor, Scherm scherm) {
+			EV3TouchSensor touchSensor, Scherm scherm, GeluidSpeler geluidspeler) {
 		super();
 		this.hardware = hardware;
 		this.motorA = motorA;
@@ -48,6 +50,8 @@ public class BalSpel {
 		this.touch = touchSensor.getTouchMode();
 		this.sample = new float[seek.sampleSize()];
 		this.sample2 = new float[touch.sampleSize()];
+		this.geluidspeler = geluidspeler;
+		this.koplampen = new KopLampen();
 
 	}
 
@@ -60,7 +64,7 @@ public class BalSpel {
 	 */
 	public void findBall() {
 		initiateBalspel();
-		drawLCD();
+		ready();
 		while (Button.ESCAPE.isUp()) {
 			if (isTouched()) {
 				break;
@@ -124,8 +128,9 @@ public class BalSpel {
 	/*
 	 * deze methode tekent de ogen. Die wordt aangeroepen op de schermklasse.
 	 */
-	private void drawLCD() {
+	private void ready() {
 		scherm.printOgen();
+		geluidspeler.speelWelkomstBlaf();
 	}
 
 	/**
