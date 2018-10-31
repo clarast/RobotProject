@@ -120,7 +120,7 @@ public class MelodieSpeler extends Thread {
 	//speel twinkle twinkle 
 	public void speelTwinkleTwinkle() {
 		for (int i = 0; i<TWINKLETWINKLE.length; i++) {
-			Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][0]);
+			Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][1]);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class MelodieSpeler extends Thread {
 
 			while (count < 2) {
 				for (int i = 0; i < TWINKLETWINKLE.length; i++) {
-					koplamp.randomConstant();
+					//koplamp.randomConstant();
 					Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][1]);
 				}
 				count++;

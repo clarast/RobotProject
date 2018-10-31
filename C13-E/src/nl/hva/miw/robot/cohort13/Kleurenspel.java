@@ -121,6 +121,8 @@ public class Kleurenspel {
 			motorA.forward();
 			Delay.msDelay(200);
 		}
+		
+		motorA.stop();
 
 		for (int i = 0; i < 4; i++) {
 			motorB.setPower(MOTOR_POWER);
@@ -129,7 +131,6 @@ public class Kleurenspel {
 			motorB.forward();
 			Delay.msDelay(200);
 		}
-		motorA.stop();
 		motorB.stop();
 
 	}
