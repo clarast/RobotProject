@@ -75,18 +75,8 @@ public class Lijnvolger {
 			scherm.printTekst(tijdswaarneming.toString());
 		}
 
-<<<<<<< HEAD
 		beëindigTijdrit();
-=======
-		this.tijdswaarneming.stopStopwatch();
-		this.motorA.stop();
-		this.motorB.stop();
-		this.koplampen.kleurenWisselKortKnipper();
-		this.kwispel();
-		this.scherm.printRondeTijd(tijdswaarneming.toString());
-		Button.ENTER.waitForPress();
-		this.scherm.schoonScherm();
->>>>>>> master
+
 	}
 
 	/**
@@ -183,6 +173,7 @@ public class Lijnvolger {
 		Button.ENTER.waitForPress();
 		scherm.schoonScherm();
 	}
+
 	public void kwispel() {
 
 		for (int aantalKeer = 0; aantalKeer < 3; aantalKeer++) {

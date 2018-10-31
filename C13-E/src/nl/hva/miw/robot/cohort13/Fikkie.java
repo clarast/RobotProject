@@ -17,11 +17,11 @@ public class Fikkie {
 	private void run() {
 
 		Hardware hardware = new Hardware();
-		Lijnvolger lijnvolger = new Lijnvolger(hardware);
+		/*Lijnvolger lijnvolger = new Lijnvolger(hardware);
 		MelodieSpeler melodietest = new MelodieSpeler();
-		melodietest.setLiedNummer(1);
+		melodietest.setLiedNummer(2);
 		melodietest.start();
-		lijnvolger.tijdrit();
+		lijnvolger.tijdrit();*/
 		Dollen dollen = new Dollen(hardware);
 		dollen.startDollen();
 		

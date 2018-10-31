@@ -119,7 +119,7 @@ public class BalSpel {
 	 * Deze methode initieert het balspel, speelt een geluid, print een schermtekst
 	 * en wacht tot er op een knop gedrukt wordt.
 	 */
-	private void initiateBalspel() {
+	public void initiateBalspel() {
 		Sound.beepSequence(); // make sound when ready.
 		scherm.printTekst("Druk op de knop!");
 		Button.waitForAnyPress();
@@ -130,7 +130,7 @@ public class BalSpel {
 	/*
 	 * deze methode tekent de ogen. Die wordt aangeroepen op de schermklasse.
 	 */
-	private void ready() {
+	public void ready() {
 		scherm.printOgen();
 		geluidspeler.speelWelkomstBlaf();
 	}
@@ -153,7 +153,7 @@ public class BalSpel {
 	/**
 	 * stop de motoren
 	 */
-	private void stopMotors() {
+	public void stopMotors() {
 		// stop de motoren
 		motorA.stop();
 		motorB.stop();
