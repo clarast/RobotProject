@@ -177,6 +177,7 @@ public class Lijnvolger {
 		this.hardware.sluitLichtSensor();
 	}
 
+
 	public void kwispel() {
 		for (int aantalKeer = 0; aantalKeer < 3; aantalKeer++) {
 			this.motorC.setSpeed(600);
