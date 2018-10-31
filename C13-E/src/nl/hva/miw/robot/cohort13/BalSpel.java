@@ -11,6 +11,10 @@ import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
+/**
+ * @author BR Deze klasse wordt vanuit roamingmode aangeroepen. In deze modus
+ *         gaat fikkie achter een beacon aan rijden.
+ */
 public class BalSpel {
 
 	private UnregulatedMotor motorA;
@@ -25,9 +29,16 @@ public class BalSpel {
 	private int distance;
 	private SampleProvider touch;
 	private float[] sample2;
+	private KopLampen koplampen;
+	private GeluidSpeler geluidspeler;
 
+	/**
+	 * 
+	 * @param hardware: Hij geeft alle hardware door vanuit de dollen klasse.
+	 * 
+	 */
 	public BalSpel(Hardware hardware, UnregulatedMotor motorA, UnregulatedMotor motorB, EV3IRSensor infraroodSensor,
-			EV3TouchSensor touchSensor, Scherm scherm) {
+			EV3TouchSensor touchSensor, Scherm scherm, GeluidSpeler geluidspeler) {
 		super();
 		this.hardware = hardware;
 		this.motorA = motorA;
@@ -39,41 +50,73 @@ public class BalSpel {
 		this.touch = touchSensor.getTouchMode();
 		this.sample = new float[seek.sampleSize()];
 		this.sample2 = new float[touch.sampleSize()];
+		this.geluidspeler = geluidspeler;
+		this.koplampen = new KopLampen();
 
 	}
 
+	/**
+	 * In deze methode wordt het balspel gestart. Er wordt eerst een geluid
+	 * afgespeeld. allereerst wordt er een meting genomen om te kijken of de beacon
+	 * in zijn richting staat. Daar rijdt de robot vervolgens naartoe. Als er op
+	 * zijn neus gedrukt wordt zal deze modus beeindigen en zal de robot terugkeren
+	 * naar dollen-modus.
+	 */
 	public void findBall() {
 		initiateBalspel();
-		drawLCD();
+		ready();
 		while (Button.ESCAPE.isUp()) {
 			if (isTouched()) {
 				break;
 			}
-			seek.fetchSample(sample, 0);
-			direction = (int) sample[0];
-			distance = (int) sample[1];
-			motorA.setPower(100);
-			motorB.setPower(100);
+			fetchSample();
+			setMotorPower();
 
 			if (direction > 5) {
-				motorA.forward();
-				motorB.stop();
+				goRight();
 			} else if (direction < -5) {
-				motorB.forward();
-				motorA.stop();
+				goLeft();
 			} else {
 				if (distance < Integer.MAX_VALUE) {
-					motorA.forward();
-					motorB.forward();
+					goFwd();
 				} else {
-					motorA.stop();
-					motorB.stop();
+					stopMotors();
 				}
 			}
 		}
 		stopMotors();
 	}
 
+	public void goFwd() {
+		motorA.forward();
+		motorB.forward();
+	}
+
+	public void goLeft() {
+		motorB.forward();
+		motorA.stop();
+	}
+
+	public void goRight() {
+		motorA.forward();
+		motorB.stop();
+	}
+
+	public void setMotorPower() {
+		motorA.setPower(100);
+		motorB.setPower(100);
+	}
+
+	public void fetchSample() {
+		seek.fetchSample(sample, 0);
+		direction = (int) sample[0];
+		distance = (int) sample[1];
+	}
+
+	/*
+	 * Deze methode initieert het balspel, speelt een geluid, print een schermtekst
+	 * en wacht tot er op een knop gedrukt wordt.
+	 */
 	private void initiateBalspel() {
 		Sound.beepSequence(); // make sound when ready.
 		scherm.printTekst("Druk op de knop!");
@@ -82,11 +125,21 @@ public class BalSpel {
 			System.exit(0);
 	}
 
-	private void drawLCD() {
+	/*
+	 * deze methode tekent de ogen. Die wordt aangeroepen op de schermklasse.
+	 */
+	private void ready() {
 		scherm.printOgen();
+		geluidspeler.speelWelkomstBlaf();
 	}
 
+	/**
+	 * neem een sample en kijk of de knop is ingdrukt.
+	 * 
+	 * @return true als de knop ingedrukt wordt.
+	 */
 	public boolean isTouched() {
+
 		touch.fetchSample(sample2, 0);
 
 		if (sample2[0] == 0)
@@ -95,6 +148,9 @@ public class BalSpel {
 			return true;
 	}
 
+	/**
+	 * stop de motoren
+	 */
 	private void stopMotors() {
 		// stop de motoren
 		motorA.stop();

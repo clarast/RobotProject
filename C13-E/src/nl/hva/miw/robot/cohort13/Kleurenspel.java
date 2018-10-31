@@ -14,20 +14,21 @@ public class Kleurenspel {
 
 	private int kleurNummer;
 	private int[] kleuren = new int[4];
-	private int motorPowerA;
-	private int motorPowerB;
+	private final int MOTOR_POWER = 100;
 
 	private Hardware hardware;
 	private EV3TouchSensor touchSensor;
 	private Scherm scherm;
 	private GeluidSpeler geluidspeler;
+	private MelodieSpeler melodieSpeler;
 	private UnregulatedMotor motorA;
 	private UnregulatedMotor motorB;
 	private EV3MediumRegulatedMotor motorC;
 	private EV3ColorSensor kleurSensor;
+	private KopLampen koplampen;
 
 	public Kleurenspel(Hardware hardware, EV3TouchSensor touchSensor, UnregulatedMotor motorA, UnregulatedMotor motorB,
-			EV3MediumRegulatedMotor motorC, Scherm scherm, GeluidSpeler geluidspeler) {
+			EV3MediumRegulatedMotor motorC, Scherm scherm, GeluidSpeler geluidspeler, MelodieSpeler melodieSpeler,KopLampen koplampen) {
 		this.hardware = hardware;
 		this.kleurSensor = hardware.maakLichtsensor();
 		this.motorA = motorA;
@@ -36,28 +37,42 @@ public class Kleurenspel {
 		this.touchSensor = touchSensor;
 		this.scherm = scherm;
 		this.geluidspeler = geluidspeler;
+		this.melodieSpeler = melodieSpeler;
+		this.koplampen = koplampen;
 	}
 
+	/**
+	 * Deze methode wordt aangeroepen vanuit 'Dollen' en voert de sub-methods van
+	 * het kleurenspel uit
+	 */
 	public void startKleurenspel() {
 
-			scherm.printKoekje();
-			Sound.beepSequenceUp();
-			Delay.msDelay(500);
+		welkomst();
+		neemMetingen();
+		reeksUitvoer(kleuren);
+		afscheid();
+	}
 
-			for (int meting = 0; meting < kleuren.length; meting++) {
-				scherm.plaatsKoekje();
-				Button.ENTER.waitForPress();
-				kleuren[meting] = kleurMeting();
-				// LED kleurtje
-				scherm.koekjeGegeten();
-			}
-			reeksUitvoer(kleuren);
-			hardware.sluitLichtSensor();
-			scherm.printOgen();
-			Delay.msDelay(500);
+	/**
+	 * Deze method neem een reeks kleurmetingen. De gebruiker wordt gevraagd een
+	 * 'hondenkoekje' te plaatsen en op de knop te drukken. Daarna wordt de meting
+	 * genomen. Wanneer de array vol is stoppen de metingen.
+	 */
+	private void neemMetingen() {
+		
+		for (int meting = 0; meting < kleuren.length; meting++) {
+			scherm.plaatsKoekje();
+			Button.ENTER.waitForPress();
+			kleuren[meting] = kleurMeting();
+			koplampen.kleurenWisselKort();
+			scherm.koekjeGegeten();
 		}
 
-	// deze methode verhuizen naar LichtsensorMeting?
+	}
+
+	/**
+	 * Deze method neemt een enkele kleurmeting.
+	 */
 	public int kleurMeting() {
 		SensorMode kleur = kleurSensor.getColorIDMode();
 		float[] sample = new float[kleur.sampleSize()];
@@ -66,21 +81,25 @@ public class Kleurenspel {
 		return kleurNummer;
 	}
 
+	/**
+	 * Deze methode ontvangt de met kleur ID's gevulde array en voert per waarde een
+	 * specifieke actie uit.
+	 */
 	public void reeksUitvoer(int[] kleuren) {
 		for (int kleur = 0; kleur < kleuren.length; kleur++) {
 
 			switch (kleuren[kleur]) {
 
-			case 0: // = rood = draaien links / rechts
-				wiggleWiggle();
+			case 0: // = rood = schuifelen links / rechts
+				schuifelen();
 				break;
 			case 1: // = groen = deuntje
-				Sound.beepSequenceUp();
+				melodieSpeler.speelVaderJacob();
 				break;
 			case 2: // = blauw = kwispel
 				kwispel();
 				break;
-			case 3: // = geel = draaien op de plaats
+			case 6: // = geelwit = draai op de plaats
 				maakDraai();
 				break;
 			}
@@ -88,33 +107,33 @@ public class Kleurenspel {
 
 	}
 
-	private void wiggleWiggle() {
-		motorA.setPower(100);
-		motorB.setPower(10);
-		motorA.forward();
-		motorB.backward();
-		Delay.msDelay(500);
-		motorA.backward();
-		motorB.forward();
-		Delay.msDelay(500);
+	private void schuifelen() {
+
+		for (int i = 0; i < 5; i++) {
+			motorA.setPower(MOTOR_POWER);
+			motorB.setPower(MOTOR_POWER);
+			motorA.backward();
+			motorB.backward();
+			Delay.msDelay(200);
+			motorA.forward();
+			motorB.forward();
+			Delay.msDelay(200);
+		}
 		motorA.stop();
 		motorB.stop();
 
 	}
 
 	public void maakDraai() {
-		motorA.setPower(75);
-		motorB.setPower(100);
-		motorA.forward();
-		motorB.backward();
-		Delay.msDelay(5000);
-		motorA.stop();
+		motorB.setPower(MOTOR_POWER);
+		motorB.forward();
+		Delay.msDelay(3500);
 		motorB.stop();
 	}
 
 	public void kwispel() {
 
-		for (int aantalKeer = 0; aantalKeer < 3; aantalKeer++) {
+		for (int aantalKeer = 0; aantalKeer < 5; aantalKeer++) {
 			motorC.setSpeed(600);
 			motorC.rotateTo(45);
 			Delay.msDelay(1);
@@ -133,5 +152,17 @@ public class Kleurenspel {
 			return false;
 		else
 			return true;
+	}
+
+	private void afscheid() {
+		hardware.sluitLichtSensor();
+		scherm.printOgen();
+		Delay.msDelay(500);
+	}
+
+	private void welkomst() {
+		Sound.beepSequenceUp();
+		scherm.printKoekje();
+		Delay.msDelay(500);
 	}
 }

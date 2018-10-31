@@ -2,8 +2,11 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
-import lejos.hardware.LED;
 import lejos.utility.Delay;
+
+/**
+ * In deze klasse staan de methods die teksten en afbeeldingen op het LCD scherm tonen
+ */
 
 public class Scherm {
 
@@ -417,16 +420,19 @@ public class Scherm {
 
 	public void plaatsKoekje() {
 		LCD.clear();
-		System.out.println("Plaats het koekje onder de sensor en druk op de neus van Fikkie.");
+		schoonScherm();
+		System.out.println("Plaats het koekje onder de sensor,\n "
+				+ "druk daarna op mijn neus.");
 	}
 
-	public void setPattern(int pattern) {
 
-	}
+
 
 	public void klaarVoorTijdrit() {
 		schoonScherm();
-		System.out.println("Klaar voor de start!\nDruk Enter om te beginnen.");
+		System.out.println("Klaar voor de start!\n"
+				+ "Druk Enter om te beginnen.");
 		
 	}
+
 }
