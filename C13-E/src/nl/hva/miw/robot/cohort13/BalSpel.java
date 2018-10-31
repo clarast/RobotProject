@@ -71,7 +71,6 @@ public class BalSpel {
 				goLeft();
 			} else {
 				if (distance < Integer.MAX_VALUE) {
-					melodieSpeler.speelWelkomstBlaf();
 					goFwd();
 				} else {
 					stopMotors();
