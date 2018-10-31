@@ -16,8 +16,8 @@ public class Fikkie {
 		Hardware hardware = new Hardware();
 		Lijnvolger lijnvolger = new Lijnvolger(hardware);
 		lijnvolger.tijdrit();
-		Dollen dollen = new Dollen(hardware);
-		dollen.startDollen();
+//		Dollen dollen = new Dollen(hardware);
+//		dollen.startDollen();
 		hardware.sluitAlleHardware();
 	}
 }

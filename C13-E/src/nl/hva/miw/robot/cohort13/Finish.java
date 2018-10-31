@@ -12,8 +12,9 @@ public class Finish {
 
 	/**
 	 * Deze methode hoogt het aantal passages op als de vorige meting finish was en de nieuwe meting niet.
+	 * @param lijnvolger om methode in lijnvolger aan te kunnen roepen bij start (extra gas bij start)
 	 */
-	public void setAantalFinishPassages(LichtsensorMeting finishmeting) {
+	public void setAantalFinishPassages(LichtsensorMeting finishmeting, Lijnvolger lijnvolger) {
 		finishmeting.nieuweMetingWordtOudeMeting();
 		finishmeting.meetKleurRGB();
 		finishmeting.meetIntensiteit();
@@ -26,6 +27,11 @@ public class Finish {
 		if (oudeFinishMetingIsFinish && !nieuweFinishMetingIsFinish) {
 			aantalFinishPassages++;
 			scherm.printKleurpassage();
+		}
+		
+		if (nieuweFinishMetingIsFinish) {
+			lijnvolger.setMotorPowerA(100);
+			lijnvolger.setMotorPowerB(100);
 		}
 	}
 

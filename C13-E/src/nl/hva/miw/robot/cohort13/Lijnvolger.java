@@ -65,8 +65,8 @@ public class Lijnvolger {
 		this.melodiespeler.speelWelkomstBlaf();
 		boolean stopwatchStarted = false;
 		while (this.finish.getAantalFinishPassages() < 2 && Button.ESCAPE.isUp()) {
-			this.finish.setAantalFinishPassages(this.finishMeting);
 			this.lijnMeting.meetIntensiteit();
+			this.finish.setAantalFinishPassages(this.finishMeting, this);
 			this.bepaalTypeBocht();
 			this.rijden();
 			if (this.finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
@@ -186,5 +186,20 @@ public class Lijnvolger {
 		}
 		this.motorC.rotateTo(0);
 	}
+
+	public void extraGasBijStart() {
+		this.motorA.setPower(70);
+		this.motorB.setPower(70);
+	}
+
+	public void setMotorPowerA(int motorPowerA) {
+		this.motorPowerA = motorPowerA;
+	}
+
+	public void setMotorPowerB(int motorPowerB) {
+		this.motorPowerB = motorPowerB;
+	}
+	
+	
 
 }
