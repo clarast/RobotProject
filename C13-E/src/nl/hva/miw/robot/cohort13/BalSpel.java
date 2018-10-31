@@ -65,29 +65,48 @@ public class BalSpel {
 			if (isTouched()) {
 				break;
 			}
-			seek.fetchSample(sample, 0);
-			direction = (int) sample[0];
-			distance = (int) sample[1];
-			motorA.setPower(100);
-			motorB.setPower(100);
+			fetchSample();
+			setMotorPower();
 
 			if (direction > 5) {
-				motorA.forward();
-				motorB.stop();
+				goRight();
 			} else if (direction < -5) {
-				motorB.forward();
-				motorA.stop();
+				goLeft();
 			} else {
 				if (distance < Integer.MAX_VALUE) {
-					motorA.forward();
-					motorB.forward();
+					goFwd();
 				} else {
-					motorA.stop();
-					motorB.stop();
+					stopMotors();
 				}
 			}
 		}
 		stopMotors();
+	}
+
+	public void goFwd() {
+		motorA.forward();
+		motorB.forward();
+	}
+
+	public void goLeft() {
+		motorB.forward();
+		motorA.stop();
+	}
+
+	public void goRight() {
+		motorA.forward();
+		motorB.stop();
+	}
+
+	public void setMotorPower() {
+		motorA.setPower(100);
+		motorB.setPower(100);
+	}
+
+	public void fetchSample() {
+		seek.fetchSample(sample, 0);
+		direction = (int) sample[0];
+		distance = (int) sample[1];
 	}
 
 	/*
