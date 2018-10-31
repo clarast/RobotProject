@@ -11,6 +11,7 @@ public class KopLampen extends Thread {
 	@Override
 	public void run() {
 		groenKnipper();
+
 	}
 
 	public void start() {
@@ -48,6 +49,10 @@ public class KopLampen extends Thread {
 
 	public void zetLampUit() {
 		Button.LEDPattern(0);
+	}
+	
+	public void randomConstant() {
+		Button.LEDPattern(genereerRandomPatroonnummerConstant());
 	}
 	
 	public void groenConstant() {
@@ -92,6 +97,10 @@ public class KopLampen extends Thread {
 	 */
 	public int genereerRandomPatroonnummer() {
 		return (int) (Math.random() * 9) + 1;
+	}
+	
+	public int genereerRandomPatroonnummerConstant() {
+		return (int) (Math.random() *3) +1;
 	}
 
 	/**
@@ -179,5 +188,6 @@ public class KopLampen extends Thread {
 			Delay.msDelay(150);
 		}
 	}
+
 
 }

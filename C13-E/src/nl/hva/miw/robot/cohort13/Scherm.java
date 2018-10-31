@@ -1560,10 +1560,12 @@ public class Scherm {
 		LCD.drawImage(hondEet, 90, 20, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 	}
 
+
 	public void klaarVoorTijdrit() {
 		schoonScherm();
 		System.out.println("Klaar voor de start!\n"
 				+ "Druk Enter om te beginnen.");
 		
 	}
+
 }

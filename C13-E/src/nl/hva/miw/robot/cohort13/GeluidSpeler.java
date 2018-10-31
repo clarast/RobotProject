@@ -7,7 +7,9 @@ import lejos.hardware.Sound;
  * In deze klasse staan de methods die .wav files afspelen
  */
 
+
 public class GeluidSpeler {
+
 
 	public void speelWelkomstBlaf() {
 		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
@@ -21,5 +23,6 @@ public class GeluidSpeler {
 	public void speelDeuntje() {
 		Sound.beepSequenceUp();
 
-	}
+
+  }
 }

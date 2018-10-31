@@ -69,6 +69,7 @@ public class Lijnvolger {
 				tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
 			}
+			scherm.printTekst(tijdswaarneming.toString());
 		}
 
 		beëindigTijdrit();
