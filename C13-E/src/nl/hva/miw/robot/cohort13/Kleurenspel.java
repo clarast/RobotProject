@@ -14,8 +14,7 @@ public class Kleurenspel {
 
 	private int kleurNummer;
 	private int[] kleuren = new int[4];
-	private int motorPowerA;
-	private int motorPowerB;
+	private final int MOTOR_POWER = 100;
 
 	private Hardware hardware;
 	private EV3TouchSensor touchSensor;
@@ -110,15 +109,15 @@ public class Kleurenspel {
 
 	private void schuifelen() {
 
-		for (int i = 0; i < 4; i++) {
-			motorA.setPower(100);
-			motorA.forward();
+		for (int i = 0; i < 5; i++) {
+			motorA.setPower(MOTOR_POWER);
+			motorB.setPower(MOTOR_POWER);
+			motorA.backward();
+			motorB.backward();
 			Delay.msDelay(200);
-			motorA.stop();
-			motorB.setPower(100);
+			motorA.forward();
 			motorB.forward();
 			Delay.msDelay(200);
-			motorB.stop();
 		}
 		motorA.stop();
 		motorB.stop();
@@ -126,15 +125,15 @@ public class Kleurenspel {
 	}
 
 	public void maakDraai() {
-		motorB.setPower(100);
+		motorB.setPower(MOTOR_POWER);
 		motorB.forward();
-		Delay.msDelay(2500);
+		Delay.msDelay(3500);
 		motorB.stop();
 	}
 
 	public void kwispel() {
 
-		for (int aantalKeer = 0; aantalKeer < 4; aantalKeer++) {
+		for (int aantalKeer = 0; aantalKeer < 5; aantalKeer++) {
 			motorC.setSpeed(600);
 			motorC.rotateTo(45);
 			Delay.msDelay(1);

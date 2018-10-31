@@ -1,6 +1,6 @@
 package nl.hva.miw.robot.cohort13;
 
-import lejos.hardware.Brick;
+
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
@@ -60,6 +60,7 @@ public class Dollen {
 		this.scherm = hardware.maakScherm();
 		this.geluidspeler = hardware.maakGeluidSpeler();
 		this.koplampen = new KopLampen();
+		this.melodieSpeler = new MelodieSpeler();
 		this.distance = infraroodSensor.getDistanceMode();
 		this.touch = touchSensor.getTouchMode();
 		this.average = new MeanFilter(distance, SAMPLE_LENGTH);
