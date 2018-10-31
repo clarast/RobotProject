@@ -11,6 +11,10 @@ import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
+/**
+ * @author BR Deze klasse wordt vanuit roamingmode aangeroepen. In deze modus
+ *         gaat fikkie achter een beacon aan rijden.
+ */
 public class BalSpel {
 
 	private UnregulatedMotor motorA;
@@ -26,6 +30,11 @@ public class BalSpel {
 	private SampleProvider touch;
 	private float[] sample2;
 
+	/**
+	 * 
+	 * @param hardware: Hij geeft alle hardware door vanuit de dollen klasse.
+	 * 
+	 */
 	public BalSpel(Hardware hardware, UnregulatedMotor motorA, UnregulatedMotor motorB, EV3IRSensor infraroodSensor,
 			EV3TouchSensor touchSensor, Scherm scherm) {
 		super();
@@ -42,6 +51,13 @@ public class BalSpel {
 
 	}
 
+	/**
+	 * In deze methode wordt het balspel gestart. Er wordt eerst een geluid
+	 * afgespeeld. allereerst wordt er een meting genomen om te kijken of de beacon
+	 * in zijn richting staat. Daar rijdt de robot vervolgens naartoe. Als er op
+	 * zijn neus gedrukt wordt zal deze modus beeindigen en zal de robot terugkeren
+	 * naar dollen-modus.
+	 */
 	public void findBall() {
 		initiateBalspel();
 		drawLCD();
@@ -74,6 +90,10 @@ public class BalSpel {
 		stopMotors();
 	}
 
+	/*
+	 * Deze methode initieert het balspel, speelt een geluid, print een schermtekst
+	 * en wacht tot er op een knop gedrukt wordt.
+	 */
 	private void initiateBalspel() {
 		Sound.beepSequence(); // make sound when ready.
 		scherm.printTekst("Druk op de knop!");
@@ -82,11 +102,20 @@ public class BalSpel {
 			System.exit(0);
 	}
 
+	/*
+	 * deze methode tekent de ogen. Die wordt aangeroepen op de schermklasse.
+	 */
 	private void drawLCD() {
 		scherm.printOgen();
 	}
 
+	/**
+	 * neem een sample en kijk of de knop is ingdrukt.
+	 * 
+	 * @return true als de knop ingedrukt wordt.
+	 */
 	public boolean isTouched() {
+
 		touch.fetchSample(sample2, 0);
 
 		if (sample2[0] == 0)
@@ -95,6 +124,9 @@ public class BalSpel {
 			return true;
 	}
 
+	/**
+	 * stop de motoren
+	 */
 	private void stopMotors() {
 		// stop de motoren
 		motorA.stop();
