@@ -1,6 +1,7 @@
 package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.Button;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.utility.Delay;
 import lejos.hardware.sensor.EV3ColorSensor;
@@ -26,6 +27,7 @@ public class Lijnvolger {
 	private LichtsensorMeting lijnMeting;
 	private LichtsensorMeting finishMeting;
 	private Finish finish;
+	private EV3MediumRegulatedMotor motorC;
 
 	/**
 	 * @param hardware:
@@ -39,6 +41,7 @@ public class Lijnvolger {
 		this.geluidspeler = hardware.maakGeluidSpeler();
 		this.motorA = hardware.maakMotorA();
 		this.motorB = hardware.maakMotorB();
+		this.motorC = hardware.maakMotorC();
 		this.lichtSensor = hardware.maakLichtsensor();
 		this.scherm = hardware.maakScherm();
 		lijnMeting = new LichtsensorMeting(lichtSensor);
@@ -72,13 +75,14 @@ public class Lijnvolger {
 			}
 		}
 
-		tijdswaarneming.stopStopwatch();
-		koplampen.roodKnipper();
-		motorA.stop();
-		motorB.stop();
-		scherm.printRondeTijd(tijdswaarneming.toString());
+		this.tijdswaarneming.stopStopwatch();
+		this.motorA.stop();
+		this.motorB.stop();
+		this.koplampen.kleurenWisselKortKnipper();
+		this.kwispel();
+		this.scherm.printRondeTijd(tijdswaarneming.toString());
 		Button.ENTER.waitForPress();
-		scherm.schoonScherm();
+		this.scherm.schoonScherm();
 	}
 
 	/**
@@ -165,4 +169,16 @@ public class Lijnvolger {
 		Delay.msDelay(100);
 	}
 
+	public void kwispel() {
+
+		for (int aantalKeer = 0; aantalKeer < 3; aantalKeer++) {
+			motorC.setSpeed(600);
+			motorC.rotateTo(45);
+			Delay.msDelay(1);
+			motorC.rotateTo(-45);
+		}
+		motorC.rotateTo(0);
+	}
+
+	
 }
