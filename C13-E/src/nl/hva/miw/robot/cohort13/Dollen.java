@@ -135,7 +135,7 @@ public class Dollen {
 	}
 
 	public void welkom() {
-		initiateDollen();
+		proloogDollen();
 		drawLCD();
 		melodieSpeler.speelWelkomstBlaf();
 		koplampen.kleurenWisselKortKnipper();
@@ -209,14 +209,26 @@ public class Dollen {
 		kleurenspel.startKleurenspel();
 	}
 
-	private void initiateDollen() {
-		Sound.beepSequence(); // make sound when ready.
-		scherm.printTekst("Druk op de knop!");
+	/**
+	 * Deze methode verzorgt de inleiding op het programma (tijdens presentatie).
+	 * Fikkie knippert met zijn ogen en wacht tot er op ESC en daarna op Button
+	 * gedrukt wordt.
+	 */
+	private void proloogDollen() {
+		while (Button.ESCAPE.isUp()) {
+			scherm.printOgen();
+			koplampen.groenPulse();
+			Delay.msDelay(1500);
+			scherm.printOgenDicht();
+			Delay.msDelay(500);
+		}
+		scherm.printSpelendeHond();
+		Sound.beepSequence();
 		Button.waitForAnyPress();
 	}
 
 	/**
-	 * deze methode zorgt neemt een sample of de touchsensor is aangeraakt.
+	 * deze methode neemt een sample of de touchsensor is aangeraakt.
 	 * 
 	 * @return true als de sensor is aangeraakt.
 	 */
@@ -233,6 +245,10 @@ public class Dollen {
 		scherm.printOgen();
 	}
 
+	/**
+	 * Na 10 afstandmetingen kiest Fikkie via deze method een willekeurige actie om uit te
+	 * voeren.
+	 */
 	private void chooseAction() {
 		switch (makeRandomNumber(ACTION_4)) {
 		case 1: // ga naar links
@@ -265,7 +281,6 @@ public class Dollen {
 	}
 
 	private void stopMotors() {
-		// stop de motoren
 		motorA.stop();
 		motorB.stop();
 		motorC.stop();
@@ -307,7 +322,6 @@ public class Dollen {
 			motorC.rotateTo(-makeRandomNumber(ACTION_2));
 		}
 		motorC.rotateTo(STARTPOINT_TAIL);
-		// make random
 	}
 
 	public void avoidLeft() {

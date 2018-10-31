@@ -112,10 +112,8 @@ public class BalSpel {
 	 */
 	private void initiateBalspel() {
 		Sound.beepSequence(); // make sound when ready.
-		scherm.printTekst("Druk op de knop!");
+		scherm.printHondEnBal();
 		Button.waitForAnyPress();
-		if (Button.ESCAPE.isDown())
-			System.exit(0);
 	}
 
 	/*

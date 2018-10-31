@@ -68,7 +68,6 @@ public class Geluid extends Thread {
 	private Thread thread;
 	private KopLampen koplamp;
 
-	
 	// Melodie 1 voor kleurenspel
 	final static int VADERJACOB[][] = { { C5, KWART }, { D5, KWART }, { E5, KWART }, { C5, KWART }, { C5, KWART },
 			{ D5, KWART }, { E5, KWART }, { C5, KWART }, { E5, KWART }, { F5, KWART }, { G5, HALF }, { E5, KWART },
@@ -88,7 +87,6 @@ public class Geluid extends Thread {
 			{ A5, KWART }, { G5, HALF }, { F5, KWART }, { F5, KWART }, { E5, KWART }, { E5, KWART }, { D5, KWART },
 			{ D5, KWART }, { C5, HALF }, };
 
-
 	// startmelodie voor lijnvolger
 	final static int STARTMELODIE[][] = { { C4, KWART }, { E5, KWART }, { G5, KWART }, { BREAK, BREAK }, { G5, KWART },
 			{ A5, KWART }, { G5, KWART }, { E5, KWART }, { C5, BREAK }, { BREAK, BREAK }, { C5, HALF }, { C5, TRIPLET },
@@ -96,9 +94,6 @@ public class Geluid extends Thread {
 
 	};
 
-	
-	
-	
 	// speel vader jacob
 	public void speelVaderJacob() {
 		for (int i = 0; i < VADERJACOB.length; i++) {
@@ -108,11 +103,13 @@ public class Geluid extends Thread {
 
 	// speel twinkle twinkle
 	public void speelTwinkleTwinkle() {
+
 		koplamp = new KopLampen();
-		
+
 		for (int i = 0; i < TWINKLETWINKLE.length; i++) {
 			koplamp.randomConstant();
 			Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][0]);
+
 		}
 	}
 
@@ -136,6 +133,7 @@ public class Geluid extends Thread {
 				koplamp.randomConstant();
 				Sound.playTone(STARTMELODIE[i][0], STARTMELODIE[i][1]);
 			}
+
 			count++;
 		}
 	}
