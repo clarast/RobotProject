@@ -2,14 +2,11 @@ package nl.hva.miw.robot.cohort13;
 
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.SensorMode;
-import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
-import lejos.utility.Delay;
 
 /**
  * @author BR Deze klasse wordt vanuit roamingmode aangeroepen. In deze modus
@@ -79,7 +76,6 @@ public class BalSpel {
 				goLeft();
 			} else {
 				if (distance < Integer.MAX_VALUE) {
-					geluidspeler.speelWelkomstBlaf();
 					goFwd();
 				} else {
 					stopMotors();

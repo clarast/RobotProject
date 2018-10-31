@@ -97,7 +97,7 @@ public class Kleurenspel {
 				break;
 			case 1: // = groen = deuntje
 				scherm.printNoten();
-				melodieSpeler.speelVaderJacob();
+				melodieSpeler.speelTwinkleTwinkle();
 				break;
 			case 2: // = blauw = kwispel
 				scherm.printOgen();

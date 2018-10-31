@@ -125,7 +125,7 @@ public class Dollen {
 
 	public void afscheid() {
 		koplampen.kleurenWisselKort();
-		geluidspeler.speelBlaf3x();
+		geluidspeler.speelWelkomstBlaf();
 	}
 
 	public void startSpel() {
@@ -207,7 +207,7 @@ public class Dollen {
 	}
 
 	public void maakKleurenSpel() {
-		Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorA, motorC, scherm, geluidspeler,
+		Kleurenspel kleurenspel = new Kleurenspel(hardware, touchSensor, motorA, motorB, motorC, scherm, geluidspeler,
 				melodieSpeler, koplampen);
 		kleurenspel.startKleurenspel();
 	}
