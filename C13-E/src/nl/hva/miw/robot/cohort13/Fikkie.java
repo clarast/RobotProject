@@ -16,7 +16,7 @@ public class Fikkie {
 	private void run() {
 
 		Hardware hardware = new Hardware();
-		System.out.println("RECHTS lijnvolger, LINKS voor tijdrit");
+		hardware.getScherm().kiesDollenOfLijnVolger();
 		Button.waitForAnyPress();
 		if (Button.RIGHT.isDown()) {
 			Lijnvolger lijnvolger = new Lijnvolger(hardware);

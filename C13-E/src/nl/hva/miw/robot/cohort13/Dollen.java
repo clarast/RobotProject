@@ -45,8 +45,8 @@ public class Dollen {
 	private final int START_NUMBER = 1;
 	private final int MAX_DEGREES = 60;
 	private final int START_DEGREES = 30;
-	private final int START_KWISPELS = 2;
-	private final int MAX_KWISPELS = 3;
+	private final int START_KWISPELS = 1;
+	private final int MAX_KWISPELS = 2;
 	private final int STARTPOINT_TAIL = 0;
 	private final int ACTION_1 = 1;
 	private final int ACTION_2 = 2;

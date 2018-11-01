@@ -108,7 +108,7 @@ public class Geluid extends Thread {
 
 		for (int i = 0; i < TWINKLETWINKLE.length; i++) {
 			koplamp.randomConstant();
-			Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][0]);
+			Sound.playTone(TWINKLETWINKLE[i][0], TWINKLETWINKLE[i][1]);
 
 		}
 	}
@@ -140,5 +140,12 @@ public class Geluid extends Thread {
 	
 	public void speelWelkomstBlaf() {
 		Sound.playSample(new File("dog_bark6.wav"), Sound.VOL_MAX);
+	}
+
+	public void melodie() {
+		for (int i = 0; i < STARTMELODIE.length; i++) {
+			koplamp.randomConstant();
+			Sound.playTone(STARTMELODIE[i][0], STARTMELODIE[i][1]);
+		}
 	}
 }

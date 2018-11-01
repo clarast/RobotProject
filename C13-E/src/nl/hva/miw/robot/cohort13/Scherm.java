@@ -1751,5 +1751,9 @@ public class Scherm {
 	public void toonTijdwaarneming (Tijdswaarneming t) {
 		textLCD.drawString(t.toonElapsed(), 0, 6);
 	}
-	
+
+	public void kiesDollenOfLijnVolger() {
+		System.out.println("RECHTS lijnvolger\nLINKS voor dollen");		
+	}
+		
 }

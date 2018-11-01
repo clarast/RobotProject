@@ -73,9 +73,9 @@ public class Lijnvolger {
 			if (this.finish.getAantalFinishPassages() == 1 && !stopwatchStarted) {
 				this.tijdswaarneming.startStopwatch();
 				stopwatchStarted = true;
-				// this.melodiespeler.start();
+				this.melodiespeler.start();
 			}
-			if(stopwatchStarted) {
+			if (stopwatchStarted) {
 				scherm.toonTijdwaarneming(tijdswaarneming);
 			}
 		}
@@ -168,20 +168,31 @@ public class Lijnvolger {
 		Delay.msDelay(100);
 	}
 
+	/**
+	 * Dit zijn alle procedures die nodig zijn op het moment dat Fikkie de finish
+	 * over komt.
+	 */
 	private void beëindigTijdrit() {
 		this.tijdswaarneming.stopStopwatch();
-		this.koplampen.roodKnipper();
 		this.scherm.printKnipOog();
-		this.kwispel();
+		this.scherm.printRondeTijd(tijdswaarneming.toString());
+		this.koplampen.roodKnipper();
+		this.hardware.sluitLichtSensor();
+		this.motorA.setPower(40);
+		this.motorB.setPower(40);
+		this.motorB.backward();
+		this.motorA.forward();
+		this.melodiespeler.melodie();
 		this.motorA.stop();
 		this.motorB.stop();
-		this.scherm.printRondeTijd(tijdswaarneming.toString());
+		this.kwispel();
 		Button.ENTER.waitForPress();
 		this.scherm.schoonScherm();
-		this.hardware.sluitLichtSensor();
 	}
 
-
+	/**
+	 * Als deze methode aangeroepen wordt gaat fikkies staart (motor 3) kwispelen.
+	 */
 	public void kwispel() {
 		for (int aantalKeer = 0; aantalKeer < 3; aantalKeer++) {
 			this.motorC.setSpeed(600);
@@ -199,7 +210,5 @@ public class Lijnvolger {
 	public void setMotorPowerB(int motorPowerB) {
 		this.motorPowerB = motorPowerB;
 	}
-	
-	
 
 }
